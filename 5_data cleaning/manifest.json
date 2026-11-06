@@ -1,86 +1,104 @@
 {
- "written_utc": "2026-11-04T23:54:28+00:00",
+ "written_utc": "2026-11-06T22:53:37+00:00",
  "files": [
   {
    "path": "cache/raw/raw_2006.zip",
    "script": "cache_raw.py",
    "version": "",
-   "modified_utc": "2026-11-04T23:46:17+00:00",
-   "rows": 191,
-   "bytes": 2677754,
-   "sha256": "904f956f97203cbc7b8affd0f8017529310f915e1ca018642f03ab196935070f"
+   "modified_utc": "2026-11-06T22:43:32+00:00",
+   "rows": 200,
+   "bytes": 2813244,
+   "sha256": "1ad10d9029479ef08a7962ac829cf90d8caedb92b3baf6ad1acbacea38e5b1b2"
   },
   {
    "path": "cache/raw_manifest.parquet",
    "script": "cache_raw.py",
    "version": "",
-   "modified_utc": "2026-11-04T23:47:36+00:00",
+   "modified_utc": "2026-11-06T22:43:32+00:00",
    "rows": 200,
-   "bytes": 31883,
-   "sha256": "cefdce9e163ce4dd0b7521c53dd03e981556d0e6e5c7abc5adb711bb5b38b692"
+   "bytes": 32774,
+   "sha256": "6b022884c48d156625559cd965c6b1930231dac98dc04d08e7f54ffc296127cd"
   },
   {
    "path": "cache/model_outputs.sqlite",
    "script": "model_cache.py",
    "version": "",
-   "modified_utc": "2026-11-04T23:54:21+00:00",
+   "modified_utc": "2026-11-06T22:53:26+00:00",
    "rows": null,
-   "bytes": 16384,
-   "sha256": "6a0e1a49aedae639b30a9278fef9039d3efa7cd0f2540d2c4ff2584693837e86"
+   "bytes": 24576,
+   "sha256": "7715c70f88618d35912a7e8ca1eb2433fb4e5174e04e128bfb1e5ba9e3057b30"
   },
   {
    "path": "data/clean/clean_2006.parquet",
    "script": "clean_release.py",
-   "version": "v1",
-   "modified_utc": "2026-11-04T23:52:43+00:00",
-   "rows": 191,
-   "bytes": 2198311,
-   "sha256": "91d8ca901fcd983e8d3e7489d8467d91d7266837fef2d9043683cc37c5bc74e8"
+   "version": "v2",
+   "modified_utc": "2026-11-06T22:47:49+00:00",
+   "rows": 200,
+   "bytes": 5020029,
+   "sha256": "7fe23fbeca3a48a8260612f703acd6c68b1aca7e0e917e54e062cc5fd134f9ed"
   },
   {
    "path": "data/entities.parquet",
    "script": "entities.py",
    "version": "",
-   "modified_utc": "2026-11-04T23:53:53+00:00",
+   "modified_utc": "2026-11-06T22:52:33+00:00",
    "rows": 115976,
-   "bytes": 2860523,
-   "sha256": "e392be5c6a4329273d55e1daa187f862e6a89868247020729a114bb1905eed9a"
+   "bytes": 2958656,
+   "sha256": "07ce7a665c52e81e56163c0161c7a13c6b20f24a623062bd9e7c09642827f2c3"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2006.parquet",
+   "script": "token_stats.py",
+   "version": "v2",
+   "modified_utc": "2026-11-06T22:53:07+00:00",
+   "rows": 486,
+   "bytes": 29504,
+   "sha256": "d38368f920c015dd361b1171cb25fa3cf28ff770e264c8a8a373478391499cd9"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2006.parquet",
+   "script": "token_stats.py",
+   "version": "v2",
+   "modified_utc": "2026-11-06T22:53:01+00:00",
+   "rows": 1394,
+   "bytes": 35250,
+   "sha256": "a0cf6cb64358e16a8872885083dc1a4dd5ba0fb4c4760bb4c6023c5cc9e34480"
   },
   {
    "path": "data/token_stats.parquet",
    "script": "token_stats.py",
-   "version": "v1",
-   "modified_utc": "2026-11-04T23:54:16+00:00",
-   "rows": 191,
-   "bytes": 9556,
-   "sha256": "55bc1b6b51a68579bf1a21ca1129804d7e4003df7f71672f3bf3a06887a7ffaa"
+   "version": "v2",
+   "modified_utc": "2026-11-06T22:53:07+00:00",
+   "rows": 200,
+   "bytes": 9695,
+   "sha256": "e170600cc78478dd38fe5e84678bea5cdf2e81a39e796340a5364c0f3adf46c6"
   },
   {
    "path": "results/token_quantiles.csv",
    "script": "token_stats.py",
-   "version": "v1",
-   "modified_utc": "2026-11-04T23:54:16+00:00",
+   "version": "v2",
+   "modified_utc": "2026-11-06T22:53:07+00:00",
    "rows": 2,
-   "bytes": 207,
-   "sha256": "5f619d9a401a0ee0917795cdd0a5e09e95ec0a697ac2cd62cf30029ceb0672cd"
+   "bytes": 209,
+   "sha256": "7343d155e9c1b2e6dbbf579f4c654d004a4e0eb2478962bfe40244159e0da59c"
   },
   {
    "path": "data/dedup_flags.parquet",
    "script": "dedup.py",
-   "version": "v1",
-   "modified_utc": "2026-11-04T23:54:20+00:00",
+   "version": "v2",
+   "modified_utc": "2026-11-06T22:53:25+00:00",
    "rows": 6,
-   "bytes": 2460,
-   "sha256": "4fa67de4802400cbd5f4c554e3afc0245942d982114c9201e3bb8bf667de9bda"
+   "bytes": 2391,
+   "sha256": "9ac6b2173085a26d8ee7978fcd8ea899028208bcdddf71733b59012f9c709a9d"
   },
   {
    "path": "data/splits_draft.parquet",
    "script": "splits.py",
    "version": "",
-   "modified_utc": "2026-11-04T23:54:27+00:00",
+   "modified_utc": "2026-11-06T22:53:34+00:00",
    "rows": 115976,
-   "bytes": 1199139,
-   "sha256": "f52cb6285771f2a61e0c0347a4bf24a5cd99e3ede7ff57ce6a77e8e9c5f8f57f"
+   "bytes": 2007007,
+   "sha256": "da0783f94d89fed77a4acbabea114d59f18442b6c2bcd5c730480ff3b806cfea"
   }
  ]
 }

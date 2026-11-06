@@ -1,3 +1,3 @@
 model,year,n,tokens_p10,tokens_p50,tokens_p90,tokens_p99,chunks_median,share_one_chunk,truncated_sentences
-finbert,2006,191,370,1173,2713,3912,3.0,0.1728,2
-chronogpt,2006,191,406,1181,2533,3870,1.0,0.6283,0
+finbert,2006,200,514,1752,6695,23118,4.0,0.1,27
+chronogpt,2006,200,553,1809,6742,18346,2.0,0.415,0

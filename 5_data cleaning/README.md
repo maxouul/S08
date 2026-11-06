@@ -82,7 +82,7 @@ Set `TEAM_DIR` when the private data live outside the checkout. The Llama 3.1 to
 | ChronoGPT | 1,500 |
 | Llama 3.1 8B Instruct | 8,000 |
 
-On the 2006 test, the median release is about 1,200 tokens: a single 8,000-token window covers nearly all of it, while FinBERT needs a median of three pieces. Encoders score the pieces and pool them. The generative model reads the whole `text_body`.
+On the 2006 test (200 releases, cleaning v2), the median release is about 1,750 tokens with FinBERT's tokenizer and 1,800 with ChronoGPT's, and nine in ten are under 6,700: a single 8,000-token window covers about nine releases in ten, while FinBERT needs a median of four pieces. Llama's own count is not measured yet (its tokenizer needs `HF_TOKEN`). Encoders score the pieces and pool them. The generative model reads the whole `text_body`.
 
 **Caching.**
 - **Raw bytes:** cached once and never refetched.
@@ -111,7 +111,8 @@ On the 2006 test, the median release is about 1,200 tokens: a single 8,000-token
 |---|---|
 | Code and unit tests | done; end-to-end run on synthetic inputs, outputs read by part 7–8's own readers |
 | Raw cache | 200-event test only (2006); full pass not run |
-| Cleaning | only the 2006 test, with v1; to rerun with v2 on every year |
-| Entities, tokens, duplicates, split draft | run on the test only |
+| Cleaning | 2006 test with v2 (200 releases, all 24 checks of `02_clean_prepare` agree); every year still to run |
+| Entities, split draft | built for all 115,976 filings from part 3–4's files of 6 November (Drive export); to rebuild after part 4's rerun |
+| Tokens, duplicates | 2006 test only; Llama not counted yet (needs `HF_TOKEN`) |
 | Model cache | created, empty; waiting for part 6 |
 | Holdout freeze | not done: waits for the corrected clock and part 4's rerun |
