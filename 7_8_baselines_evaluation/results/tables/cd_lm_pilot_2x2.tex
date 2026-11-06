@@ -1,0 +1,14 @@
+\begin{table}
+\caption{EXPLORATORY: LM tone on the 115 events with a text (dev 105, validation 10); below the 5% coverage rule, not a result; text sign = above / below median tone}
+\label{tab:cd_lm_pilot_2x2}
+\begin{tabular}{llllrrrrrrrrr}
+\toprule
+signal & outcome & text\_rule & cell & n & share & mean & se\_naive & se\_cluster & t\_cluster & ci95\_lo & ci95\_hi & median \\
+\midrule
+lm\_tone & car\_0\_1\_ff4 & season\_median & beat\_textpos & 40 & 0.408200 & 0.020800 & 0.008700 & 0.009000 & 2.312400 & 0.003200 & 0.038400 & 0.026700 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & beat\_textneg & 35 & 0.357100 & 0.003600 & 0.009300 & 0.008600 & 0.422200 & -0.013200 & 0.020500 & 0.004000 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & miss\_textpos & 5 & 0.051000 & -0.011900 & 0.024700 & 0.012500 & -0.949500 & -0.036400 & 0.012600 & -0.002700 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & miss\_textneg & 18 & 0.183700 & -0.046700 & 0.013000 & 0.014800 & -3.155800 & -0.075700 & -0.017700 & -0.034700 \\
+\bottomrule
+\end{tabular}
+\end{table}

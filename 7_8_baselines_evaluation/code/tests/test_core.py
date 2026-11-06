@@ -165,6 +165,21 @@ def test_two_by_two_cell_means_exact():
     assert np.isclose(k["diff-in-diff (beat effect - miss effect)"], 0.0, atol=1e-4)
 
 
+def test_surprise_sign_means_and_difference():
+    from current_data import surprise_sign
+
+    rows = []
+    for s in range(4):
+        for sur, m in ((0.02, 0.03), (0.0, 0.0), (-0.02, -0.02)):
+            for k in range(10):
+                rows.append({"split": "dev", "season": f"q{s}", "surprise": sur,
+                             "y": m + (0.001 if k % 2 else -0.001)})
+    t = surprise_sign(pd.DataFrame(rows), "dev", "y", save=False).set_index("group")
+    assert np.isclose(t.loc["beat", "mean_car"], 0.03) and np.isclose(t.loc["miss", "mean_car"], -0.02)
+    assert t.loc["meet", "n"] == 40
+    assert np.isclose(t.loc["beat - miss", "mean_car"], 0.05)
+
+
 def test_two_by_two_excludes_meets():
     from two_by_two import two_by_two
 
@@ -211,6 +226,71 @@ def test_save_table_refuses_row_level_data():
 
     with pytest.raises(ValueError):
         OUT.save_table(pd.DataFrame({"event_id": ["x"], "v": [1]}), "should_fail")
+
+
+def test_git_commit_found_from_code_dir_even_if_step78_dir_is_not_a_repo(monkeypatch, tmp_path):
+    import subprocess
+
+    import outputs as OUT
+
+    here = Path(__file__).resolve().parent
+    if subprocess.run(["git", "-C", str(here), "rev-parse", "HEAD"], capture_output=True).returncode:
+        pytest.skip("code is not in a git checkout")
+    monkeypatch.setattr(S, "STEP78_DIR", tmp_path)          # e.g. the Drive folder
+    OUT._GIT_CACHE.clear()
+    try:
+        g = OUT._git_commit()
+    finally:
+        OUT._GIT_CACHE.clear()
+    assert g and len(g.split("-")[0]) >= 7
+
+
+# ---------------------------------------------------------------- book-to-market
+def test_book_to_market_uses_only_quarters_public_before_release():
+    from book_to_market import compute_book_to_market
+
+    ev = pd.DataFrame({
+        "event_id": ["a", "b", "c", "d", "e"],
+        "gvkey": ["001", "001", "002", "003", "004"],
+        "R_et": ["2015-04-20 07:00:00-04:00",   # Q1 release: rdq of Q1 is this day -> use Q4
+                 "2015-07-20 07:00:00-04:00",   # Q2 release -> Q1 (rdq 2015-04-20)
+                 "2015-04-20 16:05:00-04:00",   # rdq missing -> datadate + 90 rule
+                 "2015-04-20 07:00:00-04:00",   # negative book equity -> NaN
+                 "2015-04-20 07:00:00-04:00"],  # only a stale quarter -> NaN
+        "mktcap_t2": [2_000_000.0, 2_000_000.0, 500_000.0, 1_000_000.0, 1_000_000.0],  # $000s
+    })
+    fq = pd.DataFrame({
+        "gvkey": ["1", "1", "1", "2", "2", "3", "4"],
+        "datadate": pd.to_datetime(["2014-12-31", "2015-03-31", "2015-06-30",
+                                    "2014-12-31", "2015-03-31", "2014-12-31", "2013-12-31"]),
+        "rdq": pd.to_datetime(["2015-02-01", "2015-04-20", "2015-07-20",
+                               None, None, "2015-02-01", "2014-02-01"]),
+        "ceqq": [1000.0, 1100.0, 1200.0, 100.0, 999.0, -50.0, 800.0],          # $ millions
+    })
+    out = compute_book_to_market(ev, fq).set_index("event_id")
+    assert out.loc["a", "bm"] == pytest.approx(1000 * 1000 / 2_000_000)        # 0.5, not Q1's 0.55
+    assert out.loc["b", "bm"] == pytest.approx(1100 * 1000 / 2_000_000)
+    # 2014-12-31 + 90 = 2015-03-31 < 2015-04-20 is usable; 2015-03-31 + 90 is not
+    assert out.loc["c", "bm"] == pytest.approx(100 * 1000 / 500_000)
+    assert out.loc["c", "bm_source"] == "datadate+90"
+    assert np.isnan(out.loc["d", "bm"]) and out.loc["d", "ceqq"] == -50
+    assert np.isnan(out.loc["e", "bm"])
+
+
+def test_panel_log_bm_filled_and_flagged():
+    import synthetic as SY
+    from panel import build_panel
+
+    ev = SY.make_events(n_firms=40, years=[2015, 2016])
+    bm = SY.make_book_to_market(ev)
+    assert bm["bm"].notna().mean() > 0.8
+    p = build_panel(ev, sample=None, book_to_market=bm)
+    assert p["log_bm"].notna().all()
+    assert set(p["bm_missing"].unique()) == {0.0, 1.0}
+    ok = p["bm_missing"] == 0
+    assert np.corrcoef(p.loc[ok, "log_bm"], np.log(p.loc[ok, "bm"]))[0, 1] > 0.95  # up to winsorising
+    p0 = build_panel(ev, sample=None)                     # no B/M file: control is inert
+    assert (p0["bm_missing"] == 1).all() and (p0["log_bm"] == 0).all()
 
 
 # ---------------------------------------------------------------- holdout lock

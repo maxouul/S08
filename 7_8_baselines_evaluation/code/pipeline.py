@@ -54,6 +54,7 @@ def load_all(synthetic: bool = False):
         scores, prov = IO.load_model_scores(db)
         sectors = ev[["event_id"]].assign(siccd=np.nan,
                                           ff12=np.random.default_rng(0).choice(list(IO.FF12), len(ev)))
+        SY.make_book_to_market(ev).to_parquet(S.BOOK_TO_MARKET, index=False)
         return ev, texts, sectors, scores, prov
     ev = IO.load_events()
     texts = IO.load_texts(accessions=ev["accession"].dropna())
@@ -62,9 +63,12 @@ def load_all(synthetic: bool = False):
     return ev, texts, sectors, scores, prov
 
 
-def build_inputs(ev, texts, sectors, sample=S.SAMPLE, include_holdout=False):
+def build_inputs(ev, texts, sectors, sample=S.SAMPLE, include_holdout=False, book_to_market=None):
+    from book_to_market import load_book_to_market
+    bm = book_to_market if book_to_market is not None else load_book_to_market()
     panel = build_panel(ev, sectors=sectors, texts_meta=texts.drop(columns="text_body"), sample=sample,
-                        include_holdout=include_holdout, frozen_holdout=IO.load_frozen_holdout())
+                        include_holdout=include_holdout, frozen_holdout=IO.load_frozen_holdout(),
+                        book_to_market=bm)
     OUT.set_context(sample=sample, **OUT.upstream_versions(ev, texts))
     return panel
 
@@ -181,7 +185,8 @@ def evaluate(panel: pd.DataFrame, sig: pd.DataFrame, eval_split: str = S.TUNE_SP
             ii = incremental_info(d, tr, oc)
             summ.append(ii["summary"])
             if oc == S.PRIMARY_OUTCOME:
-                keep = [tr, "text_x_miss", "miss", "log_mktcap", "log_analysts", "disp_price", "ret_prior_1m_w"]
+                keep = [tr, "text_x_miss", "miss", "log_mktcap", "log_analysts", "disp_price", "ret_prior_1m_w",
+                        "log_bm"]
                 OUT.save_table(regression_table(ii["fits"], keep), f"t8_regressions__{t}__{oc}__{eval_split}",
                                f"Abnormal return on text rank, {t}, {oc}", index=True)
                 for name, fit in ii["fits"].items():

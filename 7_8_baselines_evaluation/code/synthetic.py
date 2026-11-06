@@ -160,6 +160,33 @@ def write_lm_dictionary(path: Path) -> Path:
     return path
 
 
+def make_fundq(ev: pd.DataFrame, seed: int = S.RANDOM_SEED) -> pd.DataFrame:
+    """
+    Compustat-style quarterly fundamentals for the synthetic firms: quarter ends
+    every three months, rdq ~30 days later (missing 10% of the time), ceqq in $
+    millions with B/M lognormal around 0.5 and 3% negative book equity.
+    B/M plays no role in the returns (it is a control, not part of the planted effect).
+    """
+    rng = np.random.default_rng(seed + 7)
+    firms = ev.groupby("permno")["mktcap_t2"].median()
+    ends = pd.date_range("2004-03-31", "2025-12-31", freq="QE")
+    f = pd.DataFrame([(p, d) for p in firms.index for d in ends], columns=["permno", "datadate"])
+    n = len(f)
+    f["gvkey"] = (f["permno"] - 10000).astype(str).str.zfill(6)
+    f["rdq"] = (f["datadate"] + pd.to_timedelta(rng.integers(20, 45, n), unit="D")).where(rng.random(n) > 0.10)
+    bm = rng.lognormal(np.log(0.5), 0.6, n) * np.where(rng.random(n) < 0.03, -1, 1)
+    f["ceqq"] = bm * f["permno"].map(firms).to_numpy() / 1000.0
+    return f[["gvkey", "datadate", "rdq", "ceqq"]]
+
+
+def make_book_to_market(ev: pd.DataFrame, seed: int = S.RANDOM_SEED) -> pd.DataFrame:
+    """book_to_market.compute_book_to_market on the synthetic events and fundq."""
+    from book_to_market import compute_book_to_market
+
+    e = ev.assign(gvkey=(ev["permno"] - 10000).astype(str).str.zfill(6))
+    return compute_book_to_market(e, make_fundq(ev, seed))
+
+
 def write_model_cache(ev: pd.DataFrame, path: Path, seed: int = S.RANDOM_SEED) -> Path:
     """
     A model-output cache in part 5's schema with two fake "LLM" signals:

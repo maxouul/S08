@@ -1,0 +1,14 @@
+\begin{table}
+\caption{EXPLORATORY: LM tone on the 115 events with a text (dev 105, validation 10); below the 5% coverage rule, not a result; HC1 standard errors}
+\label{tab:cd_lm_pilot_regressions}
+\begin{tabular}{lrrrrrr}
+\toprule
+spec & n & r2 & coef\_sue\_rank & t\_sue\_rank & coef\_lm\_tone\_z & t\_lm\_tone\_z \\
+\midrule
+SUE rank & 115 & 0.230900 & 0.097500 & 5.098100 &  &  \\
+LM tone & 115 & 0.019400 &  &  & 0.007800 & 1.663600 \\
+SUE rank + LM tone & 115 & 0.247600 & 0.096900 & 5.083200 & 0.007300 & 1.612600 \\
++ size, B/M & 115 & 0.248900 & 0.096000 & 5.019500 & 0.007400 & 1.641100 \\
+\bottomrule
+\end{tabular}
+\end{table}

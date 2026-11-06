@@ -80,6 +80,7 @@ LM_DIR = RESOURCES / "lm"
 PANEL = DATA / "analysis_panel.parquet"          # events + texts metadata + controls
 SIGNALS = DATA / "signals.parquet"               # one column per text/surprise signal
 TEXT_FEATURES = DATA / "text_features"           # cached tokenised counts per year
+BOOK_TO_MARKET = DATA / "book_to_market.parquet" # event_id -> Compustat ceqq / mktcap (book_to_market.py)
 RUN_LOG = LOGS / "runs.jsonl"
 
 
@@ -174,11 +175,12 @@ def redirect_outputs(tag: str) -> None:
     synthetic demo and the tests, so they never overwrite real results).
     Modules read these attributes at call time, so the redirect applies everywhere.
     """
-    global DATA, RESULTS, TABLES, REGRESSIONS, FIGURES, PANEL, SIGNALS, TEXT_FEATURES, RUN_LOG
+    global DATA, RESULTS, TABLES, REGRESSIONS, FIGURES, PANEL, SIGNALS, TEXT_FEATURES, RUN_LOG, BOOK_TO_MARKET
     DATA = STEP78_DIR / "data" / f"_{tag}"
     RESULTS = STEP78_DIR / "results" / f"_{tag}"
     TABLES, REGRESSIONS, FIGURES = RESULTS / "tables", RESULTS / "regressions", RESULTS / "figures"
     PANEL, SIGNALS = DATA / "analysis_panel.parquet", DATA / "signals.parquet"
     TEXT_FEATURES = DATA / "text_features"
+    BOOK_TO_MARKET = DATA / "book_to_market.parquet"
     RUN_LOG = LOGS / f"runs_{tag}.jsonl"
     ensure_dirs()

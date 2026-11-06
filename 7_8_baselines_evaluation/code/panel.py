@@ -22,7 +22,8 @@ What it adds to part 4's event table
   tails), so the "surprise-only" benchmark must be allowed to be non-linear,
   otherwise a text model could look useful merely by capturing that curvature.
 * controls: log market cap, log number of analysts, dispersion scaled by price,
-  prior one-month return, FF12 sector, size terciles.
+  prior one-month return, log book-to-market (+ missing indicator), FF12 sector,
+  size terciles.
 * text metadata: whether a cleaned text exists, its length and version.
 
 The holdout guard
@@ -102,7 +103,8 @@ PANEL_ID_COLS = ["event_id", "accession", "permno", "ticker", "reaction_date", "
 
 def build_panel(events: pd.DataFrame, sectors: pd.DataFrame | None = None,
                 texts_meta: pd.DataFrame | None = None, sample: str | None = S.SAMPLE,
-                include_holdout: bool = False, frozen_holdout: set[str] | None = None) -> pd.DataFrame:
+                include_holdout: bool = False, frozen_holdout: set[str] | None = None,
+                book_to_market: pd.DataFrame | None = None) -> pd.DataFrame:
     """
     Parameters
     ----------
@@ -116,6 +118,9 @@ def build_panel(events: pd.DataFrame, sectors: pd.DataFrame | None = None,
                     so that the holdout cannot be opened by a default argument.
     frozen_holdout  part 5's frozen holdout accessions; when given, the holdout
                     events must be exactly those (checked, warning otherwise)
+    book_to_market  book_to_market.compute_book_to_market output (event_id, bm);
+                    None leaves log_bm at 0 with bm_missing = 1 for every event
+                    (the regressions then drop both as constants)
     """
     common = S.common_3_4()
     p = events.copy()
@@ -167,6 +172,20 @@ def build_panel(events: pd.DataFrame, sectors: pd.DataFrame | None = None,
     p["disp_price"] = winsorize_by(p["disp_price"].fillna(0.0), p["season"])
     p["ret_prior_1m_w"] = winsorize_by(p["ret_prior_1m"], p["season"])
     p["size_tercile"] = quantile_bucket(p["mktcap_t2"], p["season"], 3)
+    # Book-to-market (book_to_market.py): log of Compustat ceqq of the last quarter
+    # public before the release over mktcap_t2. Same treatment as dispersion: a
+    # missing value (no Compustat match, stale or negative book equity) is filled,
+    # here with the season's median log(B/M), and flagged by bm_missing, so those
+    # events stay in every specification.
+    if book_to_market is not None and len(book_to_market):
+        p = p.merge(book_to_market[["event_id", "bm"]], on="event_id", how="left",
+                    validate="many_to_one")
+    elif "bm" not in p.columns:
+        p["bm"] = np.nan
+    lbm = np.log(p["bm"].where(p["bm"] > 0))
+    p["bm_missing"] = lbm.isna().astype(float)
+    lbm = winsorize_by(lbm, p["season"])
+    p["log_bm"] = lbm.fillna(lbm.groupby(p["season"]).transform("median")).fillna(0.0)
 
     # Winsorised outcomes, for OLS only (rank statistics use the raw outcome).
     for c in S.OUTCOMES + S.PLACEBO_OUTCOMES + S.MKT_ADJ_OUTCOMES:

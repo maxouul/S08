@@ -67,6 +67,17 @@ every baseline and every test sees the same events.
 * **Winsorising:** returns and continuous controls are winsorised at 1%/99% *within season* for OLS
   only. Rank statistics use the raw values.
 * **No look-ahead check:** the panel asserts no reaction session precedes its release time.
+* **Book-to-market** (`book_to_market.py`): `bm = ceqq × 1000 / mktcap_t2`, where `ceqq` is
+  Compustat quarterly common equity ($ millions, `comp.fundq`, INDL/STD/D/C) of the most recent
+  fiscal quarter that was **public strictly before the release date**, and `mktcap_t2` is CRSP market
+  cap at t−2 ($ thousands). A quarter is public from its `rdq` (report date); when `rdq` is missing,
+  from `datadate + 90` days. The quarter being announced has `rdq` = release date, so it is never
+  used. Book equity whose `datadate` is more than 365 days before the release is treated as missing.
+  The control is `log_bm = log(bm)`, winsorised within season; events with no match, stale or
+  non-positive book equity are kept with `log_bm` = the season median and `bm_missing = 1` (the
+  same fill-and-flag treatment as dispersion). Compustat is pulled by parts 7–8 themselves into
+  `data/` (part 3-4's `comp_fundq` cache has no `ceqq`); without `data/book_to_market.parquet`
+  both columns are constant and the regressions drop them with a message.
 
 ## 4. Baselines (task 7)
 
@@ -123,7 +134,7 @@ exactly the same way: nothing in the comparison is model-specific.
 (1) y = SUE deciles + season FE
 (2) y = text + season FE
 (3) y = SUE deciles + text + season FE                 ← the main test
-(4) (3) + log size, log #analysts, dispersion/price, prior 1-month return + FF12 FE
+(4) (3) + log size, log #analysts, dispersion/price, prior 1-month return, log B/M + FF12 FE
 (5) (4) + text × 1[miss]
 (FM) (4) estimated season by season, Fama–MacBeth with Newey–West
 ```
@@ -177,10 +188,10 @@ previous four seasons). If we report a portfolio return, it must use that versio
 
 | Item | Waiting on | Effect here |
 |---|---|---|
-| Release texts for 2007–2025 | part 5 (`clean_release.py` has run on 2006 only) | LM and TF-IDF cover only ~115 events today; TF-IDF needs ≥ 500 training docs per fold |
-| LM master dictionary file | someone downloads it into `resources/lm/` | LM baseline skipped until then |
+| Release texts for 2007–2025 | part 5 (`clean_release.py` has run on 2006 only) | LM and TF-IDF cover only 115 events today (105 dev, 10 validation): below the 5% coverage needed to enter the comparison and the regressions; TF-IDF needs ≥ 500 training docs per fold |
+| ~~LM master dictionary file~~ | done 6 Nov 2026: `Loughran-McDonald_MasterDictionary_1993-2025.csv` (SRAF, March 2026 update) in `resources/lm/`, git-ignored | LM counts run on every available text |
 | LLM scores | part 6 (model cache is empty) | appear automatically as `llm__<model>__<prompt>__<variant>` signals |
 | Corrected release clock | part 1 → part 3-4 rerun | rerun `pipeline.py`; nothing to change here |
-| Book-to-market control | part 3-4 to pull Compustat `ceqq` | add to `regressions.CONTROLS` |
+| Book-to-market control | **done** 2026-11-06: 94.6% coverage, in `regressions.CONTROLS` | none |
 | FactSet consensus | part 3 | an alternative `sue_*` column can be added to the robustness grid |
 | Holdout freeze | part 5 `splits.py --freeze` | unlocks the test-set run and the rate-shock analysis |

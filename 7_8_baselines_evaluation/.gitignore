@@ -18,3 +18,11 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 .DS_Store
+
+# LaTeX build files
+docs/status_report/*.aux
+docs/status_report/*.fdb_latexmk
+docs/status_report/*.fls
+docs/status_report/*.log
+docs/status_report/*.out
+docs/status_report/*.toc

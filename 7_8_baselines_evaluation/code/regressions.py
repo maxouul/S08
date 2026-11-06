@@ -30,9 +30,11 @@ Specification ladder (``incremental_info``)
   indicator when it is missing), prior one-month return, and sector FE. Size and
   coverage proxy for the information environment (the same text should matter
   less for a mega-cap followed by 30 analysts); prior return controls for
-  momentum and for any pre-release leakage the text may pick up. Book-to-market is
-  **not yet** included: it needs Compustat ceqq, which part 3-4 has not pulled
-  (see docs/METHODOLOGY.md, open items).
+  momentum and for any pre-release leakage the text may pick up. Log book-to-market
+  (Compustat ceqq of the last quarter public before the release / market cap at
+  t-2, see book_to_market.py) controls for value/growth: growth firms' releases
+  are more forward-looking and their returns respond differently to news. A
+  missing B/M is filled with the season median and flagged by ``bm_missing``.
 * Outcomes are winsorised at 1/99% within season (``*_w``).
 
 Standard errors
@@ -52,7 +54,8 @@ import pandas as pd
 import settings as S
 from metrics import newey_west_se
 
-CONTROLS = ["log_mktcap", "log_analysts", "disp_price", "disp_missing", "ret_prior_1m_w"]
+CONTROLS = ["log_mktcap", "log_analysts", "disp_price", "disp_missing", "ret_prior_1m_w",
+            "log_bm", "bm_missing"]
 
 
 # ---------------------------------------------------------------------------

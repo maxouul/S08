@@ -1,0 +1,57 @@
+(3) SUE rank + controls
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          car_0_1_ff4_w   R-squared:                       0.102
+Model:                            OLS   Adj. R-squared:                  0.100
+Method:                 Least Squares   F-statistic:                    -1.530
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):               1.00
+Time:                        15:53:06   Log-Likelihood:                 14169.
+No. Observations:               11375   AIC:                        -2.828e+04
+Df Residuals:                   11345   BIC:                        -2.806e+04
+Df Model:                          29                                         
+Covariance Type:              cluster                                         
+==================================================================================
+                     coef    std err          z      P>|z|      [0.025      0.975]
+----------------------------------------------------------------------------------
+const             -0.0056      0.011     -0.526      0.599      -0.027       0.015
+sue_rank           0.0802      0.004     19.407      0.000       0.072       0.088
+log_mktcap     -4.357e-05      0.001     -0.054      0.957      -0.002       0.002
+log_analysts      -0.0005      0.002     -0.294      0.769      -0.004       0.003
+disp_price         0.4424      0.270      1.638      0.101      -0.087       0.972
+ret_prior_1m_w    -0.0060      0.012     -0.505      0.614      -0.029       0.017
+log_bm            -0.0019      0.001     -1.803      0.071      -0.004       0.000
+bm_missing         0.0107      0.003      3.090      0.002       0.004       0.017
+season_2017Q2      0.0017      0.001      1.800      0.072      -0.000       0.004
+season_2017Q3     -0.0063        nan        nan        nan         nan         nan
+season_2017Q4      0.0001        nan        nan        nan         nan         nan
+season_2018Q1      0.0009        nan        nan        nan         nan         nan
+season_2018Q2     -0.0023      0.000     -4.939      0.000      -0.003      -0.001
+season_2018Q3      0.0033        nan        nan        nan         nan         nan
+season_2018Q4     -0.0042      0.001     -4.490      0.000      -0.006      -0.002
+season_2019Q1      0.0056      0.001      7.581      0.000       0.004       0.007
+season_2019Q2     -0.0052      0.000    -45.314      0.000      -0.005      -0.005
+season_2019Q3      0.0006      0.001      0.874      0.382      -0.001       0.002
+season_2019Q4      0.0044        nan        nan        nan         nan         nan
+ff12_Chems         0.0037      0.003      1.248      0.212      -0.002       0.009
+ff12_Durbl         0.0001      0.005      0.022      0.982      -0.010       0.010
+ff12_Enrgy        -0.0032      0.004     -0.737      0.461      -0.012       0.005
+ff12_Hlth          0.0059      0.004      1.374      0.169      -0.003       0.014
+ff12_Manuf         0.0016      0.004      0.388      0.698      -0.007       0.010
+ff12_Money         0.0094      0.002      3.784      0.000       0.005       0.014
+ff12_NoDur         0.0046      0.004      1.150      0.250      -0.003       0.012
+ff12_Other         0.0057      0.003      1.754      0.079      -0.001       0.012
+ff12_Shops         0.0060      0.004      1.589      0.112      -0.001       0.013
+ff12_Telcm         0.0014      0.006      0.237      0.813      -0.010       0.013
+ff12_Utils         0.0115      0.003      3.477      0.001       0.005       0.018
+==============================================================================
+Omnibus:                      568.738   Durbin-Watson:                   2.013
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1518.277
+Skew:                          -0.263   Prob(JB):                         0.00
+Kurtosis:                       4.711   Cond. No.                     7.18e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+[2] The condition number is large, 7.18e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.

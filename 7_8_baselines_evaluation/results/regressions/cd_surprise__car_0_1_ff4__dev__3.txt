@@ -1,0 +1,89 @@
+(3) SUE rank + controls
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          car_0_1_ff4_w   R-squared:                       0.119
+Model:                            OLS   Adj. R-squared:                  0.118
+Method:                 Least Squares   F-statistic:                    -36.05
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):               1.00
+Time:                        15:53:05   Log-Likelihood:                 46064.
+No. Observations:               35508   AIC:                        -9.200e+04
+Df Residuals:                   35446   BIC:                        -9.148e+04
+Df Model:                          61                                         
+Covariance Type:              cluster                                         
+==================================================================================
+                     coef    std err          z      P>|z|      [0.025      0.975]
+----------------------------------------------------------------------------------
+const              0.0160      0.005      3.080      0.002       0.006       0.026
+sue_rank           0.0835      0.003     29.410      0.000       0.078       0.089
+log_mktcap        -0.0012      0.000     -3.607      0.000      -0.002      -0.001
+log_analysts    6.717e-05      0.001      0.077      0.939      -0.002       0.002
+disp_price        -0.4141      0.176     -2.355      0.018      -0.759      -0.070
+ret_prior_1m_w    -0.0098      0.005     -1.961      0.050      -0.020   -6.55e-06
+log_bm            -0.0022      0.001     -3.549      0.000      -0.003      -0.001
+bm_missing         0.0023      0.003      0.802      0.422      -0.003       0.008
+season_2006Q2     -0.0003      0.000     -0.755      0.450      -0.001       0.001
+season_2006Q3     -0.0013        nan        nan        nan         nan         nan
+season_2006Q4      0.0023        nan        nan        nan         nan         nan
+season_2007Q1     -0.0005        nan        nan        nan         nan         nan
+season_2007Q2      0.0012        nan        nan        nan         nan         nan
+season_2007Q3      0.0021        nan        nan        nan         nan         nan
+season_2007Q4      0.0035        nan        nan        nan         nan         nan
+season_2008Q1      0.0009      0.000      3.730      0.000       0.000       0.001
+season_2008Q2      0.0061      0.001     11.755      0.000       0.005       0.007
+season_2008Q3      0.0023      0.000      5.076      0.000       0.001       0.003
+season_2008Q4      0.0039      0.001      4.417      0.000       0.002       0.006
+season_2009Q1      0.0004        nan        nan        nan         nan         nan
+season_2009Q2      0.0083      0.001     11.284      0.000       0.007       0.010
+season_2009Q3      0.0051      0.000     14.471      0.000       0.004       0.006
+season_2009Q4     -0.0059      0.000    -19.348      0.000      -0.006      -0.005
+season_2010Q1      0.0013        nan        nan        nan         nan         nan
+season_2010Q2      0.0022      0.001      3.474      0.001       0.001       0.003
+season_2010Q3      0.0017      0.000      3.852      0.000       0.001       0.003
+season_2010Q4      0.0014        nan        nan        nan         nan         nan
+season_2011Q1      0.0028      0.000      9.131      0.000       0.002       0.003
+season_2011Q2     -0.0023        nan        nan        nan         nan         nan
+season_2011Q3     -0.0041        nan        nan        nan         nan         nan
+season_2011Q4   6.617e-05        nan        nan        nan         nan         nan
+season_2012Q1      0.0054      0.000     19.911      0.000       0.005       0.006
+season_2012Q2     -0.0051      0.000    -13.465      0.000      -0.006      -0.004
+season_2012Q3      0.0043   7.35e-05     59.030      0.000       0.004       0.004
+season_2012Q4     -0.0023      0.000     -5.855      0.000      -0.003      -0.002
+season_2013Q1      0.0030      0.000      9.462      0.000       0.002       0.004
+season_2013Q2      0.0003      0.000      0.679      0.497      -0.001       0.001
+season_2013Q3      0.0052      0.000     16.004      0.000       0.005       0.006
+season_2013Q4      0.0022        nan        nan        nan         nan         nan
+season_2014Q1      0.0014      0.000      3.787      0.000       0.001       0.002
+season_2014Q2     -0.0074      0.000    -61.340      0.000      -0.008      -0.007
+season_2014Q3     -0.0009      0.000     -3.709      0.000      -0.001      -0.000
+season_2014Q4      0.0012        nan        nan        nan         nan         nan
+season_2015Q1      0.0002      0.001      0.425      0.670      -0.001       0.001
+season_2015Q2     -0.0009      0.001     -1.560      0.119      -0.002       0.000
+season_2015Q3      0.0004      0.000      1.081      0.280      -0.000       0.001
+season_2015Q4      0.0040      0.000     25.557      0.000       0.004       0.004
+season_2016Q1      0.0012      0.000      2.667      0.008       0.000       0.002
+season_2016Q2      0.0051        nan        nan        nan         nan         nan
+season_2016Q3      0.0042        nan        nan        nan         nan         nan
+season_2016Q4     -0.0014        nan        nan        nan         nan         nan
+ff12_Chems         0.0021      0.002      0.856      0.392      -0.003       0.007
+ff12_Durbl         0.0020      0.003      0.723      0.470      -0.003       0.008
+ff12_Enrgy         0.0009      0.002      0.447      0.655      -0.003       0.005
+ff12_Hlth          0.0017      0.002      0.946      0.344      -0.002       0.005
+ff12_Manuf         0.0011      0.001      0.767      0.443      -0.002       0.004
+ff12_Money         0.0020      0.001      1.419      0.156      -0.001       0.005
+ff12_NoDur         0.0043      0.002      1.992      0.046    6.98e-05       0.008
+ff12_Other         0.0009      0.002      0.552      0.581      -0.002       0.004
+ff12_Shops         0.0031      0.001      2.140      0.032       0.000       0.006
+ff12_Telcm         0.0029      0.003      1.108      0.268      -0.002       0.008
+ff12_Utils         0.0027      0.002      1.280      0.200      -0.001       0.007
+==============================================================================
+Omnibus:                     1917.746   Durbin-Watson:                   1.993
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             5471.157
+Skew:                          -0.270   Prob(JB):                         0.00
+Kurtosis:                       4.845   Cond. No.                     5.09e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)
+[2] The condition number is large, 5.09e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.

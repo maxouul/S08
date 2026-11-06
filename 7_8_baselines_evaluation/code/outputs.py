@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -39,12 +40,35 @@ def set_context(**kw) -> None:
     _CONTEXT.update(kw)
 
 
+_CODE_DIR = Path(__file__).resolve().parent
+_GIT_CACHE: dict = {}
+
+
 def _git_commit() -> str | None:
-    try:
-        return subprocess.run(["git", "-C", str(S.STEP78_DIR), "rev-parse", "--short", "HEAD"],
-                              capture_output=True, text=True, timeout=5).stdout.strip() or None
-    except Exception:
-        return None
+    """
+    Commit of the repository that holds *this code* (not of STEP78_DIR: on Drive or
+    with STEP78_DIR overridden, the output folder is often not a git checkout, which
+    is why early logs recorded "git": null). "-dirty" is appended when the parts 7-8
+    code differs from that commit. Falls back to $GIT_COMMIT (e.g. set on Colab).
+    """
+    if "v" in _GIT_CACHE:
+        return _GIT_CACHE["v"]
+    v = None
+    for d in (_CODE_DIR, S.STEP78_DIR):
+        try:
+            h = subprocess.run(["git", "-C", str(d), "rev-parse", "--short", "HEAD"],
+                               capture_output=True, text=True, timeout=5).stdout.strip()
+            if h:
+                dirty = subprocess.run(["git", "-C", str(d), "status", "--porcelain", "--",
+                                        str(_CODE_DIR)],
+                                       capture_output=True, text=True, timeout=5).stdout.strip()
+                v = h + ("-dirty" if dirty else "")
+                break
+        except Exception:
+            continue
+    v = v or os.environ.get("GIT_COMMIT") or None
+    _GIT_CACHE["v"] = v
+    return v
 
 
 def _sha(path: Path) -> str:

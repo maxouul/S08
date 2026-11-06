@@ -1,0 +1,40 @@
+\begin{table}
+\caption{SUE rank IC with car_0_1_ff4 across subsets, validation (Newey-West t across seasons)}
+\label{tab:cd_surprise_robustness__validation}
+\begin{tabular}{lllrrrrrr}
+\toprule
+dimension & group & outcome & n & seasons & mean\_ic & ic\_t\_nw & ls\_mean & ls\_t\_nw \\
+\midrule
+baseline & all & car\_0\_1\_ff4 & 11375 & 12 & 0.313600 & 22.260000 & 0.075200 & 13.329300 \\
+sector (FF12) & BusEq & car\_0\_1\_ff4 & 1677 & 12 & 0.282900 & 16.240000 & 0.111800 & 7.983300 \\
+sector (FF12) & Chems & car\_0\_1\_ff4 & 357 & 6 & 0.398900 & 10.510000 & 0.078400 & 3.539600 \\
+sector (FF12) & Durbl & car\_0\_1\_ff4 & 272 & 0 &  &  &  &  \\
+sector (FF12) & Enrgy & car\_0\_1\_ff4 & 568 & 12 & 0.185400 & 3.620000 & 0.041000 & 1.671300 \\
+sector (FF12) & Hlth & car\_0\_1\_ff4 & 1120 & 12 & 0.250300 & 17.490000 & 0.060900 & 5.004700 \\
+sector (FF12) & Manuf & car\_0\_1\_ff4 & 1033 & 12 & 0.332000 & 7.090000 & 0.098500 & 5.743100 \\
+sector (FF12) & Money & car\_0\_1\_ff4 & 1934 & 12 & 0.405200 & 17.330000 & 0.070900 & 13.617200 \\
+sector (FF12) & NoDur & car\_0\_1\_ff4 & 551 & 12 & 0.391200 & 10.190000 & 0.108000 & 6.522600 \\
+sector (FF12) & Other & car\_0\_1\_ff4 & 1702 & 12 & 0.292200 & 10.330000 & 0.067000 & 6.569100 \\
+sector (FF12) & Shops & car\_0\_1\_ff4 & 1429 & 12 & 0.412600 & 13.490000 & 0.120000 & 11.613200 \\
+sector (FF12) & Telcm & car\_0\_1\_ff4 & 243 & 0 &  &  &  &  \\
+sector (FF12) & Utils & car\_0\_1\_ff4 & 489 & 12 & 0.179900 & 3.870000 & 0.002400 & 0.243400 \\
+size tercile & small & car\_0\_1\_ff4 & 3796 & 12 & 0.322700 & 20.500000 & 0.085600 & 9.684400 \\
+size tercile & mid & car\_0\_1\_ff4 & 3787 & 12 & 0.319200 & 23.020000 & 0.073300 & 9.975800 \\
+size tercile & large & car\_0\_1\_ff4 & 3792 & 12 & 0.292800 & 11.890000 & 0.058300 & 9.461200 \\
+year & 2017 & car\_0\_1\_ff4 & 3746 & 4 & 0.321100 & 16.290000 & 0.076100 & 9.882500 \\
+year & 2018 & car\_0\_1\_ff4 & 3757 & 4 & 0.286800 & 27.670000 & 0.067700 & 28.916500 \\
+year & 2019 & car\_0\_1\_ff4 & 3872 & 4 & 0.332800 & 17.610000 & 0.081700 & 7.796500 \\
+release session & after\_close & car\_0\_1\_ff4 & 5713 & 12 & 0.295700 & 18.600000 & 0.081700 & 13.159700 \\
+release session & pre\_open & car\_0\_1\_ff4 & 5636 & 12 & 0.333600 & 21.500000 & 0.069400 & 9.668600 \\
+event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 11375 & 12 & 0.025500 & 2.470000 & 0.002200 & 0.591900 \\
+event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 11375 & 12 & -0.011400 & -0.730000 & -0.013500 & -1.857900 \\
+event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 11375 & 12 & -0.020100 & -1.290000 & -0.016600 & -2.381500 \\
+event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 11375 & 12 & 0.313200 & 23.580000 & 0.075400 & 13.547200 \\
+event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 11375 & 12 & 0.026800 & 2.530000 & 0.002300 & 0.692300 \\
+event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 11375 & 12 & -0.012000 & -0.660000 & -0.012600 & -1.702000 \\
+event window & ar\_m1 & ar\_m1 & 11375 & 12 & 0.036000 & 4.660000 & 0.002600 & 4.540200 \\
+sample & excluding basis\_suspect & car\_0\_1\_ff4 & 11272 & 12 & 0.315300 & 22.450000 & 0.076900 & 14.102200 \\
+sample & excluding timing\_suspect & car\_0\_1\_ff4 & 11375 & 12 & 0.313600 & 22.260000 & 0.075200 & 13.329300 \\
+\bottomrule
+\end{tabular}
+\end{table}

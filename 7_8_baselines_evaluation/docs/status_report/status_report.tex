@@ -49,14 +49,17 @@
 
 \vspace{6pt}
 \noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
-\textbf{In one paragraph.} The code for tasks 7 and 8 is written, commented, documented and
-tested (24 tests pass). It reads the outputs of parts 3--4, 5 and 6 directly, so new upstream
-data flows in by rerunning one command, with no code changes. On the real data, the surprise-only
-benchmark runs on the full sample (validation rank IC $0.31$, $t=22$). On synthetic data with a
-planted effect, the whole pipeline recovers the effect and rejects a pure-noise ``LLM'' and the
-placebo. What is missing is mostly \emph{upstream input}: release texts beyond 2006 (part 5), the
-Loughran--McDonald dictionary file, model scores (part 6), and the holdout freeze. A handful of
-design decisions must also be written down before the freeze.}}
+\textbf{In one paragraph.} The code for tasks 7 and 8 is written, documented and tested (28 tests
+pass). It reads the outputs of parts 3--4, 5 and 6 directly, so new upstream data flows in by
+rerunning one command, with no code changes. With today's inputs we have: (i) the full surprise
+benchmark on 46{,}883 events (validation rank IC $0.31$, $t=22$; beat$-$miss reaction gap $4.5$\%),
+stable across sectors, sizes, years and sessions; (ii) the benchmark regression with controls,
+\emph{including book-to-market} (Compustat, 94.6\% coverage), which is the bar text must clear;
+(iii) a diagnostic of the day $-1$ placebo, which the surprise fails mildly in every subset, a
+pattern that looks like pre-announcement drift rather than a clock error; (iv) an exploratory
+Loughran--McDonald pilot on the 115 texts that exist, pointing the right way but far too small to
+test. \textbf{The bottleneck is upstream}: release texts beyond 2006 (part 5), model scores (part 6),
+and the holdout freeze. No text-beyond-surprise result is possible until they arrive.}}
 
 \tableofcontents
 \vspace{6pt}
@@ -159,7 +162,7 @@ holdout & 2021--2025 & Final test, one run & Locked until freeze \\
 Requirement & Implementation & Status \\
 \midrule
 Surprise-only baseline & \code{baseline_surprise.py}: SUE rank, linear and decile models, cross-fitted & \done{} (real data) \\
-Loughran--McDonald baseline & \code{baseline_lm.py}: 7 categories, negation of positive words within 3 words, signals \code{lm_tone}, \code{lm_net}, \code{lm_negshare}, \code{lm_unc}; counts cached by text hash & \done{} (code); \waiting{} dictionary file \\
+Loughran--McDonald baseline & \code{baseline_lm.py}: 7 categories, negation of positive words within 3 words, signals \code{lm_tone}, \code{lm_net}, \code{lm_negshare}, \code{lm_unc}; counts cached by text hash; dictionary 1993--2025 (SRAF, March 2026) & \done{}; runs on 115 texts, \waiting{} texts \\
 TF-IDF baseline & \code{baseline_tfidf.py}: uni/bigrams, numbers masked, firm filter ($\ge 20$ firms per term), ridge and logistic, tuned on dev only & \done{} (code); \waiting{} texts \\
 Language models on same sample & \code{io_inputs.load_model_scores}: reads part 6's cache, \code{raw} and \code{mask} variants & \done{} (plumbing); \waiting{} scores \\
 Surprise-only vs text-only vs combined & \code{compare.py}: out-of-sample $R^2$, gain over surprise-only, Clark--West with $t_{S-1}$ p-values & \done{} \\
@@ -180,7 +183,7 @@ Requirement & Implementation & Status \\
 \midrule
 Merge scores with financial data & \code{panel.py} + \code{pipeline.py}: one row per event, signals aligned by event & \done{} \\
 Signal--return relationship & IC and decile long-short per signal and window & \done{} \\
-Regressions with controls & \code{regressions.py}: ladder (1)--(5), controls (size, analysts, dispersion, prior return), FF12 sector effects, two-way clustering, Fama--MacBeth & \done{} \\
+Regressions with controls & \code{regressions.py}: ladder (1)--(5), controls (size, analysts, dispersion, prior return, book-to-market), FF12 sector effects, two-way clustering, Fama--MacBeth & \done{}; benchmark version run (\S\ref{sec:bench}) \\
 $2\times2$ table & \code{two_by_two.py}: beat/miss $\times$ good/bad tone (within-season median), cell means, SEs, 95\% CIs, $n$, contrasts incl.\ diff-in-diff & \done{} \\
 Text beyond surprise & Spec (3) coefficient, Clark--West, $2\times2$ within-row effects & \done{} \\
 Robustness & \code{robustness.py}: sectors, size, NYSE, periods, Llama cutoff, all windows, placebo, stricter samples, dispersion-scaled SUE & \done{} \\
@@ -192,9 +195,9 @@ Save outputs automatically & \code{outputs.py}: \code{.csv/.md/.tex}, provenance
 
 \subsection*{Quality checks}
 \begin{itemize}
-  \item \textbf{24 tests} (\texttt{python code/tests/run\_all.py}): hand-computed answers (ranks,
-  Newey--West equal to part 4's, Clark--West, exact $2\times2$ cell means, LM negation, folds without
-  look-ahead, holdout lock) and recovery tests on synthetic data (planted effect found; noise and
+  \item \textbf{28 tests} (\texttt{python code/tests/run\_all.py}): hand-computed answers (ranks,
+  Newey--West equal to part 4's, Clark--West, exact $2\times2$ and beat/miss cell means, LM negation,
+  folds without look-ahead, holdout lock, book-to-market timing and units, git provenance) and recovery tests on synthetic data (planted effect found; noise and
   placebo not; Clark--West size under the null over 15 seeds).
   \item \textbf{Notebooks}: \code{00_inputs_check}, \code{07_baselines}, \code{08_evaluation},
   \code{08b_rate_shock}, each with markdown explaining the choices.
@@ -241,6 +244,115 @@ signal only fails the placebo if it predicts day $-1$ beyond what the surprise d
 $R^2$ of the surprise-only decile model on the reaction is 8.7\%: this is the bar text models have
 to raise.
 
+\subsection{Real data: the benchmark regression}\label{sec:bench}
+
+Reaction \code{car_0_1_ff4} (winsorised) on the surprise, two-way clustered by firm and season
+(\code{results/tables/cd_surprise_regressions__*}). This is specification (4) of the ladder without
+the text term: the regression every text signal will be added to.
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& \multicolumn{2}{c}{Dev 2006--16} & \multicolumn{2}{c}{Validation 2017--19} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+& SUE rank & + controls & SUE rank & + controls \\
+\midrule
+SUE rank & 0.0830 (29.0) & 0.0835 (29.4) & 0.0789 (18.3) & 0.0802 (19.4) \\
+log market cap & & $-0.0012$ ($-3.6$) & & $-0.0000$ ($-0.1$) \\
+log book-to-market & & $-0.0022$ ($-3.6$) & & $-0.0019$ ($-1.8$) \\
+B/M missing or negative & & 0.0023 (0.8) & & 0.0107 (3.1) \\
+Prior 1-month return & & $-0.0098$ ($-2.0$) & & $-0.0060$ ($-0.5$) \\
+Dispersion / price & & $-0.41$ ($-2.4$) & & 0.44 (1.6) \\
+Sector FE & no & yes & no & yes \\
+$N$ & 35{,}508 & 35{,}508 & 11{,}375 & 11{,}375 \\
+$R^2$ & 0.118 & 0.119 & 0.099 & 0.102 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent All specifications include season fixed effects; $t$-statistics in parentheses. Moving from
+the bottom to the top of the surprise distribution adds about 8 percentage points of two-day
+abnormal return. Controls add almost nothing ($\Delta R^2 \le 0.003$): the surprise is the whole
+benchmark. Fama--MacBeth gives the same SUE coefficient (0.078, $t_{NW}=20.3$ in validation).
+The controls matter for a different reason: a text signal correlated with size or value
+could otherwise look informative.
+
+\subsection{Real data: beat, meet, miss}
+
+The one-axis version of the $2\times2$ table (\code{cd_surprise_sign__*}); 95\% CIs clustered by season.
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Validation 2017--19 & $n$ & Share & Mean CAR$_{0,1}$ & 95\% CI \\
+\midrule
+Beat & 7{,}997 & 70.3\% & $+1.31$\% & [1.04, 1.57] \\
+Meet & 559 & 4.9\% & $-1.48$\% & [$-2.12$, $-0.83$] \\
+Miss & 2{,}819 & 24.8\% & $-3.22$\% & [$-3.56$, $-2.88$] \\
+Beat $-$ miss & & & $4.53$\% & [4.16, 4.89] \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent Dev years give the same picture (beat $+1.67$\%, miss $-3.29$\%). Misses are punished more
+than beats are rewarded, and a meet is bad news. When text signals arrive, the $2\times2$ table
+splits each of these rows by text tone; the question is whether the split is large.
+
+\subsection{Real data: is the benchmark stable?}
+
+Rank IC of SUE with the reaction, validation (\code{cd_surprise_robustness__validation}):
+
+\begin{itemize}
+  \item \textbf{Sectors:} 0.18 (utilities, energy) to 0.41 (shops, finance); $t \ge 3.6$ everywhere
+  estimable. Durables and telecom have too few events per season.
+  \item \textbf{Size terciles:} 0.32 / 0.32 / 0.29 (small / mid / large); slightly weaker for large firms.
+  \item \textbf{Years:} 0.32 (2017), 0.29 (2018), 0.33 (2019). \textbf{Sessions:} 0.30 after the close, 0.33 before the open.
+  \item \textbf{Samples:} unchanged without \code{basis_suspect} events (0.315).
+  \code{timing_suspect} is never set in the primary sample, so that check is empty there.
+\end{itemize}
+\noindent Sector heterogeneity is the one notable pattern: where SUE is weak (utilities, energy),
+text has more room to add information, so sector-level text results will be worth reporting.
+
+\subsection{Real data: the day $-1$ placebo}
+
+The surprise ranks the day $-1$ return in every subset (\code{cd_placebo_diagnostic}):
+
+\begin{center}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Split & Subset & IC with $AR_{-1}$ & $t_{NW}$ \\
+\midrule
+Dev & all & 0.052 & 9.1 \\
+& after close / before open & 0.061 / 0.044 & 7.0 / 5.6 \\
+& small / mid / large & 0.065 / 0.036 / 0.049 & 9.4 / 4.7 / 5.3 \\
+& 2006--10 / 2011--16 & 0.052 / 0.051 & 5.0 / 8.3 \\
+Validation & all & 0.036 & 4.7 \\
+& after close / before open & 0.037 / 0.033 & 7.0 / 1.8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent \textbf{Reading.} Every event in the primary sample has the wire and I/B/E/S clocks
+agreeing, so day 0 is unlikely to be one day late. For an after-close release, day $-1$ is the
+release day itself, whose close-to-close return ends before the release. The effect is about
+one-sixth of the reaction IC, diffuse across sessions, sizes and periods, and smaller in later years.
+That pattern fits pre-announcement drift (anticipation, information leakage, guidance) better
+than a systematic clock error. Parts 1 and 3--4 should still look at it: a subset of misdated
+releases would produce the same signature. For parts 7--8 the consequence is that the text placebo
+must control for SUE, which the robustness grid does.
+
+\subsection{Real data: Loughran--McDonald pilot (exploratory)}
+
+Only 115 events have text (105 dev, almost all 2006; 10 validation), below the 5\% coverage rule,
+so the pipeline does not evaluate LM. Purely to check direction (\code{cd_lm_pilot_*}):
+
+\begin{itemize}
+  \item LM tone vs reaction: Spearman 0.16 ($p=0.09$); vs SUE: 0.04, so nearly orthogonal to the surprise.
+  \item Reaction on SUE rank + standardised tone (HC1): tone $+0.73$\% per SD ($t=1.6$),
+  $R^2$ 0.231 $\to$ 0.248; unchanged with size and B/M.
+  \item $2\times2$ cells, tone above / below median: beat 2.1\% / 0.4\%; miss $-1.2$\% ($n=5$) / $-4.7$\% ($n=18$).
+\end{itemize}
+\noindent The direction matches the hypothesis (tone adds to the surprise in both rows), but none of
+this is a result: one year, $n=115$, no seasons to cluster on. It shows the LM path works end to end
+on real texts.
+
 \subsection{Synthetic data: the pipeline works}
 
 Synthetic events carry a planted text effect (a ``good'' LLM) and a pure-noise LLM. Combined model
@@ -272,10 +384,9 @@ does not invent one that does not.
 \toprule
 Item & Who & Effect on 7--8 & Action here \\
 \midrule
-Release texts 2007--2025 & Part 5 & LM and TF-IDF cover 115 events; TF-IDF needs $\ge 500$ training texts per fold & Rerun \texttt{-{}-step all} \\
-Loughran--McDonald dictionary & Anyone (sraf.nd.edu) & LM baseline skipped & Put the CSV in \texttt{resources/lm/} \\
+Release texts 2007--2025 & Part 5 & LM and TF-IDF cover 115 events; TF-IDF needs $\ge 500$ training texts per fold; no real regression or $2\times2$ with text & Rerun \texttt{-{}-step all} \\
 LLM scores & Part 6 & No LLM rows in any table & Rerun \texttt{-{}-step evaluate} \\
-Corrected release clock & Part 1, then 3--4 & Returns and surprise may shift & Rerun \texttt{-{}-step all} \\
+Corrected release clock & Part 1, then 3--4 & Returns and surprise may shift; may also explain part of the day $-1$ placebo & Rerun \texttt{-{}-step all} \\
 Holdout freeze & Part 5 (\texttt{splits.py -{}-freeze}) & Test run and rate shock locked & Final run (\S\ref{sec:next}) \\
 \bottomrule
 \end{tabularx}
@@ -305,13 +416,10 @@ holdout is opened; afterwards they cannot change.
   \item \textbf{Tradable portfolio.} Current long-short uses same-quarter ranks (fine for
   measuring information, not a strategy). A version with breakpoints from trailing releases only
   would give an implementable return.
-  \item \textbf{Book-to-market control.} Needs Compustat \code{ceqq} from part 3--4; then one line
-  in \code{regressions.CONTROLS}.
   \item \textbf{FactSet consensus robustness.} If part 3 provides it, add an alternative \code{sue_*}
   column to the robustness grid.
   \item \textbf{Figures for the report.} Cumulative abnormal return by text tercile within beat/miss
   (event-time plot), IC by season over time.
-  \item \textbf{Initial git commit.} The repo is initialised and staged but not committed.
 \end{itemize}
 
 %=====================================================================
@@ -321,8 +429,10 @@ holdout is opened; afterwards they cannot change.
 All commands run from the folder \code{7_8_baselines_evaluation/}.
 
 \begin{enumerate}
-  \item \textbf{Now:} download the Loughran--McDonald master dictionary into \code{resources/lm/},
-  then \texttt{python code/pipeline.py -{}-step all}. Check \code{results/tables/}.
+  \item \textbf{Today's state:} \texttt{python code/pipeline.py -{}-step all}, then
+  \texttt{python code/current\_data.py} for the benchmark, placebo and pilot tables (\code{cd_*}).
+  Book-to-market is cached in \code{data/}; \texttt{python code/book\_to\_market.py -{}-refresh}
+  re-pulls Compustat (needs a Duo approval).
   \item \textbf{When part 5 delivers more texts:} rerun \texttt{-{}-step all}. Sanity-check the TF-IDF
   top terms (they should be words like ``impairment'', ``raised guidance'', not firm names), text
   coverage by year, and the placebo row.
@@ -374,6 +484,8 @@ File & Role \\
 \code{code/two_by_two.py} & $2\times2$ table and contrasts \\
 \code{code/robustness.py} & Robustness grid \\
 \code{code/rate_shock.py} & 2022 rate-shock regimes \\
+\code{code/book_to_market.py} & Compustat book equity as of the release, divided by market cap \\
+\code{code/current_data.py} & Benchmark regression, beat/miss, stability, placebo diagnostic, LM pilot \\
 \code{code/outputs.py} & Saving and provenance logging \\
 \code{code/synthetic.py} & Synthetic data with planted effect \\
 \code{code/pipeline.py} & Command-line entry point \\

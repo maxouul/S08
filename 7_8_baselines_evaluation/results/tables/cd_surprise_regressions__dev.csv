@@ -1,0 +1,22 @@
+,(1) SUE deciles,(2) SUE rank,(3) SUE rank + controls,(4) SUE deciles + controls
+sue_rank,,0.0830***,0.0835***,
+,,(28.96),(29.41),
+log_mktcap,,,-0.0012***,-0.0015***
+,,,(-3.61),(-4.49)
+log_analysts,,,0.0001,0.0000
+,,,(0.08),(0.00)
+disp_price,,,-0.4141**,-0.2646
+,,,(-2.36),(-1.45)
+disp_missing,,,,
+,,,,
+ret_prior_1m_w,,,-0.0098**,-0.0095*
+,,,(-1.96),(-1.90)
+log_bm,,,-0.0022***,-0.0018***
+,,,(-3.55),(-2.85)
+bm_missing,,,0.0023,0.0022
+,,,(0.80),(0.76)
+SUE deciles,yes,no,no,yes
+season FE,yes,yes,yes,yes
+sector FE,no,no,yes,yes
+N,"35,508","35,508","35,508","35,508"
+R2,0.1182,0.1177,0.1194,0.1196

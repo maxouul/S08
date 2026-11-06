@@ -10,6 +10,7 @@ model has to beat (task 7) and runs the statistical tests (task 8).
 * **Why it is built this way:** [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md)
 * **What it reads from the other parts:** [`docs/INTERFACES.md`](docs/INTERFACES.md)
 * **What changed and when:** [`docs/CHANGELOG.md`](docs/CHANGELOG.md)
+* **Where things stand, with every current number:** [`docs/status_report/status_report.pdf`](docs/status_report/status_report.pdf)
 
 ## Layout
 
@@ -30,6 +31,7 @@ model has to beat (task 7) and runs the statistical tests (task 8).
     baseline_tfidf.py       benchmark 3: TF-IDF + ridge / logit, firm filter, tuning on dev
     metrics.py              IC, long-short, OOS R^2, Clark-West, hit rate, AUC
     compare.py              surprise-only vs text-only vs combined, on common support
+    book_to_market.py       Compustat ceqq (pulled from WRDS) / market cap, as of the release
     regressions.py          specification ladder, two-way clustering, Fama-MacBeth
     two_by_two.py           SUE sign x text sign, cell means, CIs, contrasts
     robustness.py           sectors, size, periods, windows, placebo, samples
@@ -37,12 +39,15 @@ model has to beat (task 7) and runs the statistical tests (task 8).
     outputs.py              saves every table as csv / md / tex and logs its provenance
     synthetic.py            fake data with a planted effect (tests and demo)
     pipeline.py             the whole thing, from the command line
-    tests/                  24 tests: hand-computed answers + recovery of a planted effect
-  resources/lm/             put the Loughran-McDonald master dictionary here (not redistributed)
+    current_data.py         what today's inputs support: benchmark regression, beat/miss,
+                            stability, day -1 placebo diagnostic, LM pilot (tables cd_*)
+    tests/                  28 tests: hand-computed answers + recovery of a planted effect
+  resources/lm/             the Loughran-McDonald master dictionary (downloaded, git-ignored, not redistributed)
   data/                     panel, signals, cached LM counts        WRDS-derived: never committed
   results/tables/           every table, as .csv, .md and .tex      summary statistics only
   results/regressions/      full statsmodels output of every regression
   results/_synthetic/       the same outputs on synthetic data (demo)
+  docs/status_report/       status report (.tex source and compiled .pdf)
   logs/runs.jsonl           one line per saved result: time, sha256, git commit, upstream versions
 ```
 
@@ -54,11 +59,13 @@ model has to beat (task 7) and runs the statistical tests (task 8).
 | `07_baselines` | build every baseline signal, compare with surprise | panel, texts | `data/signals.parquet`, `results/tables/t7_*` | 1 min today; ~15 min with all texts (TF-IDF) |
 | `08_evaluation` | regressions, 2x2, robustness | panel, signals, model cache | `results/tables/t8_*`, `results/regressions/*` | 1–3 min |
 | `08b_rate_shock` | rate-shock regimes | holdout, after the freeze | `results/tables/t8_rate_shock_*` | < 1 min |
+| `code/current_data.py` | results that need no text coverage, plus the LM pilot | panel, signals | `results/tables/cd_*` | < 1 min |
 
 Or from a terminal, at the folder root:
 
 ```bash
 python code/pipeline.py --step all                 # real data, validation split
+python code/current_data.py                        # then: benchmark, placebo, LM pilot tables
 ```
 
 ```bash
@@ -90,14 +97,45 @@ came from.
 
 ## Status (6 Nov 2026)
 
+**In short:** everything in tasks 7–8 is built and tested. The surprise benchmark and its controls
+are final on real data. Every *text* result (LM, TF-IDF, LLMs, the real 2×2 table, the text
+regressions) is waiting for upstream inputs: part 5 has cleaned 2006 only (115 events with text)
+and part 6 has not scored anything. When those arrive, rerunning the pipeline fills every table
+without code changes. Full write-up: [`docs/status_report/status_report.pdf`](docs/status_report/status_report.pdf).
+
+### What runs on real data today (dev 2006–16: 35,508 events; validation 2017–19: 11,375)
+
+| Result | Validation number | Table |
+|---|---|---|
+| SUE rank IC with the reaction (`car_0_1_ff4`) | 0.314 (t = 22.3); long-short 7.5% per event | `t7_surprise_benchmark__validation` |
+| Benchmark regression: SUE rank + controls + sector and season FE | coef 0.080 (t = 19.4), R² 0.102; controls add ≤ 0.003 R² | `cd_surprise_regressions__*` |
+| Beat / meet / miss mean reaction | +1.31% / −1.48% / −3.22%; beat − miss 4.53% [4.16, 4.89] | `cd_surprise_sign__*` |
+| SUE stability | IC 0.18 (utilities, energy) to 0.41 (shops, finance); 0.29–0.33 across size terciles, years and sessions | `cd_surprise_robustness__*` |
+| Post-release drift | none: 60-day IC −0.011 (t = −0.7) | `t7_surprise_benchmark__validation` |
+| Day −1 placebo | SUE IC 0.036 (t = 4.7); dev 0.052 (t = 9.1); diffuse across sessions, sizes and periods, which looks like pre-announcement drift, not a clock error. Flagged to parts 1 and 3–4 | `cd_placebo_diagnostic` |
+| LM tone pilot (115 texts, **exploratory**) | Spearman with reaction 0.16 (p = 0.09); +0.73% per SD beyond SUE (t = 1.6) | `cd_lm_pilot_*` |
+
+### Component status
+
 | | Status |
 |---|---|
-| Surprise-only baseline | **runs on the full sample**. Validation: rank IC 0.31 with the reaction (t = 22), long-short 7.5% per event |
-| Loughran–McDonald | code and tests done; waiting for the dictionary file in `resources/lm/` |
-| TF-IDF | code and tests done; waiting for part 5 to clean more than 2006 (needs ≥ 500 training texts per fold) |
-| LLM comparison | plumbing done and tested on synthetic scores; waiting for part 6 to fill the model cache |
-| Regressions, 2×2, robustness | done and tested; run on every available text signal |
+| Surprise-only baseline | **done**, full sample |
+| Loughran–McDonald | **done**; dictionary 1993–2025 in `resources/lm/` (git-ignored). Below the 5% coverage rule until part 5 cleans more years |
+| TF-IDF | code and tests done; skips every fold until there are ≥ 500 training texts per fold (has ≤ 104) |
+| LLM comparison | plumbing done and tested on synthetic scores; **waiting for part 6** |
+| Regressions, 2×2, robustness | done and tested; benchmark version run on real data; text versions wait for coverage |
+| Book-to-market control | **done**: Compustat `ceqq` as of the release, 94.6% coverage, median B/M 0.46; cached in `data/` (`--refresh` re-pulls WRDS, needs a Duo approval) |
+| Provenance | `logs/runs.jsonl` records the git commit of the code (`-dirty` if uncommitted) |
 | Rate shock | done; locked until the holdout freeze |
+
+### Blocked on other parts
+
+| Waiting for | Owner | Unblocks |
+|---|---|---|
+| Cleaned release texts 2007–2025 | part 5 | LM and TF-IDF evaluation, real text regressions and 2×2 |
+| Model scores in `model_outputs.sqlite` | part 6 | the LLM rows of every table; complex vs simple models |
+| Corrected release clock (55k filings) | parts 1 → 3–4 | rerun everything; may shrink the day −1 placebo |
+| Holdout freeze (`splits.py --freeze`) | part 5 | the one test-set run and the 2022 rate-shock analysis |
 
 The synthetic demo (`results/_synthetic/`) shows what every table looks like when all inputs exist.
 It recovers the planted text effect and finds nothing for a pure-noise "LLM" and for the placebo.
