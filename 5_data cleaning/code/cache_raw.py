@@ -7,14 +7,15 @@ and stores its bytes undecoded, so that cleaning becomes a separate, versioned s
 (clean_release.py) that never has to go back to EDGAR.
 
 Two ways to know which document to take:
-- report mode, when extraction_report_full.csv (the full report of fetch_releases.py,
-  with accession, cik and filename) is at hand: one request per document, straight
-  to its Archives URL, about 117,000 requests or 3 to 4 hours at 9 a second;
-- index mode otherwise (the shared extraction_report.csv has no accession column):
-  for each event of the release clock, the index page is read again and the document
-  is chosen with fetch_releases.py's own rules (parse_index, to_text,
-  looks_like_prose), so the choice is the same as before. About two requests per
-  event, 7 to 8 hours.
+- report mode, the default: the report of fetch_releases.py (files csv/
+  extraction_report.csv, or extraction_report_full.csv after a rerun) names the
+  document of each filing (accession, cik, filename). One request per document,
+  straight to its Archives URL: about 117,000 requests, 3 to 4 hours at 9 a second.
+  The 943 filings where fetch_releases.py found no prose document are not fetched;
+- index mode, only if no such report is found: for each filing of the release clock,
+  the index page is read again and the document is chosen with fetch_releases.py's own
+  rules (parse_index, to_text, looks_like_prose), so the choice is the same. About two
+  requests per filing, 7 to 8 hours.
 
 Output: cache/raw/raw_{year}.zip holding {accession}__{filename} (year of the filing date,
 which the timing corrections do not move), and raw_manifest.parquet (accession, cik,
@@ -46,7 +47,7 @@ import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
-import settings as S  # first: it puts part 1-2's folder on the path for fetch_releases
+import settings as S  # first: it puts scripts/ on the path for fetch_releases
 from fetch_releases import (RATE, USER_AGENT, WORKERS, RateLimiter, looks_like_prose,
                             parse_index, to_text)
 
@@ -56,7 +57,7 @@ JOURNAL = "_journal.csv"
 PERMANENT = {400, 404, 410}
 FIELDS = ["accession", "cik", "kind", "source", "url", "filename", "http_status",
           "n_bytes", "sha256", "fetched_at_utc"]
-REPORT_COLUMNS = {"accession", "cik", "filename", "source"}
+REPORT_COLUMNS = S.FETCH_REPORT_COLUMNS
 
 
 def fetch_status(url: str, limiter: RateLimiter, retries: int = 4) -> tuple[int, bytes | None]:
@@ -160,10 +161,11 @@ def build_manifest(raw_dir: str, out: str, present: set[str]) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--report", default=str(S.extraction_full() or ""),
-                    help="full report of fetch_releases.py; index mode if absent")
+    ap.add_argument("--report", default=str(S.fetch_report() or ""),
+                    help="report of fetch_releases.py (accession, cik, filename, source); "
+                         "index mode if absent")
     ap.add_argument("--events", default=str(S.CLOCK),
-                    help="events for index mode: accession, cik, filing_date")
+                    help="filings for index mode only: accession, cik, filing_date")
     ap.add_argument("--raw-dir", default=str(S.RAW_DIR))
     ap.add_argument("--manifest", default=str(S.RAW_MANIFEST))
     ap.add_argument("--workers", type=int, default=WORKERS)

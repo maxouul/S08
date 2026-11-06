@@ -6,11 +6,12 @@ Three kinds of flag:
 - exact: the same cleaned text (same sha256_text) under several accessions;
 - near: Jaccard similarity of word 5-grams of text_body of at least 0.9, estimated by
   MinHash with LSH (datasketch, 128 permutations), then confirmed on the estimate;
-- close_events: the same PERMNO with two events at most 5 trading sessions apart, as
-  when a preliminary release is followed by the final one. The date is reaction_date
-  from the release clock (part 3-4) and sessions are counted on its trading calendar.
-  Events the clock has not dated yet get no such flag; the clock is provisional, so
-  rerun this script when it is replaced.
+- close_events: the same PERMNO with two filings at most 5 trading sessions apart, as
+  when a preliminary release is followed by the final one, or two 8-Ks report one
+  quarter. The date is the reaction date of splits.load_event_dates (part 4's
+  events_final, the release clock for filings no event is linked to) and sessions are
+  counted on part 3-4's trading calendar. Undated filings get no such flag. The dates
+  move when the clock is corrected: rerun this script then.
 
 Output: data/dedup_flags.parquet (accession, dup_group, flag_type); an accession can carry
 several flags. dup_group is unique within a flag_type.
@@ -29,6 +30,7 @@ import numpy as np
 import pandas as pd
 
 import settings as S
+from splits import load_event_dates
 
 NUM_PERM = 128
 WORD_RE = re.compile(r"\w+")
@@ -71,6 +73,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--clean-dir", default=str(S.CLEAN_DIR))
     ap.add_argument("--clock", default=str(S.CLOCK))
+    ap.add_argument("--events", default=str(S.EVENTS_FINAL))
     ap.add_argument("--calendar", default=str(S.CALENDAR))
     ap.add_argument("--out", default=str(S.DEDUP_FLAGS))
     ap.add_argument("--threshold", type=float, default=0.9)
@@ -119,11 +122,9 @@ def main() -> int:
           f"{n.dup_group.nunique():,} groups", flush=True)
 
     # close events of the same security, in trading sessions
-    ck = pd.read_csv(args.clock, usecols=["accession", "permno", "reaction_date"],
-                     dtype={"accession": str})
-    ck = ck[ck.accession.isin(set(df.accession))].drop_duplicates("accession")
-    ck["d"] = pd.to_datetime(ck.reaction_date, errors="coerce")
-    undated = int(ck.d.isna().sum())
+    ck = load_event_dates(args.clock, args.events)
+    ck = ck[ck.accession.isin(set(df.accession))].rename(columns={"date_used": "d"})
+    undated = int(df.accession.nunique()) - int(ck.d.notna().sum())
     ck = ck.dropna(subset=["d", "permno"]).sort_values(["permno", "d"])
     cal = pd.to_datetime(pd.read_csv(args.calendar, usecols=["date"]).date).sort_values()
     ck["pos"] = np.searchsorted(cal.values, ck.d.values)        # session index
@@ -138,7 +139,7 @@ def main() -> int:
     c["flag_type"] = "close_events"
     flags.append(c)
     print(f"same permno within {args.max_gap} sessions: {len(c):,} events in "
-          f"{c.dup_group.nunique():,} groups ({undated:,} texts not dated by the clock)",
+          f"{c.dup_group.nunique():,} groups ({undated:,} texts without a date)",
           flush=True)
 
     out = pd.concat(flags, ignore_index=True)

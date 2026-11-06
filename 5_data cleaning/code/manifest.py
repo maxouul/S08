@@ -32,6 +32,8 @@ OUTPUTS = {
     "data/dedup_flags.parquet": "dedup.py",
     "data/splits_draft.parquet": "splits.py",
     "data/holdout_ids.txt": "splits.py --freeze",
+    "data/holdout_ids.sha256": "splits.py --freeze",
+    "data/holdout_freeze.json": "splits.py --freeze",
 }
 VERSIONED = {"clean_release.py", "token_stats.py", "dedup.py"}
 

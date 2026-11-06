@@ -3,7 +3,8 @@ Unit tests for clean_release.clean(), on four small documents built to look like
 four kinds met in the sample: a recent HTML release, an old release laid out inside a
 table, an old .txt filing in SGML, and an iXBRL 8-K body; and on two more carrying the
 repeated content a release can hold (page headers, "-more-", a paragraph or a table
-printed twice). They need no network and no data.
+printed twice); and on an earnings release against a monthly traffic report, for the
+earnings_like flag. They need no network and no data.
 
 Usage: python code/test_clean_release.py
 """
@@ -32,6 +33,15 @@ RECENT_HTML = f"""<html><head><meta charset="utf-8"><title>Acme Q3</title>
 <p>About Acme Corp.</p><p>Acme makes widgets.</p>
 <p>Investor Contact:</p><p>Jane Doe</p><p>(212) 555-1234</p><p>ir@acme.com</p>
 </body></html>""".encode("utf-8")
+
+# Part 2's earnings-release check: a quarterly release, and a monthly traffic report
+# filed under Item 2.02.
+EARNINGS_HTML = b"""<html><body><p>Acme Reports Third Quarter Financial Results</p>
+<p>Net income was $5.1 million, or $0.10 per diluted share, compared with $4.2 million.
+Operating income rose 8%. Acme raised its full year guidance.</p></body></html>"""
+TRAFFIC_HTML = b"""<html><body><p>Acme Airlines Reports May Traffic</p>
+<p>Revenue passenger miles rose 4.1% on available seat miles up 2.0%, and the load
+factor reached 84.2%, up 1.7 points.</p></body></html>"""
 
 LAYOUT_TABLE_HTML = f"""<HTML><HEAD><META http-equiv="Content-Type"
 content="text/html; charset=iso-8859-1"></HEAD><BODY>
@@ -193,6 +203,14 @@ def run() -> int:
 
     r = clean(b"caf\xe9 \x81 ok", "x.txt")
     expect("undecodable byte counted, not hidden", r["n_replacement_chars"] == 1)
+
+    r = clean(EARNINGS_HTML, "ex99.htm")
+    expect("earnings release flagged earnings_like",
+           r["earnings_like"] and r["n_earnings_terms"] >= 3)
+    r = clean(TRAFFIC_HTML, "ex99.htm")
+    expect("monthly traffic report not earnings_like, text kept",
+           not r["earnings_like"] and r["n_other_report_terms"] >= 2
+           and "load factor" in r["text_body"])
 
     print(f"\n{len(fails)} failed" if fails else "\nall passed")
     return 1 if fails else 0

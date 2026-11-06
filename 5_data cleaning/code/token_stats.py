@@ -54,7 +54,7 @@ MODELS = {
     "llama31_8b": ("meta-llama/Llama-3.1-8B-Instruct", 8000),
     "chronogpt": ("manelalab/chrono-gpt-v1-20231231", 1500),
 }
-BATCH = 500        # texts tokenized together; bounds memory on Colab
+BATCH = 500        # texts tokenized together; bounds memory
 PARAMS = ["sha256_text", "clean_version", "tokenizer_id", "max_tokens", "overlap"]
 
 

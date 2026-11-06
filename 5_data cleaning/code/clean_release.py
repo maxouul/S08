@@ -23,9 +23,16 @@ Compared with to_text() in fetch_releases.py:
   content repeated inside a document: a paragraph pasted twice, the page header or
   footer an old filing repeats on every page, a table printed twice. The counts are
   kept, so nothing disappears unseen;
-- the text is split into sentences, never across paragraphs.
+- the text is split into sentences, never across paragraphs;
+- part 2's check that the document is an earnings release (2_EDGAR.ipynb: earnings
+  vocabulary against that of the monthly sales and traffic reports some filers also
+  file under Item 2.02) is applied to every text, as a flag (earnings_like), never as
+  a deletion. Part 2's hand check found about 5% of its sample was not an earnings
+  release.
 
-Output: data/clean/clean_{year}.parquet, one row per accession.
+Output: data/clean/clean_{year}.parquet, one row per accession, columns OUTPUT_COLUMNS
+(year of the filing date). Parts 6 to 8 read accession, text_body, sha256_text,
+clean_version, n_words_body and error from it.
 
 Usage: python code/clean_release.py --workers 4
 """
@@ -71,6 +78,28 @@ C1_TO_CP1252 = {c: bytes([c]).decode("cp1252") for c in range(0x80, 0xA0)
                 if c not in (0x81, 0x8D, 0x8F, 0x90, 0x9D)}
 REPEAT_MIN_WORDS = 8      # a repeated paragraph this long is a copy, whatever its count
 REPEAT_MIN_COUNT = 3      # a shorter one goes only if it recurs, like a page header
+
+# Part 2's earnings-release check (2_EDGAR.ipynb, automatic validation), same terms and
+# rule, read on the first 8,000 characters. It only sets a flag: the text is unchanged.
+EARNINGS_TERMS = ["earnings per share", "net income", "diluted", "fourth quarter",
+                  "first quarter", "second quarter", "third quarter", "full year",
+                  "results of operations", "financial results", "net revenue",
+                  "operating income", "gaap", "guidance"]
+OTHER_REPORT_TERMS = ["traffic", "revenue passenger", "load factor", "available seat miles",
+                      "same-store sales for", "monthly sales", "sales for the month",
+                      "unit sales for"]
+EARNINGS_MIN_TERMS = 3    # earnings_like: at least this many earnings terms ...
+OTHER_MAX_TERMS = 1       # ... and at most this many terms of a monthly report
+
+# Every column of data/clean/clean_{year}.parquet, in order. A year file lacking one of
+# them is rebuilt even when its clean_version is current.
+OUTPUT_COLUMNS = [
+    "accession", "filename", "clean_version", "error", "encoding",
+    "text_full", "text_body", "sections", "sentences", "sentence_section", "fin_tables",
+    "n_words", "n_words_body", "n_words_tables", "n_sentences", "n_replacement_chars",
+    "n_furniture_removed", "n_repeats_removed", "n_table_copies_removed",
+    "n_earnings_terms", "n_other_report_terms", "earnings_like", "sha256_text",
+]
 
 # WHATWG treats these labels as windows-1252, and so do the filers who wrote them.
 CP1252_ALIASES = {"iso-8859-1", "iso8859-1", "latin-1", "latin1", "us-ascii", "ascii",
@@ -384,6 +413,10 @@ def clean(raw_bytes: bytes, filename: str) -> dict:
             sentences.append(s)
             sentence_section.append(lab)
 
+    head = text_full[:8000].lower()
+    n_earnings = sum(t in head for t in EARNINGS_TERMS)
+    n_other = sum(t in head for t in OTHER_REPORT_TERMS)
+
     return {
         "clean_version": CLEAN_VERSION,
         "encoding": encoding,
@@ -401,6 +434,9 @@ def clean(raw_bytes: bytes, filename: str) -> dict:
         "n_furniture_removed": n_furniture,
         "n_repeats_removed": n_copies,
         "n_table_copies_removed": n_tables_found - len(fin_tables),
+        "n_earnings_terms": n_earnings,
+        "n_other_report_terms": n_other,
+        "earnings_like": n_earnings >= EARNINGS_MIN_TERMS and n_other <= OTHER_MAX_TERMS,
         "sha256_text": hashlib.sha256(text_full.encode("utf-8")).hexdigest(),
     }
 
@@ -455,7 +491,7 @@ def main() -> int:
         out = os.path.join(args.out_dir, f"clean_{year}.parquet")
         if os.path.exists(out) and not args.force:
             v = pq.read_table(out, columns=["clean_version"]).column(0).unique().to_pylist()
-            if v == [CLEAN_VERSION]:
+            if v == [CLEAN_VERSION] and set(OUTPUT_COLUMNS) <= set(pq.read_schema(out).names):
                 print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
                 continue
         zp = os.path.join(args.raw_dir, name)
@@ -463,10 +499,8 @@ def main() -> int:
             members = [m for m in z.namelist() if "__" in m and not m.endswith("__index.htm")]
         with Pool(args.workers) as pool:
             recs = pool.map(_work, [(zp, m) for m in members], chunksize=32)
-        df = pd.DataFrame(recs)
+        df = pd.DataFrame(recs).reindex(columns=OUTPUT_COLUMNS)
         bad = int((df["error"] != "").sum())
-        df = df[["accession", "clean_version"] + [c for c in df.columns
-                                                  if c not in ("accession", "clean_version")]]
         tmp = out + ".tmp"
         df.to_parquet(tmp, index=False)
         os.replace(tmp, out)               # a crash never leaves a half-written year
