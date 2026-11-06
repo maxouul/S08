@@ -42,7 +42,7 @@ This folder builds the event-level financial data the rest of the project is mea
 | `03_returns` | `data/surprise.parquet`, `cache/` | `data/returns.parquet`, `results/returns_info.csv`, `results/sue_deciles_dev.csv` | 3 min |
 | `04_sample` | `data/surprise.parquet`, `data/returns.parquet`, `data/clock_provisional.csv`, `cache/` | `data/events_final.parquet`, `data/text_sample_keys.csv`, `results/funnel_final.csv`, `results/sample_by_split.csv`, `results/gaap_basis_check.csv`, `results/robustness_ic_dev.csv` | 2 min |
 
-Each notebook mounts Drive, adds `code/` to the path and checks its inputs exist. WRDS logins use your own account (username, password, Duo push). Never save the password; answer `n` to the `.pgpass` question.
+Each notebook finds the repository, adds its `code/` folder to the path and checks its inputs exist. Private inputs and outputs default to the checkout; set `TEAM_DIR` to use a separate data folder. WRDS logins use your own account (username, password, Duo push). Never save the password; answer `n` to the `.pgpass` question.
 
 **For teammates:** `data/events_final.parquet` has one row per event, with surprise, returns and every flag. Filter with `in_primary` (the pre-registered sample) or `in_text_sample` (all events with text). `data/text_sample_keys.csv` lists the filings to score, by accession number. Join model scores back on `event_id` or `accession`.
 
@@ -81,7 +81,7 @@ All market and analyst data come from WRDS under MIT's subscription: CRSP CIZ da
 ## Tests
 
 ```
-!cd "/content/drive/MyDrive/S08 NLP/3_4_surprise_returns" && python code/tests/run_all.py
+python 3_4_surprise_returns/code/tests/run_all.py
 ```
 
 The tests use synthetic data with hand-computed answers. They cover filing links, the size flag, the GAAP-basis flag, the funnel, look-ahead, stale and stopped estimates, currency, stock splits, duplicate announcements, wire-first timing, factor betas, the open-to-close leg, delisting returns, data-end truncation, the day −1 placebo and Newey-West standard errors.

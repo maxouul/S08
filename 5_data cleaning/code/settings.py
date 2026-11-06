@@ -4,12 +4,12 @@ Shared settings for part 5: where it reads and where it writes.
 Every script in code/ takes its default paths from here, so the folders are
 defined once. Override the two roots with environment variables (on Colab, WRDS
 or a laptop) instead of editing paths:
-  TEAM_DIR   the shared "S08 NLP" folder (default: the shortcut in My Drive)
+  TEAM_DIR   the private data root (default: the repository root)
   STEP5_DIR  this folder (default: TEAM_DIR / "5_data cleaning")
 
 Part 5 writes only inside STEP5_DIR. It reads, without changing them:
   1_2nov/nov2_data      event_table.csv, extraction_report*.csv, three_source_timing.csv
-  1_2nov/files .py      fetch_releases.py, whose download and choice rules are reused
+  scripts/             fetch_releases.py, whose download and choice rules are reused
   3_4_surprise_returns  the release clock, the trading calendar, the CRSP names and
                         I/B/E/S link already pulled from WRDS, and SPLITS in common.py
 """
@@ -20,10 +20,11 @@ import os
 import sys
 from pathlib import Path
 
-TEAM_DIR = Path(os.environ.get("TEAM_DIR", "/content/drive/MyDrive/S08 NLP"))
-STEP5_DIR = Path(os.environ.get("STEP5_DIR", TEAM_DIR / "5_data cleaning"))
+REPO_ROOT = Path(__file__).resolve().parents[2]
+TEAM_DIR = Path(os.environ.get("TEAM_DIR", REPO_ROOT)).expanduser().resolve()
+STEP5_DIR = Path(os.environ.get("STEP5_DIR", TEAM_DIR / "5_data cleaning")).expanduser().resolve()
 
-CODE = STEP5_DIR / "code"
+CODE = REPO_ROOT / "5_data cleaning" / "code"
 CACHE = STEP5_DIR / "cache"        # raw EDGAR bytes and model outputs
 DATA = STEP5_DIR / "data"          # built tables keyed by accession
 RESULTS = STEP5_DIR / "results"    # tables for the report
@@ -31,7 +32,9 @@ LOGS = STEP5_DIR / "logs"
 
 # Inputs from the other parts
 NOV2_DATA = TEAM_DIR / "1_2nov" / "nov2_data"
-NOV2_CODE = TEAM_DIR / "1_2nov" / "files .py"
+if not NOV2_DATA.is_dir():
+    NOV2_DATA = TEAM_DIR / "files csv"
+NOV2_CODE = REPO_ROOT / "scripts"
 PART34 = TEAM_DIR / "3_4_surprise_returns"
 CLOCK = PART34 / "data" / "clock_provisional.csv"
 CALENDAR = PART34 / "data" / "trading_calendar.csv"
@@ -73,7 +76,7 @@ def common_3_4():
     """Part 3-4's common.py, loaded from its file under another module name so it
     never shadows anything here. SPLITS and split_of come from it, so the texts and
     the returns are split by the same rule."""
-    path = PART34 / "code" / "common.py"
+    path = REPO_ROOT / "3_4_surprise_returns" / "code" / "common.py"
     spec = importlib.util.spec_from_file_location("common_3_4", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

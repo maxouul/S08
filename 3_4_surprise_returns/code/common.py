@@ -15,7 +15,8 @@ ET = "America/New_York"
 
 # Folder holding the inputs and outputs. Override with the PROJECT_DIR
 # environment variable (on WRDS, Colab or a laptop) instead of editing paths.
-PROJECT_DIR = Path(os.environ.get("PROJECT_DIR", "."))
+TEAM_DIR = Path(os.environ.get("TEAM_DIR", Path(__file__).resolve().parents[2])).expanduser().resolve()
+PROJECT_DIR = Path(os.environ.get("PROJECT_DIR", TEAM_DIR / "3_4_surprise_returns")).expanduser().resolve()
 
 # ---------------------------------------------------------------------------
 # Splits, as registered in the proposal. 2020 is set aside.
@@ -123,7 +124,7 @@ def build_trading_calendar(db, start: str = "2005-01-01", end: str = "2026-12-31
 
 
 def load_trading_calendar(path: str | Path | None = None) -> pd.DataFrame:
-    path = Path(path) if path else PROJECT_DIR / CALENDAR_FILE
+    path = Path(path) if path else PROJECT_DIR / "data" / CALENDAR_FILE
     cal = pd.read_csv(path, dtype={"close_et": str}, parse_dates=["date"])
     cal = cal.sort_values("date").drop_duplicates("date").reset_index(drop=True)
     assert cal["date"].is_monotonic_increasing

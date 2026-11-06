@@ -10,6 +10,8 @@
 
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import pandas as pd
 import wrds
@@ -38,11 +40,12 @@ def sessions(dates: pd.Series, times: pd.Series) -> pd.DataFrame:
 
 
 def main() -> int:
-    ev = pd.read_csv("matched_sample.csv",
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    ev = pd.read_csv(data_path("matched_sample.csv"),
                      usecols=["accession", "permno", "session_date", "when"],
                      dtype={"accession": str, "permno": "Int64",
                             "session_date": str, "when": str})
-    idn = pd.read_csv("identity.csv", usecols=["accession"], dtype=str)
+    idn = pd.read_csv(data_path("identity.csv"), usecols=["accession"], dtype=str)
     ev = ev[ev.accession.isin(set(idn.accession))]
     print(f"{len(ev):,} matched events", flush=True)
 
@@ -125,9 +128,9 @@ def main() -> int:
     m["agrees"] = agree
     cols = ["accession", "permno", "session_date", "when", "anndats",
             "anntims", "ibes_session", "ibes_flag", "agrees"]
-    m[cols].to_csv("timing_validation.csv", index=False)
+    m[cols].to_csv(data_path("timing_validation.csv"), index=False)
     con = m.loc[has & ~agree, cols].head(50)
-    con.to_csv("timing_conflicts_50.csv", index=False)
+    con.to_csv(data_path("timing_conflicts_50.csv"), index=False)
     print("\n-> timing_validation.csv\n-> timing_conflicts_50.csv "
           "(for the hand check against the wire)")
     return 0

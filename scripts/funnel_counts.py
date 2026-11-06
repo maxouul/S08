@@ -3,6 +3,8 @@
 #this is the first step of the attrition funnel, before CRSP matching and filtering.
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 import csv
@@ -60,9 +62,10 @@ def iter_filing_tables(zf: zipfile.ZipFile):
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
     ap.add_argument("--zip", required=True, help="path to submissions.zip")
-    ap.add_argument("--out", default="raw_counts.csv")
+    ap.add_argument("--out", default=data_path("raw_counts.csv"))
     args = ap.parse_args()
 
     if not os.path.exists(args.zip):

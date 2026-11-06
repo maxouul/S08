@@ -391,7 +391,7 @@ The holdout is about 22,000 events, not the 50,000 the feedback assumed. The eva
 
 ## 12\. Reproducibility and data handling
 
-**Run order** (`S08 NLP/3_4_surprise_returns/`). Each notebook mounts Drive, adds `code/` to the path and checks its inputs.
+**Run order** (`S08 NLP/3_4_surprise_returns/`). Each notebook locates the repository, adds its `code/` folder to the path and checks its inputs. `TEAM_DIR` can point to a separate private data folder.
 
 | Step | What it does | Time |
 | :---- | :---- | :---- |

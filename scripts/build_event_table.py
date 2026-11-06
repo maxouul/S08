@@ -5,6 +5,8 @@
 #Usage: python build_event_table.py --zip <submissions.zip> --out event_table.csv
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 import csv
@@ -107,10 +109,11 @@ def iter_tables(zf: zipfile.ZipFile):
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
     ap.add_argument("--zip", required=True)
-    ap.add_argument("--out", default="event_table.csv")
-    ap.add_argument("--acceptance", default="acceptance_times.csv",
+    ap.add_argument("--out", default=data_path("event_table.csv"))
+    ap.add_argument("--acceptance", default=data_path("acceptance_times.csv"),
                     help="ACCEPTANCE-DATETIME per accession, from "
                          "fetch_acceptance.py. Used in preference to "
                          "the submissions JSON wherever it has a row.")

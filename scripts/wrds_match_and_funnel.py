@@ -5,6 +5,8 @@
 #python wrds_match_and_funnel.py
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 import sys
@@ -165,11 +167,12 @@ class Funnel:
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
-    ap.add_argument("--events", default="event_table.csv")
-    ap.add_argument("--link", default="ccm_link.csv")
-    ap.add_argument("--out-sample", default="matched_sample.csv")
-    ap.add_argument("--out-funnel", default="attrition_funnel.csv")
+    ap.add_argument("--events", default=data_path("event_table.csv"))
+    ap.add_argument("--link", default=data_path("ccm_link.csv"))
+    ap.add_argument("--out-sample", default=data_path("matched_sample.csv"))
+    ap.add_argument("--out-funnel", default=data_path("attrition_funnel.csv"))
     ap.add_argument("--min-analysts", type=int, default=3)
     ap.add_argument("--min-price", type=float, default=5.0)
     ap.add_argument("--user", default=None,

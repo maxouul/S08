@@ -6,6 +6,8 @@
 #python three_source_timing.py
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 
@@ -58,6 +60,7 @@ def secs_of(ts: pd.Series) -> pd.Series:
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
     ap.add_argument("--keep-all", action="store_true",
                     help="write every event, corroborated or not. "
@@ -65,19 +68,19 @@ def main() -> int:
                          "sources place in the same session.")
     args = ap.parse_args()
 
-    t = pd.read_csv("timing_validation.csv", dtype={"accession": str})
-    w = pd.read_csv("wire_times.csv")
+    t = pd.read_csv(data_path("timing_validation.csv"), dtype={"accession": str})
+    w = pd.read_csv(data_path("wire_times.csv"))
 
     #we match wire stories using the exact release timestamp rather than the session
     #date to avoid incorrect matches. We use release_et when available, or fall back to acceptance_et for older event tables.
 
-    head = pd.read_csv("event_table.csv", nrows=0).columns
+    head = pd.read_csv(data_path("event_table.csv"), nrows=0).columns
     col = "release_et" if "release_et" in head else "acceptance_et"
     if col != "release_et":
         print("event_table.csv has no release_et column, so the 06:00 rule "
               "for filings disseminated the next morning is not applied "
               "here. Rebuild it with the current build_event_table.py.")
-    ev = pd.read_csv("event_table.csv", dtype={"accession": str},
+    ev = pd.read_csv(data_path("event_table.csv"), dtype={"accession": str},
                      usecols=["accession", col]).rename(
                          columns={col: "release_et"})
     ev = ev.drop_duplicates("accession")
@@ -163,9 +166,9 @@ def main() -> int:
             "session_source", "agree_two"]
 
 
-    m[cols].to_csv("three_source_timing_all.csv", index=False)
+    m[cols].to_csv(data_path("three_source_timing_all.csv"), index=False)
     kept = m if args.keep_all else m[two]
-    kept[cols].to_csv("three_source_timing.csv", index=False)
+    kept[cols].to_csv(data_path("three_source_timing.csv"), index=False)
     print(f"\nthree_source_timing.csv holds {len(kept):,} events"
           + ("" if args.keep_all else
              f", {n - len(kept):,} dropped for want of a second source"))
@@ -179,7 +182,7 @@ def main() -> int:
         + f"{a.replace('-', '')}/{a}-index.htm" for a in hand.accession]
     for c in ["session_you_read", "source_you_trust", "note"]:
         hand[c] = ""
-    hand.to_csv("timing_handcheck_50.csv", index=False,
+    hand.to_csv(data_path("timing_handcheck_50.csv"), index=False,
                 encoding="utf-8-sig")
     print("-> three_source_timing_all.csv\n-> three_source_timing.csv"
           "\n-> timing_handcheck_50.csv")

@@ -7,6 +7,8 @@
 #python fetch_releases.py --events matched_sample.csv --out-zip-dir releases
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 import csv
@@ -187,10 +189,11 @@ def already_done(zip_dir: str) -> set[str]:
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
-    ap.add_argument("--events", default="matched_sample.csv")
-    ap.add_argument("--out-zip-dir", default="releases")
-    ap.add_argument("--report", default="extraction_report_full.csv")
+    ap.add_argument("--events", default=data_path("matched_sample.csv"))
+    ap.add_argument("--out-zip-dir", default=data_path("releases"))
+    ap.add_argument("--report", default=data_path("extraction_report_full.csv"))
     ap.add_argument("--workers", type=int, default=WORKERS)
     ap.add_argument("--limit", type=int, default=0)
     args = ap.parse_args()

@@ -7,6 +7,8 @@
 #python wire_times.py --years 2006-2025
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 
@@ -46,9 +48,10 @@ def wire_for_year(db: wrds.Connection, year: int) -> pd.DataFrame:
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
     ap.add_argument("--years", default="2006-2025")
-    ap.add_argument("--out", default="wire_times.csv")
+    ap.add_argument("--out", default=data_path("wire_times.csv"))
     args = ap.parse_args()
     lo, hi = (int(x) for x in args.years.split("-"))
 

@@ -17,6 +17,9 @@ venv/
 cache/
 data/
 /1_2nov/nov2_data/
-/files csv/
 **/three_source_timing.csv
 **/timing_handcheck_50.csv
+
+# Shared CSV inputs explicitly included in the repository
+!/files csv/three_source_timing.csv
+!/files csv/timing_handcheck_50.csv

@@ -5,6 +5,8 @@
 #python fetch_acceptance.py --events event_table.csv
 
 from __future__ import annotations
+from project_paths import DATA_DIR, data_path
+
 
 import argparse
 import csv
@@ -63,9 +65,10 @@ def already_done(path: str) -> set[str]:
 
 
 def main() -> int:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     ap = argparse.ArgumentParser()
-    ap.add_argument("--events", default="event_table.csv")
-    ap.add_argument("--out", default="acceptance_times.csv")
+    ap.add_argument("--events", default=data_path("event_table.csv"))
+    ap.add_argument("--out", default=data_path("acceptance_times.csv"))
     ap.add_argument("--workers", type=int, default=WORKERS)
     ap.add_argument("--limit", type=int, default=0)
     args = ap.parse_args()
