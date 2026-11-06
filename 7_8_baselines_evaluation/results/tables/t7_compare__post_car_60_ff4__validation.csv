@@ -1,0 +1,3 @@
+eval_split,n_events,text_signal,approach,signal,outcome,n,seasons,mean_ic,ic_t_nw,ic_share_positive,ls_mean,ls_t_nw,ls_seasons,hit_rate,auc,oos_r2_vs0
+validation,11375,(none),surprise_only,surprise_only,post_car_60_ff4,11375,12,-0.019,-0.99,0.33,-0.017176131663370516,-1.7474529045726728,12,0.49208984375,0.4924765956390469,-0.0016585724701756455
+validation,11375,(none),sue_rank (raw signal),sue_rank,post_car_60_ff4,11375,12,-0.0114,-0.73,0.5,-0.013474684829255271,-1.8579205012832944,12,0.5016713581984518,0.4971879237531379,

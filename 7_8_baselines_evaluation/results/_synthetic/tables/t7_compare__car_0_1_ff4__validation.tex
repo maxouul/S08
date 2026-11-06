@@ -1,0 +1,30 @@
+\begin{table}
+\caption{Surprise-only vs text-only vs combined, car_0_1_ff4, validation split}
+\label{tab:t7_compare__car_0_1_ff4__validation}
+\begin{tabular}{lrllllrrrrrrrrrrrrrrrr}
+\toprule
+eval\_split & n\_events & text\_signal & approach & signal & outcome & n & seasons & mean\_ic & ic\_t\_nw & ic\_share\_positive & ls\_mean & ls\_t\_nw & ls\_seasons & hit\_rate & auc & oos\_r2\_vs0 & cw\_mean & cw\_t\_nw & cw\_p & cw\_seasons & oos\_r2\_vs\_surprise \\
+\midrule
+validation & 2111 & (none) & surprise\_only & surprise\_only & car\_0\_1\_ff4 & 2111 & 12 & 0.349600 & 15.880000 & 1.000000 & 0.054200 & 10.084300 & 12 & 0.638400 & 0.671700 & 0.114200 &  &  &  &  &  \\
+validation & 2111 & (none) & sue\_rank (raw signal) & sue\_rank & car\_0\_1\_ff4 & 2111 & 12 & 0.350900 & 15.570000 & 1.000000 & 0.054200 & 10.084300 & 12 & 0.635800 & 0.674700 &  &  &  &  &  &  \\
+validation & 2111 & lm\_tone & text (raw signal) & lm\_tone\_rk & car\_0\_1\_ff4 & 2111 & 12 & 0.294900 & 16.930000 & 1.000000 & 0.052900 & 11.081100 & 12 & 0.609500 & 0.644200 &  &  &  &  &  &  \\
+validation & 2111 & lm\_tone & text\_only & text\_only\_\_lm\_tone & car\_0\_1\_ff4 & 2111 & 12 & 0.294900 & 16.930000 & 1.000000 & 0.052900 & 11.081100 & 12 & 0.609500 & 0.644200 & 0.083800 &  &  &  &  &  \\
+validation & 2111 & lm\_tone & combined & combined\_\_lm\_tone & car\_0\_1\_ff4 & 2111 & 12 & 0.379300 & 17.620000 & 1.000000 & 0.064300 & 15.112100 & 12 & 0.648800 & 0.686900 & 0.140500 & 0.000200 & 10.193200 & 0.000000 & 12.000000 & 0.029600 \\
+validation & 2111 & lm\_negshare & text (raw signal) & lm\_negshare\_rk & car\_0\_1\_ff4 & 2111 & 12 & 0.267200 & 15.640000 & 1.000000 & 0.049100 & 12.358800 & 12 & 0.600500 & 0.634300 &  &  &  &  &  &  \\
+validation & 2111 & lm\_negshare & text\_only & text\_only\_\_lm\_negshare & car\_0\_1\_ff4 & 2111 & 12 & 0.267200 & 15.640000 & 1.000000 & 0.049100 & 12.358800 & 12 & 0.600500 & 0.634300 & 0.063900 &  &  &  &  &  \\
+validation & 2111 & lm\_negshare & combined & combined\_\_lm\_negshare & car\_0\_1\_ff4 & 2111 & 12 & 0.375600 & 18.270000 & 1.000000 & 0.060100 & 11.959400 & 12 & 0.647400 & 0.686400 & 0.133400 & 0.000100 & 10.172500 & 0.000000 & 12.000000 & 0.021600 \\
+validation & 2111 & tfidf\_ridge\_\_car\_0\_1\_ff4 & text (raw signal) & tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & car\_0\_1\_ff4 & 2111 & 12 & 0.258700 & 9.620000 & 1.000000 & 0.043800 & 8.848700 & 12 & 0.594500 & 0.626800 &  &  &  &  &  &  \\
+validation & 2111 & tfidf\_ridge\_\_car\_0\_1\_ff4 & text\_only & text\_only\_\_tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & 2111 & 12 & 0.258700 & 9.620000 & 1.000000 & 0.043800 & 8.848700 & 12 & 0.594500 & 0.626800 & 0.068800 &  &  &  &  &  \\
+validation & 2111 & tfidf\_ridge\_\_car\_0\_1\_ff4 & combined & combined\_\_tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & 2111 & 12 & 0.369700 & 14.810000 & 1.000000 & 0.059500 & 11.842800 & 12 & 0.640800 & 0.682700 & 0.140500 & 0.000100 & 5.955900 & 0.000000 & 12.000000 & 0.029700 \\
+validation & 2111 & tfidf\_logit\_\_up & text (raw signal) & tfidf\_logit\_\_up\_rk & car\_0\_1\_ff4 & 2111 & 12 & 0.250600 & 9.360000 & 1.000000 & 0.046300 & 6.292400 & 12 & 0.589700 & 0.625200 &  &  &  &  &  &  \\
+validation & 2111 & tfidf\_logit\_\_up & text\_only & text\_only\_\_tfidf\_logit\_\_up & car\_0\_1\_ff4 & 2111 & 12 & 0.250600 & 9.360000 & 1.000000 & 0.046300 & 6.292400 & 12 & 0.589700 & 0.625200 & 0.063600 &  &  &  &  &  \\
+validation & 2111 & tfidf\_logit\_\_up & combined & combined\_\_tfidf\_logit\_\_up & car\_0\_1\_ff4 & 2111 & 12 & 0.368700 & 14.750000 & 1.000000 & 0.062000 & 12.912000 & 12 & 0.642700 & 0.682700 & 0.138800 & 0.000100 & 5.382900 & 0.000100 & 12.000000 & 0.027800 \\
+validation & 2111 & llm\_\_good\_llm\_\_tone\_v1\_\_raw & text (raw signal) & llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & car\_0\_1\_ff4 & 2111 & 12 & 0.314100 & 25.190000 & 1.000000 & 0.059300 & 10.957800 & 12 & 0.623500 & 0.656200 &  &  &  &  &  &  \\
+validation & 2111 & llm\_\_good\_llm\_\_tone\_v1\_\_raw & text\_only & text\_only\_\_llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & 2111 & 12 & 0.314100 & 25.190000 & 1.000000 & 0.059300 & 10.957800 & 12 & 0.623500 & 0.656200 & 0.094600 &  &  &  &  &  \\
+validation & 2111 & llm\_\_good\_llm\_\_tone\_v1\_\_raw & combined & combined\_\_llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & 2111 & 12 & 0.390000 & 19.550000 & 1.000000 & 0.065300 & 13.398000 & 12 & 0.638400 & 0.693200 & 0.147500 & 0.000200 & 17.128700 & 0.000000 & 12.000000 & 0.037600 \\
+validation & 2111 & llm\_\_noise\_llm\_\_tone\_v1\_\_raw & text (raw signal) & llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & car\_0\_1\_ff4 & 2111 & 12 & 0.009800 & 0.560000 & 0.500000 & -0.001100 & -0.282200 & 12 & 0.522300 & 0.516900 &  &  &  &  &  &  \\
+validation & 2111 & llm\_\_noise\_llm\_\_tone\_v1\_\_raw & text\_only & text\_only\_\_llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & 2111 & 12 & 0.009800 & 0.560000 & 0.500000 & -0.001100 & -0.282200 & 12 & 0.522300 & 0.516900 & -0.004700 &  &  &  &  &  \\
+validation & 2111 & llm\_\_noise\_llm\_\_tone\_v1\_\_raw & combined & combined\_\_llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & 2111 & 12 & 0.347900 & 16.120000 & 1.000000 & 0.054200 & 10.084300 & 12 & 0.624600 & 0.673400 & 0.114500 & 0.000000 & 0.914700 & 0.190000 & 12.000000 & 0.000300 \\
+\bottomrule
+\end{tabular}
+\end{table}

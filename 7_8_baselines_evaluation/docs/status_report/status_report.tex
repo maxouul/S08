@@ -1,0 +1,389 @@
+% Status report for parts 7-8 of "Priced In or Memorized?" (15.S08, Fall 2026).
+% Compile from this folder with:  latexmk -pdf status_report.tex
+% Contains summary statistics only (no row-level WRDS data), like results/.
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\definecolor{done}{HTML}{1B7F3B}
+\definecolor{wait}{HTML}{B26B00}
+\definecolor{todo}{HTML}{B3261E}
+\newcommand{\done}{\textcolor{done}{\textbf{Done}}}
+\newcommand{\waiting}{\textcolor{wait}{\textbf{Waiting}}}
+\newcommand{\todo}{\textcolor{todo}{\textbf{To do}}}
+\newcommand{\locked}{\textcolor{wait}{\textbf{Locked}}}
+\usepackage{xurl}
+\urlstyle{tt}
+\newcommand{\code}[1]{\path{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setlist{itemsep=2pt, topsep=4pt}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Parts 7--8: baselines and financial evaluation}
+\rhead{\small Status, 6 November 2026}
+\cfoot{\small\thepage}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Priced In or Memorized?}\\[4pt]
+  {\Large Parts 7--8: Baselines, Model Comparisons and Financial Evaluation}\\[8pt]
+  {\large Status report: what is built, what is missing, how to continue}\\[10pt]
+  Max Lacroix \quad\textbullet\quad 15.S08, Fall 2026 \quad\textbullet\quad 6 November 2026
+\end{center}
+
+\vspace{6pt}
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
+\textbf{In one paragraph.} The code for tasks 7 and 8 is written, commented, documented and
+tested (24 tests pass). It reads the outputs of parts 3--4, 5 and 6 directly, so new upstream
+data flows in by rerunning one command, with no code changes. On the real data, the surprise-only
+benchmark runs on the full sample (validation rank IC $0.31$, $t=22$). On synthetic data with a
+planted effect, the whole pipeline recovers the effect and rejects a pure-noise ``LLM'' and the
+placebo. What is missing is mostly \emph{upstream input}: release texts beyond 2006 (part 5), the
+Loughran--McDonald dictionary file, model scores (part 6), and the holdout freeze. A handful of
+design decisions must also be written down before the freeze.}}
+
+\tableofcontents
+\vspace{6pt}
+
+%=====================================================================
+\section{What parts 7 and 8 are for}
+%=====================================================================
+
+The project asks whether the text of an earnings release tells us anything about the stock's
+abnormal return that the earnings surprise does not, and whether language models do this better
+than simple text models, or only appear to because they memorised outcomes.
+
+\begin{itemize}
+  \item \textbf{Task 7} builds the simple benchmarks a language model has to beat (surprise only,
+  Loughran--McDonald tone, TF-IDF) and compares every model on the same sample, with the same
+  metrics, windows and chronological splits.
+  \item \textbf{Task 8} merges model scores with the event-level financial data and runs the
+  tests: regressions controlling for the surprise and firm characteristics, a $2\times2$ table
+  (surprise sign $\times$ text sign), robustness checks, and the 2022 rate shock.
+\end{itemize}
+
+\noindent The four claims the design is built to test, in increasing order of strength:
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lYY@{}}
+\toprule
+& Claim & Test \\
+\midrule
+A & Text is related to returns & Rank IC, long-short spread \\
+B & Text adds information \emph{beyond the surprise} (the core claim) & Text coefficient with SUE deciles; combined vs surprise-only out of sample (Clark--West); $2\times2$ table \\
+C & LLMs beat simple text models & Same comparison: LLM vs Loughran--McDonald vs TF-IDF \\
+D & It is real, not an artefact & Robustness grid, day $-1$ placebo, one run on the frozen holdout \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%=====================================================================
+\section{How it plugs into the rest of the project}
+%=====================================================================
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lYY@{}}
+\toprule
+Part & What it provides & How 7--8 reads it \\
+\midrule
+3--4 & Event table: release clock, point-in-time consensus, SUE, abnormal returns (FF4 and market-adjusted), splits & \code{3_4_surprise_returns/data/events_final.parquet}; its \code{common.py} and \code{returns.py} are imported, not copied \\
+5 & Cleaned release texts; frozen holdout ids & \texttt{5\_data cleaning/data/clean/clean\_*.parquet}; \code{holdout_ids.txt} \\
+6 & Model scores (FinBERT, ChronoGPT, Llama 3.1 8B) & \texttt{5\_data cleaning/cache/model\_outputs.sqlite}, read-only; each \texttt{(model, prompt, variant)} becomes a signal \code{llm__<model>__<prompt>__<variant>} \\
+9 & Memorisation tests & Uses the Llama-cutoff split and the rate-shock regimes produced here \\
+10 & Report & Every table is saved as \code{.csv}, \code{.md} and \code{.tex} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent Column contracts are checked at load time (\code{io_inputs.py}); a missing column fails
+loudly rather than producing a wrong number. Full contracts are in \code{docs/INTERFACES.md}.
+
+%=====================================================================
+\section{Design in brief}
+%=====================================================================
+
+The rationale is in \code{docs/METHODOLOGY.md}; the essentials are:
+
+\begin{enumerate}
+  \item \textbf{A strong surprise benchmark.} SUE enters as decile dummies because the return
+  response is S-shaped. A linear benchmark would let text models win by capturing that curve.
+  \item \textbf{Every model graded the same way.} One panel of events. Each signal is converted to its
+  within-quarter rank in $[-0.5, 0.5]$, so a 1--5 LLM grade, a dictionary tone and a TF-IDF
+  prediction are comparable. Comparisons use \emph{common support}: only events every model scored.
+  \item \textbf{Nothing sees the future.} Trained models are fitted on earlier years only
+  (expanding window), with a 100-day embargo so a training label's 60-day return never overlaps the
+  test period. Tuning uses the development years only. The holdout (2021--25) needs two keys to
+  open. A day $-1$ placebo catches timing errors.
+  \item \textbf{Inference respects clustering.} Releases cluster in quarterly seasons that share
+  market news, so statistics are computed within season and seasons are the independent units
+  (Newey--West, 2 lags). Regressions use two-way clustering by firm and season, with Fama--MacBeth
+  as a check. Validation has only 12 seasons: below $|t|=3$ we say ``suggestive''.
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Split & Years & Role & Status \\
+\midrule
+dev & 2006--2016 & Fit and tune & In use \\
+validation & 2017--2019 & Comparison set & In use \\
+excluded & 2020 & COVID year, never used & -- \\
+holdout & 2021--2025 & Final test, one run & Locked until freeze \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%=====================================================================
+\section{What is built: task 7}
+%=====================================================================
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.4cm}Y>{\raggedright\arraybackslash}p{3.6cm}@{}}
+\toprule
+Requirement & Implementation & Status \\
+\midrule
+Surprise-only baseline & \code{baseline_surprise.py}: SUE rank, linear and decile models, cross-fitted & \done{} (real data) \\
+Loughran--McDonald baseline & \code{baseline_lm.py}: 7 categories, negation of positive words within 3 words, signals \code{lm_tone}, \code{lm_net}, \code{lm_negshare}, \code{lm_unc}; counts cached by text hash & \done{} (code); \waiting{} dictionary file \\
+TF-IDF baseline & \code{baseline_tfidf.py}: uni/bigrams, numbers masked, firm filter ($\ge 20$ firms per term), ridge and logistic, tuned on dev only & \done{} (code); \waiting{} texts \\
+Language models on same sample & \code{io_inputs.load_model_scores}: reads part 6's cache, \code{raw} and \code{mask} variants & \done{} (plumbing); \waiting{} scores \\
+Surprise-only vs text-only vs combined & \code{compare.py}: out-of-sample $R^2$, gain over surprise-only, Clark--West with $t_{S-1}$ p-values & \done{} \\
+Consistent metrics, windows, splits & \code{metrics.py}, \code{crossfit.py}: same IC, long-short, hit rate, AUC, five windows, one split scheme & \done{} \\
+Complex vs simple models & Combined-model rows for every signal in one table & \done{}; needs LLM scores \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%=====================================================================
+\section{What is built: task 8}
+%=====================================================================
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.4cm}Y>{\raggedright\arraybackslash}p{3.6cm}@{}}
+\toprule
+Requirement & Implementation & Status \\
+\midrule
+Merge scores with financial data & \code{panel.py} + \code{pipeline.py}: one row per event, signals aligned by event & \done{} \\
+Signal--return relationship & IC and decile long-short per signal and window & \done{} \\
+Regressions with controls & \code{regressions.py}: ladder (1)--(5), controls (size, analysts, dispersion, prior return), FF12 sector effects, two-way clustering, Fama--MacBeth & \done{} \\
+$2\times2$ table & \code{two_by_two.py}: beat/miss $\times$ good/bad tone (within-season median), cell means, SEs, 95\% CIs, $n$, contrasts incl.\ diff-in-diff & \done{} \\
+Text beyond surprise & Spec (3) coefficient, Clark--West, $2\times2$ within-row effects & \done{} \\
+Robustness & \code{robustness.py}: sectors, size, NYSE, periods, Llama cutoff, all windows, placebo, stricter samples, dispersion-scaled SUE & \done{} \\
+2022 rate shock & \code{rate_shock.py}: FOMC-dated regimes, per-regime IC and coefficient, pooled interaction + Wald test & \done{}; \locked{} (holdout) \\
+Save outputs automatically & \code{outputs.py}: \code{.csv/.md/.tex}, provenance log (sha256, git commit, upstream versions), refuses row-level tables & \done{} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection*{Quality checks}
+\begin{itemize}
+  \item \textbf{24 tests} (\texttt{python code/tests/run\_all.py}): hand-computed answers (ranks,
+  Newey--West equal to part 4's, Clark--West, exact $2\times2$ cell means, LM negation, folds without
+  look-ahead, holdout lock) and recovery tests on synthetic data (planted effect found; noise and
+  placebo not; Clark--West size under the null over 15 seeds).
+  \item \textbf{Notebooks}: \code{00_inputs_check}, \code{07_baselines}, \code{08_evaluation},
+  \code{08b_rate_shock}, each with markdown explaining the choices.
+\end{itemize}
+
+%=====================================================================
+\section{Results so far}
+%=====================================================================
+
+\subsection{Real data: the panel}
+
+\begin{center}
+\begin{tabular}{@{}lrrrcc@{}}
+\toprule
+Split & Events & With text & Seasons & First & Last \\
+\midrule
+dev & 35{,}508 & 105 & 44 & 2006-01-04 & 2016-12-22 \\
+validation & 11{,}375 & 10 & 12 & 2017-01-04 & 2019-12-20 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent Counts match part 4's \code{sample_by_split.csv}. Only 115 events have text so far.
+
+\subsection{Real data: the surprise benchmark (validation, 2017--19)}
+
+\begin{center}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Outcome & Rank IC & $t_{NW}$ & Long-short & $t_{NW}$ & AUC \\
+\midrule
+Reaction, \code{car_0_1_ff4} & 0.314 & 22.3 & 7.52\% & 13.3 & 0.655 \\
+\code{post_car_1_ff4} & 0.026 & 2.5 & 0.22\% & 0.6 & 0.514 \\
+Drift, \code{post_car_60_ff4} & $-0.011$ & $-0.7$ & $-1.35\%$ & $-1.9$ & 0.497 \\
+\code{car_1_60_ff4} & $-0.020$ & $-1.3$ & $-1.66\%$ & $-2.4$ & 0.495 \\
+Placebo, \code{ar_m1} & 0.036 & 4.7 & 0.26\% & 4.5 & 0.521 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Reading: the surprise is strongly priced at release and shows no post-announcement drift
+in 2017--19. It also predicts the day $-1$ return, consistent with pre-announcement drift
+(leakage or anticipation). That is why the placebo is reported \emph{controlling for SUE}: a text
+signal only fails the placebo if it predicts day $-1$ beyond what the surprise does. The out-of-sample
+$R^2$ of the surprise-only decile model on the reaction is 8.7\%: this is the bar text models have
+to raise.
+
+\subsection{Synthetic data: the pipeline works}
+
+Synthetic events carry a planted text effect (a ``good'' LLM) and a pure-noise LLM. Combined model
+vs surprise-only, reaction window, validation split:
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Text signal & Text-only IC & OOS $R^2$ gain & Clark--West $t$ & $p$ \\
+\midrule
+Good LLM & 0.314 & +3.8 pp & 17.1 & $<10^{-8}$ \\
+LM tone & 0.295 & +3.0 pp & 10.2 & $<10^{-6}$ \\
+TF-IDF ridge & 0.259 & +3.0 pp & 6.0 & $<10^{-4}$ \\
+Noise LLM & 0.010 & +0.0 pp & 0.9 & 0.19 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent These numbers are not findings; they show the machinery finds an effect that exists and
+does not invent one that does not.
+
+%=====================================================================
+\section{What is missing}
+%=====================================================================
+
+\subsection{Upstream inputs (blocking)}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{2.6cm}Y>{\raggedright\arraybackslash}p{3.3cm}@{}}
+\toprule
+Item & Who & Effect on 7--8 & Action here \\
+\midrule
+Release texts 2007--2025 & Part 5 & LM and TF-IDF cover 115 events; TF-IDF needs $\ge 500$ training texts per fold & Rerun \texttt{-{}-step all} \\
+Loughran--McDonald dictionary & Anyone (sraf.nd.edu) & LM baseline skipped & Put the CSV in \texttt{resources/lm/} \\
+LLM scores & Part 6 & No LLM rows in any table & Rerun \texttt{-{}-step evaluate} \\
+Corrected release clock & Part 1, then 3--4 & Returns and surprise may shift & Rerun \texttt{-{}-step all} \\
+Holdout freeze & Part 5 (\texttt{splits.py -{}-freeze}) & Test run and rate shock locked & Final run (\S\ref{sec:next}) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Decisions to write down before the freeze}
+
+These must be fixed in \code{docs/METHODOLOGY.md} (ideally agreed with the instructor) before the
+holdout is opened; afterwards they cannot change.
+
+\begin{enumerate}
+  \item \textbf{Headline outcome.} Proposed: \code{car_0_1_ff4} (reaction) as primary; the 60-day post-release window as secondary.
+  \item \textbf{Main sample.} \code{in_primary} (3+ analysts) vs the broader sample; with or without
+  the \code{basis_suspect} and \code{timing_suspect} events.
+  \item \textbf{Main LLM signal.} Which model, prompt and variant (\code{raw} vs \code{mask}) is the
+  headline in the $2\times2$ table and the regressions. The others become robustness rows.
+  \item \textbf{Size filter.} Whether to drop micro-caps (e.g.\ below the NYSE 20th percentile).
+  \item \textbf{Multiple testing.} How many signals $\times$ windows are ``primary''; the rest are
+  labelled exploratory.
+  \item \textbf{Interpretation table.} What each pattern of results would mean (priced in vs
+  under-reaction vs memorisation), written before seeing the holdout.
+\end{enumerate}
+
+\subsection{Extensions not yet built (own work, optional)}
+
+\begin{itemize}
+  \item \textbf{Tradable portfolio.} Current long-short uses same-quarter ranks (fine for
+  measuring information, not a strategy). A version with breakpoints from trailing releases only
+  would give an implementable return.
+  \item \textbf{Book-to-market control.} Needs Compustat \code{ceqq} from part 3--4; then one line
+  in \code{regressions.CONTROLS}.
+  \item \textbf{FactSet consensus robustness.} If part 3 provides it, add an alternative \code{sue_*}
+  column to the robustness grid.
+  \item \textbf{Figures for the report.} Cumulative abnormal return by text tercile within beat/miss
+  (event-time plot), IC by season over time.
+  \item \textbf{Initial git commit.} The repo is initialised and staged but not committed.
+\end{itemize}
+
+%=====================================================================
+\section{How to continue}\label{sec:next}
+%=====================================================================
+
+All commands run from the folder \code{7_8_baselines_evaluation/}.
+
+\begin{enumerate}
+  \item \textbf{Now:} download the Loughran--McDonald master dictionary into \code{resources/lm/},
+  then \texttt{python code/pipeline.py -{}-step all}. Check \code{results/tables/}.
+  \item \textbf{When part 5 delivers more texts:} rerun \texttt{-{}-step all}. Sanity-check the TF-IDF
+  top terms (they should be words like ``impairment'', ``raised guidance'', not firm names), text
+  coverage by year, and the placebo row.
+  \item \textbf{When part 6 fills the model cache:} \texttt{python code/pipeline.py -{}-step evaluate}.
+  LLM signals appear automatically in every table.
+  \item \textbf{Make the decisions above} and record them in \code{docs/METHODOLOGY.md} and
+  \code{docs/CHANGELOG.md}.
+  \item \textbf{After the freeze, once:}\\
+  \texttt{UNLOCK\_HOLDOUT=1 python code/pipeline.py -{}-step all -{}-eval-split holdout}, then run
+  \code{08b_rate_shock.ipynb}.
+  \item \textbf{Hand over to part 10:} the \code{.tex} tables in \code{results/tables/} can be
+  \texttt{\textbackslash input} directly into the report.
+\end{enumerate}
+
+\subsection*{What each upstream change requires}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}YY@{}}
+\toprule
+Upstream change & Rerun \\
+\midrule
+Part 5 cleaned more texts & \code{07_baselines}, then \code{08_evaluation} (LM counts are cached) \\
+Part 6 added model scores & \code{08_evaluation} only \\
+Part 1/3/4 corrected clock, surprise or returns & Everything (\texttt{-{}-step all}) \\
+Holdout frozen & The single final run \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%=====================================================================
+\appendix
+\section{File map}
+%=====================================================================
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lY@{}}
+\toprule
+File & Role \\
+\midrule
+\code{code/settings.py} & Paths and research-design constants (outcomes, splits, dates, seeds) \\
+\code{code/io_inputs.py} & Readers for parts 3--4, 5, 6 with column contracts \\
+\code{code/panel.py} & Analysis panel: seasons, ranks, controls, winsorising, holdout guard \\
+\code{code/crossfit.py} & Chronological out-of-sample fitting with embargo \\
+\code{code/baseline_surprise.py} & Benchmark 1: SUE \\
+\code{code/baseline_lm.py} & Benchmark 2: Loughran--McDonald \\
+\code{code/baseline_tfidf.py} & Benchmark 3: TF-IDF + ridge / logistic \\
+\code{code/metrics.py} & IC, long-short, OOS $R^2$, Clark--West, hit rate, AUC \\
+\code{code/compare.py} & Surprise-only vs text-only vs combined \\
+\code{code/regressions.py} & Ladder, two-way clustering, Fama--MacBeth \\
+\code{code/two_by_two.py} & $2\times2$ table and contrasts \\
+\code{code/robustness.py} & Robustness grid \\
+\code{code/rate_shock.py} & 2022 rate-shock regimes \\
+\code{code/outputs.py} & Saving and provenance logging \\
+\code{code/synthetic.py} & Synthetic data with planted effect \\
+\code{code/pipeline.py} & Command-line entry point \\
+\code{docs/METHODOLOGY.md} & Why everything is done this way \\
+\code{docs/INTERFACES.md} & Column and score contracts with other parts \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent\textit{Data note.} This report contains summary statistics only. Row-level WRDS
+derivatives stay in \code{data/} on the team Drive and are never committed or shared.
+
+\end{document}

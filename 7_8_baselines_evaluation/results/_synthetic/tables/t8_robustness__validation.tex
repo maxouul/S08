@@ -1,0 +1,184 @@
+\begin{table}
+\caption{Robustness grid}
+\label{tab:t8_robustness__validation}
+\begin{tabular}{llllrrrrrrrl}
+\toprule
+text\_signal & dimension & group & outcome & n & seasons & coef\_text & t\_text & p\_text & mean\_ic & ic\_t\_nw & note \\
+\midrule
+lm\_tone\_rk & baseline & all & car\_0\_1\_ff4 & 2111 & 12 & 0.033700 & 7.433700 & 0.000000 & 0.294900 & 16.930000 &  \\
+lm\_tone\_rk & sector (FF12) & BusEq & car\_0\_1\_ff4 & 182 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Chems & car\_0\_1\_ff4 & 194 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Durbl & car\_0\_1\_ff4 & 208 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Enrgy & car\_0\_1\_ff4 & 199 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Hlth & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Manuf & car\_0\_1\_ff4 & 158 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Money & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & NoDur & car\_0\_1\_ff4 & 198 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Shops & car\_0\_1\_ff4 & 191 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Telcm & car\_0\_1\_ff4 & 206 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & sector (FF12) & Utils & car\_0\_1\_ff4 & 197 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_tone\_rk & size tercile (within season) & small & car\_0\_1\_ff4 & 709 & 12 & 0.035700 & 4.916900 & 0.000000 & 0.315900 & 14.140000 &  \\
+lm\_tone\_rk & size tercile (within season) & mid & car\_0\_1\_ff4 & 699 & 12 & 0.033200 & 4.432800 & 0.000000 & 0.264200 & 9.150000 &  \\
+lm\_tone\_rk & size tercile (within season) & large & car\_0\_1\_ff4 & 703 & 12 & 0.033200 & 3.723200 & 0.000200 & 0.279800 & 9.720000 &  \\
+lm\_tone\_rk & NYSE 20th pct flag & below & car\_0\_1\_ff4 & 433 & 12 & 0.038600 & 3.737800 & 0.000200 & 0.347700 & 8.450000 &  \\
+lm\_tone\_rk & NYSE 20th pct flag & above & car\_0\_1\_ff4 & 1678 & 12 & 0.032000 & 6.710500 & 0.000000 & 0.277600 & 17.360000 &  \\
+lm\_tone\_rk & period & 2017-19 & car\_0\_1\_ff4 & 2111 & 12 & 0.033700 & 7.433700 & 0.000000 & 0.294900 & 16.930000 &  \\
+lm\_tone\_rk & Llama 3.1 cutoff & before 2024 & car\_0\_1\_ff4 & 2111 & 12 & 0.033700 & 7.433700 & 0.000000 & 0.294900 & 16.930000 &  \\
+lm\_tone\_rk & event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 2111 & 12 & 0.010000 & 5.282100 & 0.000000 & 0.146300 & 14.460000 &  \\
+lm\_tone\_rk & event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 2111 & 12 & 0.021800 & 2.075600 & 0.037900 & 0.029400 & 1.180000 &  \\
+lm\_tone\_rk & event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 2111 & 12 & 0.013400 & 1.373100 & 0.169700 & 0.007700 & 0.410000 &  \\
+lm\_tone\_rk & event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 2111 & 12 & 0.033800 & 7.854300 & 0.000000 & 0.289500 & 16.110000 &  \\
+lm\_tone\_rk & event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 2111 & 12 & 0.010500 & 5.557000 & 0.000000 & 0.141900 & 11.640000 &  \\
+lm\_tone\_rk & event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 2111 & 12 & 0.021700 & 2.103100 & 0.035500 & 0.028800 & 1.130000 &  \\
+lm\_tone\_rk & placebo (should be \textasciitilde 0) & ar\_m1 & ar\_m1 & 2111 & 12 & -0.001100 & -0.682800 & 0.494700 & -0.013200 & -0.560000 &  \\
+lm\_tone\_rk & sample & excluding basis\_suspect & car\_0\_1\_ff4 & 2049 & 12 & 0.032400 & 6.643100 & 0.000000 & 0.286900 & 16.550000 &  \\
+lm\_tone\_rk & sample & excluding timing\_suspect & car\_0\_1\_ff4 & 2111 & 12 & 0.033700 & 7.433700 & 0.000000 & 0.294900 & 16.930000 &  \\
+lm\_tone\_rk & surprise definition & SUE scaled by dispersion (3+ analysts) & car\_0\_1\_ff4 & 2111 & 12 & 0.035100 & 6.876500 & 0.000000 & 0.294900 & 16.930000 &  \\
+lm\_negshare\_rk & baseline & all & car\_0\_1\_ff4 & 2111 & 12 & 0.028300 & 7.457000 & 0.000000 & 0.267200 & 15.640000 &  \\
+lm\_negshare\_rk & sector (FF12) & BusEq & car\_0\_1\_ff4 & 182 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Chems & car\_0\_1\_ff4 & 194 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Durbl & car\_0\_1\_ff4 & 208 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Enrgy & car\_0\_1\_ff4 & 199 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Hlth & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Manuf & car\_0\_1\_ff4 & 158 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Money & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & NoDur & car\_0\_1\_ff4 & 198 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Shops & car\_0\_1\_ff4 & 191 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Telcm & car\_0\_1\_ff4 & 206 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & sector (FF12) & Utils & car\_0\_1\_ff4 & 197 & 12 &  &  &  &  &  & too few events or seasons \\
+lm\_negshare\_rk & size tercile (within season) & small & car\_0\_1\_ff4 & 709 & 12 & 0.031400 & 3.829900 & 0.000100 & 0.299300 & 10.650000 &  \\
+lm\_negshare\_rk & size tercile (within season) & mid & car\_0\_1\_ff4 & 699 & 12 & 0.027400 & 3.566100 & 0.000400 & 0.239000 & 7.120000 &  \\
+lm\_negshare\_rk & size tercile (within season) & large & car\_0\_1\_ff4 & 703 & 12 & 0.027000 & 3.785500 & 0.000200 & 0.237900 & 10.620000 &  \\
+lm\_negshare\_rk & NYSE 20th pct flag & below & car\_0\_1\_ff4 & 433 & 12 & 0.038600 & 3.587900 & 0.000300 & 0.352000 & 8.940000 &  \\
+lm\_negshare\_rk & NYSE 20th pct flag & above & car\_0\_1\_ff4 & 1678 & 12 & 0.025000 & 6.013700 & 0.000000 & 0.241000 & 14.150000 &  \\
+lm\_negshare\_rk & period & 2017-19 & car\_0\_1\_ff4 & 2111 & 12 & 0.028300 & 7.457000 & 0.000000 & 0.267200 & 15.640000 &  \\
+lm\_negshare\_rk & Llama 3.1 cutoff & before 2024 & car\_0\_1\_ff4 & 2111 & 12 & 0.028300 & 7.457000 & 0.000000 & 0.267200 & 15.640000 &  \\
+lm\_negshare\_rk & event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 2111 & 12 & 0.010200 & 3.919100 & 0.000100 & 0.145600 & 12.320000 &  \\
+lm\_negshare\_rk & event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 2111 & 12 & 0.019500 & 2.274100 & 0.023000 & 0.025100 & 1.330000 &  \\
+lm\_negshare\_rk & event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 2111 & 12 & 0.002700 & 0.254500 & 0.799100 & -0.008400 & -0.420000 &  \\
+lm\_negshare\_rk & event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 2111 & 12 & 0.028600 & 7.737300 & 0.000000 & 0.263600 & 14.380000 &  \\
+lm\_negshare\_rk & event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 2111 & 12 & 0.009600 & 3.822800 & 0.000100 & 0.130200 & 8.520000 &  \\
+lm\_negshare\_rk & event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 2111 & 12 & 0.019900 & 2.430300 & 0.015100 & 0.026400 & 1.330000 &  \\
+lm\_negshare\_rk & placebo (should be \textasciitilde 0) & ar\_m1 & ar\_m1 & 2111 & 12 & -0.000400 & -0.285700 & 0.775100 & -0.005900 & -0.320000 &  \\
+lm\_negshare\_rk & sample & excluding basis\_suspect & car\_0\_1\_ff4 & 2049 & 12 & 0.027100 & 6.923200 & 0.000000 & 0.261000 & 14.800000 &  \\
+lm\_negshare\_rk & sample & excluding timing\_suspect & car\_0\_1\_ff4 & 2111 & 12 & 0.028300 & 7.457000 & 0.000000 & 0.267200 & 15.640000 &  \\
+lm\_negshare\_rk & surprise definition & SUE scaled by dispersion (3+ analysts) & car\_0\_1\_ff4 & 2111 & 12 & 0.029500 & 6.612700 & 0.000000 & 0.267200 & 15.640000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & baseline & all & car\_0\_1\_ff4 & 2111 & 12 & 0.026500 & 5.159200 & 0.000000 & 0.258700 & 9.620000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & BusEq & car\_0\_1\_ff4 & 182 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Chems & car\_0\_1\_ff4 & 194 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Durbl & car\_0\_1\_ff4 & 208 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Enrgy & car\_0\_1\_ff4 & 199 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Hlth & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Manuf & car\_0\_1\_ff4 & 158 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Money & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & NoDur & car\_0\_1\_ff4 & 198 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Shops & car\_0\_1\_ff4 & 191 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Telcm & car\_0\_1\_ff4 & 206 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sector (FF12) & Utils & car\_0\_1\_ff4 & 197 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & size tercile (within season) & small & car\_0\_1\_ff4 & 709 & 12 & 0.027700 & 3.259300 & 0.001100 & 0.274000 & 7.400000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & size tercile (within season) & mid & car\_0\_1\_ff4 & 699 & 12 & 0.024800 & 2.880200 & 0.004000 & 0.231700 & 5.510000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & size tercile (within season) & large & car\_0\_1\_ff4 & 703 & 12 & 0.027800 & 3.276200 & 0.001100 & 0.251500 & 7.660000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & NYSE 20th pct flag & below & car\_0\_1\_ff4 & 433 & 12 & 0.030700 & 2.698000 & 0.007000 & 0.306800 & 6.180000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & NYSE 20th pct flag & above & car\_0\_1\_ff4 & 1678 & 12 & 0.024800 & 4.652200 & 0.000000 & 0.242800 & 9.420000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & period & 2017-19 & car\_0\_1\_ff4 & 2111 & 12 & 0.026500 & 5.159200 & 0.000000 & 0.258700 & 9.620000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & Llama 3.1 cutoff & before 2024 & car\_0\_1\_ff4 & 2111 & 12 & 0.026500 & 5.159200 & 0.000000 & 0.258700 & 9.620000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 2111 & 12 & 0.008000 & 3.451700 & 0.000600 & 0.129000 & 9.140000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 2111 & 12 & 0.013300 & 1.208900 & 0.226700 & 0.013100 & 0.500000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 2111 & 12 & 0.013000 & 1.757900 & 0.078800 & 0.012600 & 0.640000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 2111 & 12 & 0.026500 & 5.476600 & 0.000000 & 0.254000 & 9.460000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 2111 & 12 & 0.008400 & 3.434100 & 0.000600 & 0.125500 & 6.520000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 2111 & 12 & 0.012900 & 1.180800 & 0.237700 & 0.011900 & 0.450000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & placebo (should be \textasciitilde 0) & ar\_m1 & ar\_m1 & 2111 & 12 & -0.000200 & -0.111800 & 0.911000 & -0.001800 & -0.100000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sample & excluding basis\_suspect & car\_0\_1\_ff4 & 2049 & 12 & 0.024700 & 4.695900 & 0.000000 & 0.248400 & 8.960000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & sample & excluding timing\_suspect & car\_0\_1\_ff4 & 2111 & 12 & 0.026500 & 5.159200 & 0.000000 & 0.258700 & 9.620000 &  \\
+tfidf\_ridge\_\_car\_0\_1\_ff4\_rk & surprise definition & SUE scaled by dispersion (3+ analysts) & car\_0\_1\_ff4 & 2111 & 12 & 0.028000 & 4.919000 & 0.000000 & 0.258700 & 9.620000 &  \\
+tfidf\_logit\_\_up\_rk & baseline & all & car\_0\_1\_ff4 & 2111 & 12 & 0.025400 & 4.857800 & 0.000000 & 0.250600 & 9.360000 &  \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & BusEq & car\_0\_1\_ff4 & 182 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Chems & car\_0\_1\_ff4 & 194 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Durbl & car\_0\_1\_ff4 & 208 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Enrgy & car\_0\_1\_ff4 & 199 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Hlth & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Manuf & car\_0\_1\_ff4 & 158 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Money & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & NoDur & car\_0\_1\_ff4 & 198 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Shops & car\_0\_1\_ff4 & 191 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Telcm & car\_0\_1\_ff4 & 206 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & sector (FF12) & Utils & car\_0\_1\_ff4 & 197 & 12 &  &  &  &  &  & too few events or seasons \\
+tfidf\_logit\_\_up\_rk & size tercile (within season) & small & car\_0\_1\_ff4 & 709 & 12 & 0.028100 & 2.880000 & 0.004000 & 0.266400 & 6.590000 &  \\
+tfidf\_logit\_\_up\_rk & size tercile (within season) & mid & car\_0\_1\_ff4 & 699 & 12 & 0.021700 & 2.457000 & 0.014000 & 0.206300 & 4.790000 &  \\
+tfidf\_logit\_\_up\_rk & size tercile (within season) & large & car\_0\_1\_ff4 & 703 & 12 & 0.027400 & 3.493700 & 0.000500 & 0.251800 & 8.520000 &  \\
+tfidf\_logit\_\_up\_rk & NYSE 20th pct flag & below & car\_0\_1\_ff4 & 433 & 12 & 0.029600 & 2.282900 & 0.022400 & 0.293100 & 5.700000 &  \\
+tfidf\_logit\_\_up\_rk & NYSE 20th pct flag & above & car\_0\_1\_ff4 & 1678 & 12 & 0.023700 & 4.803600 & 0.000000 & 0.236100 & 9.630000 &  \\
+tfidf\_logit\_\_up\_rk & period & 2017-19 & car\_0\_1\_ff4 & 2111 & 12 & 0.025400 & 4.857800 & 0.000000 & 0.250600 & 9.360000 &  \\
+tfidf\_logit\_\_up\_rk & Llama 3.1 cutoff & before 2024 & car\_0\_1\_ff4 & 2111 & 12 & 0.025400 & 4.857800 & 0.000000 & 0.250600 & 9.360000 &  \\
+tfidf\_logit\_\_up\_rk & event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 2111 & 12 & 0.008000 & 3.491900 & 0.000500 & 0.128400 & 11.220000 &  \\
+tfidf\_logit\_\_up\_rk & event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 2111 & 12 & 0.010400 & 0.930200 & 0.352300 & 0.005900 & 0.250000 &  \\
+tfidf\_logit\_\_up\_rk & event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 2111 & 12 & 0.014200 & 1.695900 & 0.089900 & 0.015100 & 0.700000 &  \\
+tfidf\_logit\_\_up\_rk & event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 2111 & 12 & 0.025400 & 5.212300 & 0.000000 & 0.246800 & 9.570000 &  \\
+tfidf\_logit\_\_up\_rk & event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 2111 & 12 & 0.008100 & 3.401700 & 0.000700 & 0.120600 & 7.650000 &  \\
+tfidf\_logit\_\_up\_rk & event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 2111 & 12 & 0.010200 & 0.915000 & 0.360200 & 0.005300 & 0.220000 &  \\
+tfidf\_logit\_\_up\_rk & placebo (should be \textasciitilde 0) & ar\_m1 & ar\_m1 & 2111 & 12 & 0.000800 & 0.579700 & 0.562100 & 0.010500 & 0.620000 &  \\
+tfidf\_logit\_\_up\_rk & sample & excluding basis\_suspect & car\_0\_1\_ff4 & 2049 & 12 & 0.023600 & 4.418600 & 0.000000 & 0.239200 & 8.720000 &  \\
+tfidf\_logit\_\_up\_rk & sample & excluding timing\_suspect & car\_0\_1\_ff4 & 2111 & 12 & 0.025400 & 4.857800 & 0.000000 & 0.250600 & 9.360000 &  \\
+tfidf\_logit\_\_up\_rk & surprise definition & SUE scaled by dispersion (3+ analysts) & car\_0\_1\_ff4 & 2111 & 12 & 0.026900 & 4.636700 & 0.000000 & 0.250600 & 9.360000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & baseline & all & car\_0\_1\_ff4 & 2111 & 12 & 0.038000 & 12.828700 & 0.000000 & 0.314100 & 25.190000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & BusEq & car\_0\_1\_ff4 & 182 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Chems & car\_0\_1\_ff4 & 194 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Durbl & car\_0\_1\_ff4 & 208 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Enrgy & car\_0\_1\_ff4 & 199 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Hlth & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Manuf & car\_0\_1\_ff4 & 158 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Money & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & NoDur & car\_0\_1\_ff4 & 198 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Shops & car\_0\_1\_ff4 & 191 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Telcm & car\_0\_1\_ff4 & 206 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Utils & car\_0\_1\_ff4 & 197 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & size tercile (within season) & small & car\_0\_1\_ff4 & 709 & 12 & 0.039800 & 9.184600 & 0.000000 & 0.343200 & 18.500000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & size tercile (within season) & mid & car\_0\_1\_ff4 & 699 & 12 & 0.042200 & 6.527500 & 0.000000 & 0.310500 & 15.310000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & size tercile (within season) & large & car\_0\_1\_ff4 & 703 & 12 & 0.030900 & 5.075400 & 0.000000 & 0.267000 & 10.310000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & NYSE 20th pct flag & below & car\_0\_1\_ff4 & 433 & 12 & 0.039400 & 4.559300 & 0.000000 & 0.352700 & 8.090000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & NYSE 20th pct flag & above & car\_0\_1\_ff4 & 1678 & 12 & 0.037000 & 11.253700 & 0.000000 & 0.304000 & 18.180000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & period & 2017-19 & car\_0\_1\_ff4 & 2111 & 12 & 0.038000 & 12.828700 & 0.000000 & 0.314100 & 25.190000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & Llama 3.1 cutoff & before 2024 & car\_0\_1\_ff4 & 2111 & 12 & 0.038000 & 12.828700 & 0.000000 & 0.314100 & 25.190000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 2111 & 12 & 0.011200 & 3.983300 & 0.000100 & 0.152900 & 7.060000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 2111 & 12 & 0.005900 & 0.639500 & 0.522500 & -0.006100 & -0.230000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 2111 & 12 & 0.006900 & 0.719900 & 0.471600 & 0.001100 & 0.060000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 2111 & 12 & 0.038600 & 12.227500 & 0.000000 & 0.310900 & 18.960000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 2111 & 12 & 0.012100 & 4.589400 & 0.000000 & 0.153600 & 9.360000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 2111 & 12 & 0.005800 & 0.644000 & 0.519600 & -0.006700 & -0.250000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & placebo (should be \textasciitilde 0) & ar\_m1 & ar\_m1 & 2111 & 12 & -0.001800 & -1.125100 & 0.260600 & -0.026700 & -1.390000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sample & excluding basis\_suspect & car\_0\_1\_ff4 & 2049 & 12 & 0.037400 & 12.894500 & 0.000000 & 0.308300 & 23.460000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & sample & excluding timing\_suspect & car\_0\_1\_ff4 & 2111 & 12 & 0.038000 & 12.828700 & 0.000000 & 0.314100 & 25.190000 &  \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw\_rk & surprise definition & SUE scaled by dispersion (3+ analysts) & car\_0\_1\_ff4 & 2111 & 12 & 0.039700 & 11.926200 & 0.000000 & 0.314100 & 25.190000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & baseline & all & car\_0\_1\_ff4 & 2111 & 12 & 0.002500 & 0.707800 & 0.479100 & 0.009800 & 0.560000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & BusEq & car\_0\_1\_ff4 & 182 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Chems & car\_0\_1\_ff4 & 194 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Durbl & car\_0\_1\_ff4 & 208 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Enrgy & car\_0\_1\_ff4 & 199 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Hlth & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Manuf & car\_0\_1\_ff4 & 158 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Money & car\_0\_1\_ff4 & 189 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & NoDur & car\_0\_1\_ff4 & 198 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Shops & car\_0\_1\_ff4 & 191 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Telcm & car\_0\_1\_ff4 & 206 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sector (FF12) & Utils & car\_0\_1\_ff4 & 197 & 12 &  &  &  &  &  & too few events or seasons \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & size tercile (within season) & small & car\_0\_1\_ff4 & 709 & 12 & 0.006900 & 0.853600 & 0.393300 & 0.018600 & 0.490000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & size tercile (within season) & mid & car\_0\_1\_ff4 & 699 & 12 & 0.004500 & 0.749300 & 0.453600 & 0.009100 & 0.330000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & size tercile (within season) & large & car\_0\_1\_ff4 & 703 & 12 & -0.000300 & -0.072200 & 0.942400 & -0.008400 & -0.460000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & NYSE 20th pct flag & below & car\_0\_1\_ff4 & 433 & 12 & 0.012200 & 1.214400 & 0.224600 & 0.070200 & 2.080000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & NYSE 20th pct flag & above & car\_0\_1\_ff4 & 1678 & 12 & 0.000100 & 0.020300 & 0.983800 & -0.006000 & -0.380000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & period & 2017-19 & car\_0\_1\_ff4 & 2111 & 12 & 0.002500 & 0.707800 & 0.479100 & 0.009800 & 0.560000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & Llama 3.1 cutoff & before 2024 & car\_0\_1\_ff4 & 2111 & 12 & 0.002500 & 0.707800 & 0.479100 & 0.009800 & 0.560000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_1\_ff4 & post\_car\_1\_ff4 & 2111 & 12 & 0.003600 & 2.404800 & 0.016200 & 0.034400 & 3.680000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_60\_ff4 & post\_car\_60\_ff4 & 2111 & 12 & -0.003000 & -0.351300 & 0.725400 & -0.012300 & -1.010000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & event window & car\_1\_60\_ff4 & car\_1\_60\_ff4 & 2111 & 12 & -0.004700 & -0.368500 & 0.712500 & -0.015900 & -0.450000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & event window & car\_0\_1\_mkt & car\_0\_1\_mkt & 2111 & 12 & 0.002700 & 0.772700 & 0.439700 & 0.009800 & 0.590000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_1\_mkt & post\_car\_1\_mkt & 2111 & 12 & 0.002500 & 1.559000 & 0.119000 & 0.025500 & 3.200000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & event window & post\_car\_60\_mkt & post\_car\_60\_mkt & 2111 & 12 & -0.002000 & -0.226900 & 0.820500 & -0.010500 & -0.840000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & placebo (should be \textasciitilde 0) & ar\_m1 & ar\_m1 & 2111 & 12 & 0.001000 & 0.740700 & 0.458900 & 0.014900 & 1.080000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sample & excluding basis\_suspect & car\_0\_1\_ff4 & 2049 & 12 & 0.002500 & 0.710600 & 0.477300 & 0.009000 & 0.490000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & sample & excluding timing\_suspect & car\_0\_1\_ff4 & 2111 & 12 & 0.002500 & 0.707800 & 0.479100 & 0.009800 & 0.560000 &  \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw\_rk & surprise definition & SUE scaled by dispersion (3+ analysts) & car\_0\_1\_ff4 & 2111 & 12 & 0.002200 & 0.711500 & 0.476800 & 0.009800 & 0.560000 &  \\
+\bottomrule
+\end{tabular}
+\end{table}

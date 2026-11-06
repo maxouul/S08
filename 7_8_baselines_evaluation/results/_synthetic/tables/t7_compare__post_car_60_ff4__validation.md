@@ -1,0 +1,23 @@
+<!-- Surprise-only vs text-only vs combined, post_car_60_ff4, validation split -->
+| eval_split | n_events | text_signal | approach | signal | outcome | n | seasons | mean_ic | ic_t_nw | ic_share_positive | ls_mean | ls_t_nw | ls_seasons | hit_rate | auc | oos_r2_vs0 | cw_mean | cw_t_nw | cw_p | cw_seasons | oos_r2_vs_surprise |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| validation | 2111 | (none) | surprise_only | surprise_only | post_car_60_ff4 | 2111 | 12 | -0.0122 | -0.64 | 0.33 | -0.0002 | -0.017 | 12 | 0.4929 | 0.498 | -0.0012 |  |  |  |  |  |
+| validation | 2111 | (none) | sue_rank (raw signal) | sue_rank | post_car_60_ff4 | 2111 | 12 | -0.0216 | -1.07 | 0.42 | -0.0127 | -0.9501 | 12 | 0.5 | 0.4963 |  |  |  |  |  |  |
+| validation | 2111 | lm_tone | text (raw signal) | lm_tone_rk | post_car_60_ff4 | 2111 | 12 | 0.0294 | 1.18 | 0.67 | 0.0098 | 0.6553 | 12 | 0.5129 | 0.5119 |  |  |  |  |  |  |
+| validation | 2111 | lm_tone | text_only | text_only__lm_tone | post_car_60_ff4 | 2111 | 12 | 0.0294 | 1.18 | 0.67 | 0.0098 | 0.6553 | 12 | 0.5129 | 0.5119 | 0.0011 |  |  |  |  |  |
+| validation | 2111 | lm_tone | combined | combined__lm_tone | post_car_60_ff4 | 2111 | 12 | 0.0284 | 1.48 | 0.75 | 0.0174 | 1.837 | 12 | 0.4988 | 0.5078 | 0.0011 | 0.0001 | 2.2717 | 0.0221 | 12.0 | 0.0022 |
+| validation | 2111 | lm_negshare | text (raw signal) | lm_negshare_rk | post_car_60_ff4 | 2111 | 12 | 0.0251 | 1.33 | 0.67 | 0.0057 | 0.5023 | 12 | 0.5079 | 0.5104 |  |  |  |  |  |  |
+| validation | 2111 | lm_negshare | text_only | text_only__lm_negshare | post_car_60_ff4 | 2111 | 12 | 0.0251 | 1.33 | 0.67 | 0.0057 | 0.5023 | 12 | 0.5079 | 0.5104 | 0.0008 |  |  |  |  |  |
+| validation | 2111 | lm_negshare | combined | combined__lm_negshare | post_car_60_ff4 | 2111 | 12 | 0.0251 | 1.46 | 0.75 | 0.0159 | 1.6848 | 12 | 0.4931 | 0.5058 | 0.0009 | 0.0001 | 2.4928 | 0.0149 | 12.0 | 0.0021 |
+| validation | 2111 | tfidf_ridge__car_0_1_ff4 | text (raw signal) | tfidf_ridge__car_0_1_ff4_rk | post_car_60_ff4 | 2111 | 12 | 0.0131 | 0.5 | 0.5 | 0.0156 | 1.0239 | 12 | 0.5019 | 0.5015 |  |  |  |  |  |  |
+| validation | 2111 | tfidf_ridge__car_0_1_ff4 | text_only | text_only__tfidf_ridge__car_0_1_ff4 | post_car_60_ff4 | 2111 | 12 | 0.0131 | 0.5 | 0.5 | 0.0156 | 1.0239 | 12 | 0.5019 | 0.5015 | 0.0003 |  |  |  |  |  |
+| validation | 2111 | tfidf_ridge__car_0_1_ff4 | combined | combined__tfidf_ridge__car_0_1_ff4 | post_car_60_ff4 | 2111 | 12 | 0.0149 | 0.74 | 0.67 | 0.0047 | 0.5552 | 12 | 0.5005 | 0.5043 | -0.0009 | 0.0 | 1.0164 | 0.1656 | 12.0 | 0.0002 |
+| validation | 2111 | tfidf_logit__up | text (raw signal) | tfidf_logit__up_rk | post_car_60_ff4 | 2111 | 12 | 0.0059 | 0.25 | 0.42 | 0.0072 | 0.6027 | 12 | 0.4934 | 0.4955 |  |  |  |  |  |  |
+| validation | 2111 | tfidf_logit__up | text_only | text_only__tfidf_logit__up | post_car_60_ff4 | 2111 | 12 | 0.0059 | 0.25 | 0.42 | 0.0072 | 0.6027 | 12 | 0.4934 | 0.4955 | 0.0001 |  |  |  |  |  |
+| validation | 2111 | tfidf_logit__up | combined | combined__tfidf_logit__up | post_car_60_ff4 | 2111 | 12 | 0.0092 | 0.42 | 0.5 | -0.0018 | -0.2618 | 12 | 0.5062 | 0.5023 | -0.0013 | 0.0 | 0.6824 | 0.2546 | 12.0 | -0.0002 |
+| validation | 2111 | llm__good_llm__tone_v1__raw | text (raw signal) | llm__good_llm__tone_v1__raw_rk | post_car_60_ff4 | 2111 | 12 | -0.0061 | -0.23 | 0.42 | 0.0002 | 0.0205 | 12 | 0.4896 | 0.4987 |  |  |  |  |  |  |
+| validation | 2111 | llm__good_llm__tone_v1__raw | text_only | text_only__llm__good_llm__tone_v1__raw | post_car_60_ff4 | 2111 | 12 | -0.0061 | -0.23 | 0.42 | 0.0002 | 0.0205 | 12 | 0.4896 | 0.4987 | -0.0026 |  |  |  |  |  |
+| validation | 2111 | llm__good_llm__tone_v1__raw | combined | combined__llm__good_llm__tone_v1__raw | post_car_60_ff4 | 2111 | 12 | -0.0034 | -0.14 | 0.33 | 0.0182 | 2.1172 | 12 | 0.4943 | 0.497 | -0.0029 | 0.0 | 0.5393 | 0.3002 | 12.0 | -0.0018 |
+| validation | 2111 | llm__noise_llm__tone_v1__raw | text (raw signal) | llm__noise_llm__tone_v1__raw_rk | post_car_60_ff4 | 2111 | 12 | -0.0123 | -1.01 | 0.58 | -0.0055 | -0.6477 | 12 | 0.4953 | 0.4963 |  |  |  |  |  |  |
+| validation | 2111 | llm__noise_llm__tone_v1__raw | text_only | text_only__llm__noise_llm__tone_v1__raw | post_car_60_ff4 | 2111 | 12 | -0.0123 | -1.01 | 0.58 | -0.0055 | -0.6477 | 12 | 0.4953 | 0.4963 | 0.0003 |  |  |  |  |  |
+| validation | 2111 | llm__noise_llm__tone_v1__raw | combined | combined__llm__noise_llm__tone_v1__raw | post_car_60_ff4 | 2111 | 12 | -0.017 | -0.89 | 0.33 | -0.003 | -0.2937 | 12 | 0.4938 | 0.4962 | -0.0012 | -0.0 | -0.5911 | 0.7168 | 12.0 | -0.0 |

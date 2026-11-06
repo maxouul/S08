@@ -1,0 +1,12 @@
+\begin{table}
+\caption{Surprise-only vs text-only vs combined, car_0_1_ff4, validation split}
+\label{tab:t7_compare__car_0_1_ff4__validation}
+\begin{tabular}{lrllllrrrrrrrrrrr}
+\toprule
+eval\_split & n\_events & text\_signal & approach & signal & outcome & n & seasons & mean\_ic & ic\_t\_nw & ic\_share\_positive & ls\_mean & ls\_t\_nw & ls\_seasons & hit\_rate & auc & oos\_r2\_vs0 \\
+\midrule
+validation & 11375 & (none) & surprise\_only & surprise\_only & car\_0\_1\_ff4 & 11375 & 12 & 0.312000 & 22.120000 & 1.000000 & 0.075200 & 13.329300 & 12 & 0.632600 & 0.653100 & 0.087300 \\
+validation & 11375 & (none) & sue\_rank (raw signal) & sue\_rank & car\_0\_1\_ff4 & 11375 & 12 & 0.313600 & 22.260000 & 1.000000 & 0.075200 & 13.329300 & 12 & 0.617300 & 0.654600 &  \\
+\bottomrule
+\end{tabular}
+\end{table}

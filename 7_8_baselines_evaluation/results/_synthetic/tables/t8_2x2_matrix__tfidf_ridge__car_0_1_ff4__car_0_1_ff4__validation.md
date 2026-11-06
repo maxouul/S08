@@ -1,0 +1,5 @@
+<!-- Mean car_0_1_ff4 [95% CI], SUE sign x text sign (tfidf_ridge__car_0_1_ff4) -->
+| index | text negative | text positive |
+|---|---|---|
+| SUE > 0 (beat) | 0.72% [0.10, 1.34]  n=279 | 1.77% [1.37, 2.16]  n=591 |
+| SUE < 0 (miss) | -3.30% [-3.82, -2.78]  n=565 | -2.21% [-2.79, -1.62]  n=264 |

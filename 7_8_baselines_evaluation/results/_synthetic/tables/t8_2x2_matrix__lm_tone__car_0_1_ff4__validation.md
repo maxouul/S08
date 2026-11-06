@@ -1,0 +1,5 @@
+<!-- Mean car_0_1_ff4 [95% CI], SUE sign x text sign (lm_tone) -->
+| index | text negative | text positive |
+|---|---|---|
+| SUE > 0 (beat) | 0.50% [-0.20, 1.20]  n=247 | 1.84% [1.41, 2.26]  n=610 |
+| SUE < 0 (miss) | -3.46% [-4.00, -2.92]  n=576 | -1.64% [-2.19, -1.09]  n=237 |

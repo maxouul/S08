@@ -1,0 +1,175 @@
+text_signal,dimension,group,outcome,n,seasons,coef_text,t_text,p_text,mean_ic,ic_t_nw,note
+lm_tone_rk,baseline,all,car_0_1_ff4,2111,12,0.033714488362665565,7.433709015755719,1.0559412403875377e-13,0.2949,16.93,
+lm_tone_rk,sector (FF12),BusEq,car_0_1_ff4,182,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Chems,car_0_1_ff4,194,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Durbl,car_0_1_ff4,208,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Enrgy,car_0_1_ff4,199,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Hlth,car_0_1_ff4,189,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Manuf,car_0_1_ff4,158,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Money,car_0_1_ff4,189,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),NoDur,car_0_1_ff4,198,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Shops,car_0_1_ff4,191,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Telcm,car_0_1_ff4,206,12,,,,,,too few events or seasons
+lm_tone_rk,sector (FF12),Utils,car_0_1_ff4,197,12,,,,,,too few events or seasons
+lm_tone_rk,size tercile (within season),small,car_0_1_ff4,709,12,0.03566947745092386,4.9169478712399375,8.790394690963552e-07,0.3159,14.14,
+lm_tone_rk,size tercile (within season),mid,car_0_1_ff4,699,12,0.03319578829968858,4.432798167163118,9.301793426094915e-06,0.2642,9.15,
+lm_tone_rk,size tercile (within season),large,car_0_1_ff4,703,12,0.03324677040619744,3.72316418982737,0.00019674148522157476,0.2798,9.72,
+lm_tone_rk,NYSE 20th pct flag,below,car_0_1_ff4,433,12,0.03862097063629819,3.737823324572382,0.00018562030507662428,0.3477,8.45,
+lm_tone_rk,NYSE 20th pct flag,above,car_0_1_ff4,1678,12,0.03200004872688714,6.710510124412029,1.9394518858471182e-11,0.2776,17.36,
+lm_tone_rk,period,2017-19,car_0_1_ff4,2111,12,0.033714488362665565,7.433709015755719,1.0559412403875377e-13,0.2949,16.93,
+lm_tone_rk,Llama 3.1 cutoff,before 2024,car_0_1_ff4,2111,12,0.033714488362665565,7.433709015755719,1.0559412403875377e-13,0.2949,16.93,
+lm_tone_rk,event window,post_car_1_ff4,post_car_1_ff4,2111,12,0.009992066041231866,5.2820703578147,1.2773212279806308e-07,0.1463,14.46,
+lm_tone_rk,event window,post_car_60_ff4,post_car_60_ff4,2111,12,0.021767525852385713,2.0756074227302825,0.0379302743707861,0.0294,1.18,
+lm_tone_rk,event window,car_1_60_ff4,car_1_60_ff4,2111,12,0.01341474441410646,1.373134649310654,0.1697104911077767,0.0077,0.41,
+lm_tone_rk,event window,car_0_1_mkt,car_0_1_mkt,2111,12,0.033842619937019786,7.854274622730107,4.020923990256312e-15,0.2895,16.11,
+lm_tone_rk,event window,post_car_1_mkt,post_car_1_mkt,2111,12,0.010484705817435522,5.557048419750786,2.743746680431822e-08,0.1419,11.64,
+lm_tone_rk,event window,post_car_60_mkt,post_car_60_mkt,2111,12,0.021660735508051133,2.1031467530150887,0.03545294315109494,0.0288,1.13,
+lm_tone_rk,placebo (should be ~0),ar_m1,ar_m1,2111,12,-0.0011258650618886418,-0.682789274271027,0.4947400081458947,-0.0132,-0.56,
+lm_tone_rk,sample,excluding basis_suspect,car_0_1_ff4,2049,12,0.03240428575367481,6.643135072190843,3.070801810952315e-11,0.2869,16.55,
+lm_tone_rk,sample,excluding timing_suspect,car_0_1_ff4,2111,12,0.033714488362665565,7.433709015755719,1.0559412403875377e-13,0.2949,16.93,
+lm_tone_rk,surprise definition,SUE scaled by dispersion (3+ analysts),car_0_1_ff4,2111,12,0.035062440096422856,6.87654543351743,6.132138423480872e-12,0.2949,16.93,
+lm_negshare_rk,baseline,all,car_0_1_ff4,2111,12,0.0282559003058699,7.456963755058328,8.85390466352594e-14,0.2672,15.64,
+lm_negshare_rk,sector (FF12),BusEq,car_0_1_ff4,182,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Chems,car_0_1_ff4,194,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Durbl,car_0_1_ff4,208,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Enrgy,car_0_1_ff4,199,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Hlth,car_0_1_ff4,189,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Manuf,car_0_1_ff4,158,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Money,car_0_1_ff4,189,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),NoDur,car_0_1_ff4,198,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Shops,car_0_1_ff4,191,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Telcm,car_0_1_ff4,206,12,,,,,,too few events or seasons
+lm_negshare_rk,sector (FF12),Utils,car_0_1_ff4,197,12,,,,,,too few events or seasons
+lm_negshare_rk,size tercile (within season),small,car_0_1_ff4,709,12,0.03137646704570988,3.8299100021541705,0.00012819013339304965,0.2993,10.65,
+lm_negshare_rk,size tercile (within season),mid,car_0_1_ff4,699,12,0.02737896417677465,3.5660934806156717,0.0003623421682216943,0.239,7.12,
+lm_negshare_rk,size tercile (within season),large,car_0_1_ff4,703,12,0.027009484445185486,3.7854739455459194,0.00015341590810334185,0.2379,10.62,
+lm_negshare_rk,NYSE 20th pct flag,below,car_0_1_ff4,433,12,0.038622021640007595,3.587871173540977,0.00033338893472584913,0.352,8.94,
+lm_negshare_rk,NYSE 20th pct flag,above,car_0_1_ff4,1678,12,0.024973288618806953,6.013697306551707,1.8133897476662584e-09,0.241,14.15,
+lm_negshare_rk,period,2017-19,car_0_1_ff4,2111,12,0.0282559003058699,7.456963755058328,8.85390466352594e-14,0.2672,15.64,
+lm_negshare_rk,Llama 3.1 cutoff,before 2024,car_0_1_ff4,2111,12,0.0282559003058699,7.456963755058328,8.85390466352594e-14,0.2672,15.64,
+lm_negshare_rk,event window,post_car_1_ff4,post_car_1_ff4,2111,12,0.010181530096084884,3.9191022366193065,8.887941039601718e-05,0.1456,12.32,
+lm_negshare_rk,event window,post_car_60_ff4,post_car_60_ff4,2111,12,0.0194822591746747,2.274078936983157,0.022961240862672205,0.0251,1.33,
+lm_negshare_rk,event window,car_1_60_ff4,car_1_60_ff4,2111,12,0.002717193405027318,0.2545487983703386,0.7990716095902022,-0.0084,-0.42,
+lm_negshare_rk,event window,car_0_1_mkt,car_0_1_mkt,2111,12,0.028628668042011314,7.737257823427534,1.0158392879385714e-14,0.2636,14.38,
+lm_negshare_rk,event window,post_car_1_mkt,post_car_1_mkt,2111,12,0.009610828442213113,3.822788786828851,0.00013195080028858934,0.1302,8.52,
+lm_negshare_rk,event window,post_car_60_mkt,post_car_60_mkt,2111,12,0.019946806684094914,2.4302959526215373,0.015086498218001768,0.0264,1.33,
+lm_negshare_rk,placebo (should be ~0),ar_m1,ar_m1,2111,12,-0.00044390490212773255,-0.2857247001943758,0.7750889849918807,-0.0059,-0.32,
+lm_negshare_rk,sample,excluding basis_suspect,car_0_1_ff4,2049,12,0.027052930707872673,6.9232276099731465,4.414675833158404e-12,0.261,14.8,
+lm_negshare_rk,sample,excluding timing_suspect,car_0_1_ff4,2111,12,0.0282559003058699,7.456963755058328,8.85390466352594e-14,0.2672,15.64,
+lm_negshare_rk,surprise definition,SUE scaled by dispersion (3+ analysts),car_0_1_ff4,2111,12,0.029480601997624346,6.612689747357767,3.7739889296523316e-11,0.2672,15.64,
+tfidf_ridge__car_0_1_ff4_rk,baseline,all,car_0_1_ff4,2111,12,0.026453752520385957,5.159233792067072,2.479625170045745e-07,0.2587,9.62,
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),BusEq,car_0_1_ff4,182,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Chems,car_0_1_ff4,194,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Durbl,car_0_1_ff4,208,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Enrgy,car_0_1_ff4,199,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Hlth,car_0_1_ff4,189,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Manuf,car_0_1_ff4,158,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Money,car_0_1_ff4,189,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),NoDur,car_0_1_ff4,198,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Shops,car_0_1_ff4,191,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Telcm,car_0_1_ff4,206,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,sector (FF12),Utils,car_0_1_ff4,197,12,,,,,,too few events or seasons
+tfidf_ridge__car_0_1_ff4_rk,size tercile (within season),small,car_0_1_ff4,709,12,0.027742313922849118,3.25929552767977,0.001116892577945362,0.274,7.4,
+tfidf_ridge__car_0_1_ff4_rk,size tercile (within season),mid,car_0_1_ff4,699,12,0.02480872459453681,2.880221498734027,0.003973958736922481,0.2317,5.51,
+tfidf_ridge__car_0_1_ff4_rk,size tercile (within season),large,car_0_1_ff4,703,12,0.027754437304111607,3.2761699177519565,0.0010522523290290159,0.2515,7.66,
+tfidf_ridge__car_0_1_ff4_rk,NYSE 20th pct flag,below,car_0_1_ff4,433,12,0.030724901781792074,2.6979755149578075,0.00697625715951801,0.3068,6.18,
+tfidf_ridge__car_0_1_ff4_rk,NYSE 20th pct flag,above,car_0_1_ff4,1678,12,0.024837234850578913,4.652170909272804,3.2845866699391208e-06,0.2428,9.42,
+tfidf_ridge__car_0_1_ff4_rk,period,2017-19,car_0_1_ff4,2111,12,0.026453752520385957,5.159233792067072,2.479625170045745e-07,0.2587,9.62,
+tfidf_ridge__car_0_1_ff4_rk,Llama 3.1 cutoff,before 2024,car_0_1_ff4,2111,12,0.026453752520385957,5.159233792067072,2.479625170045745e-07,0.2587,9.62,
+tfidf_ridge__car_0_1_ff4_rk,event window,post_car_1_ff4,post_car_1_ff4,2111,12,0.008005473163246759,3.4516518423998295,0.0005571661564886695,0.129,9.14,
+tfidf_ridge__car_0_1_ff4_rk,event window,post_car_60_ff4,post_car_60_ff4,2111,12,0.013271075555987461,1.2088634391452457,0.226715314299907,0.0131,0.5,
+tfidf_ridge__car_0_1_ff4_rk,event window,car_1_60_ff4,car_1_60_ff4,2111,12,0.013016920812871705,1.7579449913001974,0.07875686951713214,0.0126,0.64,
+tfidf_ridge__car_0_1_ff4_rk,event window,car_0_1_mkt,car_0_1_mkt,2111,12,0.026525417525188826,5.476558988356863,4.336762490834243e-08,0.254,9.46,
+tfidf_ridge__car_0_1_ff4_rk,event window,post_car_1_mkt,post_car_1_mkt,2111,12,0.008415921211740705,3.4340560282405983,0.0005946212745560267,0.1255,6.52,
+tfidf_ridge__car_0_1_ff4_rk,event window,post_car_60_mkt,post_car_60_mkt,2111,12,0.012893760120709512,1.1807669788121429,0.23769530533985772,0.0119,0.45,
+tfidf_ridge__car_0_1_ff4_rk,placebo (should be ~0),ar_m1,ar_m1,2111,12,-0.00017472735414581007,-0.11180411797446638,0.9109787223270935,-0.0018,-0.1,
+tfidf_ridge__car_0_1_ff4_rk,sample,excluding basis_suspect,car_0_1_ff4,2049,12,0.024740378182885527,4.695921804494271,2.6540706653396402e-06,0.2484,8.96,
+tfidf_ridge__car_0_1_ff4_rk,sample,excluding timing_suspect,car_0_1_ff4,2111,12,0.026453752520385957,5.159233792067072,2.479625170045745e-07,0.2587,9.62,
+tfidf_ridge__car_0_1_ff4_rk,surprise definition,SUE scaled by dispersion (3+ analysts),car_0_1_ff4,2111,12,0.028049412382892564,4.918954375500147,8.700774503971224e-07,0.2587,9.62,
+tfidf_logit__up_rk,baseline,all,car_0_1_ff4,2111,12,0.02536084043539817,4.857791197926761,1.187024887098971e-06,0.2506,9.36,
+tfidf_logit__up_rk,sector (FF12),BusEq,car_0_1_ff4,182,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Chems,car_0_1_ff4,194,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Durbl,car_0_1_ff4,208,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Enrgy,car_0_1_ff4,199,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Hlth,car_0_1_ff4,189,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Manuf,car_0_1_ff4,158,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Money,car_0_1_ff4,189,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),NoDur,car_0_1_ff4,198,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Shops,car_0_1_ff4,191,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Telcm,car_0_1_ff4,206,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,sector (FF12),Utils,car_0_1_ff4,197,12,,,,,,too few events or seasons
+tfidf_logit__up_rk,size tercile (within season),small,car_0_1_ff4,709,12,0.028105087140784746,2.879961855450531,0.003977232870691349,0.2664,6.59,
+tfidf_logit__up_rk,size tercile (within season),mid,car_0_1_ff4,699,12,0.021673977008741983,2.457003171622638,0.014010144976555932,0.2063,4.79,
+tfidf_logit__up_rk,size tercile (within season),large,car_0_1_ff4,703,12,0.027403689626311022,3.49368784991318,0.00047639768992360613,0.2518,8.52,
+tfidf_logit__up_rk,NYSE 20th pct flag,below,car_0_1_ff4,433,12,0.02955934918477141,2.282931000542176,0.022434433067165957,0.2931,5.7,
+tfidf_logit__up_rk,NYSE 20th pct flag,above,car_0_1_ff4,1678,12,0.0237223352432018,4.803571979402947,1.5585982285746163e-06,0.2361,9.63,
+tfidf_logit__up_rk,period,2017-19,car_0_1_ff4,2111,12,0.02536084043539817,4.857791197926761,1.187024887098971e-06,0.2506,9.36,
+tfidf_logit__up_rk,Llama 3.1 cutoff,before 2024,car_0_1_ff4,2111,12,0.02536084043539817,4.857791197926761,1.187024887098971e-06,0.2506,9.36,
+tfidf_logit__up_rk,event window,post_car_1_ff4,post_car_1_ff4,2111,12,0.008013760825275894,3.491890015348579,0.0004796156932804506,0.1284,11.22,
+tfidf_logit__up_rk,event window,post_car_60_ff4,post_car_60_ff4,2111,12,0.010429127073513953,0.9301576506089724,0.35228946512262826,0.0059,0.25,
+tfidf_logit__up_rk,event window,car_1_60_ff4,car_1_60_ff4,2111,12,0.014154322726799076,1.6958507494788473,0.08991414871375594,0.0151,0.7,
+tfidf_logit__up_rk,event window,car_0_1_mkt,car_0_1_mkt,2111,12,0.02542362579304515,5.212296524609471,1.865170986442136e-07,0.2468,9.57,
+tfidf_logit__up_rk,event window,post_car_1_mkt,post_car_1_mkt,2111,12,0.008061740281520756,3.401669309412189,0.0006697562756501237,0.1206,7.65,
+tfidf_logit__up_rk,event window,post_car_60_mkt,post_car_60_mkt,2111,12,0.010157379901510296,0.9149595752473167,0.36021285252061586,0.0053,0.22,
+tfidf_logit__up_rk,placebo (should be ~0),ar_m1,ar_m1,2111,12,0.0008097355250601169,0.5796975092875396,0.5621186232921953,0.0105,0.62,
+tfidf_logit__up_rk,sample,excluding basis_suspect,car_0_1_ff4,2049,12,0.023560689245719208,4.418604622503789,9.934018878444713e-06,0.2392,8.72,
+tfidf_logit__up_rk,sample,excluding timing_suspect,car_0_1_ff4,2111,12,0.02536084043539817,4.857791197926761,1.187024887098971e-06,0.2506,9.36,
+tfidf_logit__up_rk,surprise definition,SUE scaled by dispersion (3+ analysts),car_0_1_ff4,2111,12,0.026905062829531836,4.636651651810715,3.540984233970826e-06,0.2506,9.36,
+llm__good_llm__tone_v1__raw_rk,baseline,all,car_0_1_ff4,2111,12,0.03801223962807658,12.82869815207527,1.1325114121588746e-37,0.3141,25.19,
+llm__good_llm__tone_v1__raw_rk,sector (FF12),BusEq,car_0_1_ff4,182,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Chems,car_0_1_ff4,194,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Durbl,car_0_1_ff4,208,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Enrgy,car_0_1_ff4,199,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Hlth,car_0_1_ff4,189,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Manuf,car_0_1_ff4,158,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Money,car_0_1_ff4,189,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),NoDur,car_0_1_ff4,198,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Shops,car_0_1_ff4,191,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Telcm,car_0_1_ff4,206,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,sector (FF12),Utils,car_0_1_ff4,197,12,,,,,,too few events or seasons
+llm__good_llm__tone_v1__raw_rk,size tercile (within season),small,car_0_1_ff4,709,12,0.03975782531625306,9.18460090988009,4.130561078365907e-20,0.3432,18.5,
+llm__good_llm__tone_v1__raw_rk,size tercile (within season),mid,car_0_1_ff4,699,12,0.04224445868805104,6.527466358920712,6.689152506425851e-11,0.3105,15.31,
+llm__good_llm__tone_v1__raw_rk,size tercile (within season),large,car_0_1_ff4,703,12,0.03087200646279281,5.075354326773954,3.867745773683878e-07,0.267,10.31,
+llm__good_llm__tone_v1__raw_rk,NYSE 20th pct flag,below,car_0_1_ff4,433,12,0.03944608287942641,4.559310624430977,5.1321812984057765e-06,0.3527,8.09,
+llm__good_llm__tone_v1__raw_rk,NYSE 20th pct flag,above,car_0_1_ff4,1678,12,0.03703051964357457,11.253685941857224,2.2211188358245274e-29,0.304,18.18,
+llm__good_llm__tone_v1__raw_rk,period,2017-19,car_0_1_ff4,2111,12,0.03801223962807658,12.82869815207527,1.1325114121588746e-37,0.3141,25.19,
+llm__good_llm__tone_v1__raw_rk,Llama 3.1 cutoff,before 2024,car_0_1_ff4,2111,12,0.03801223962807658,12.82869815207527,1.1325114121588746e-37,0.3141,25.19,
+llm__good_llm__tone_v1__raw_rk,event window,post_car_1_ff4,post_car_1_ff4,2111,12,0.011212384246723724,3.983280386909873,6.797048272227864e-05,0.1529,7.06,
+llm__good_llm__tone_v1__raw_rk,event window,post_car_60_ff4,post_car_60_ff4,2111,12,0.005875406207623559,0.6395182689872929,0.5224858328046287,-0.0061,-0.23,
+llm__good_llm__tone_v1__raw_rk,event window,car_1_60_ff4,car_1_60_ff4,2111,12,0.006872613426758427,0.7198806915924689,0.47159845720082205,0.0011,0.06,
+llm__good_llm__tone_v1__raw_rk,event window,car_0_1_mkt,car_0_1_mkt,2111,12,0.03855157852081918,12.227518101322426,2.2160653363570493e-34,0.3109,18.96,
+llm__good_llm__tone_v1__raw_rk,event window,post_car_1_mkt,post_car_1_mkt,2111,12,0.012072104169719457,4.589442445644783,4.4443151437955345e-06,0.1536,9.36,
+llm__good_llm__tone_v1__raw_rk,event window,post_car_60_mkt,post_car_60_mkt,2111,12,0.00584419319723631,0.6440323634459213,0.5195544479041464,-0.0067,-0.25,
+llm__good_llm__tone_v1__raw_rk,placebo (should be ~0),ar_m1,ar_m1,2111,12,-0.0018356739975261094,-1.1250796589397503,0.26055528004821993,-0.0267,-1.39,
+llm__good_llm__tone_v1__raw_rk,sample,excluding basis_suspect,car_0_1_ff4,2049,12,0.03737743926930981,12.89450140917932,4.833792663699689e-38,0.3083,23.46,
+llm__good_llm__tone_v1__raw_rk,sample,excluding timing_suspect,car_0_1_ff4,2111,12,0.03801223962807658,12.82869815207527,1.1325114121588746e-37,0.3141,25.19,
+llm__good_llm__tone_v1__raw_rk,surprise definition,SUE scaled by dispersion (3+ analysts),car_0_1_ff4,2111,12,0.0396616355573602,11.926160991063815,8.647005929527208e-33,0.3141,25.19,
+llm__noise_llm__tone_v1__raw_rk,baseline,all,car_0_1_ff4,2111,12,0.002463700143540449,0.707830485238443,0.47905053255231567,0.0098,0.56,
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),BusEq,car_0_1_ff4,182,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Chems,car_0_1_ff4,194,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Durbl,car_0_1_ff4,208,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Enrgy,car_0_1_ff4,199,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Hlth,car_0_1_ff4,189,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Manuf,car_0_1_ff4,158,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Money,car_0_1_ff4,189,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),NoDur,car_0_1_ff4,198,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Shops,car_0_1_ff4,191,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Telcm,car_0_1_ff4,206,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,sector (FF12),Utils,car_0_1_ff4,197,12,,,,,,too few events or seasons
+llm__noise_llm__tone_v1__raw_rk,size tercile (within season),small,car_0_1_ff4,709,12,0.006944471291027424,0.8536231992753047,0.3933138000615949,0.0186,0.49,
+llm__noise_llm__tone_v1__raw_rk,size tercile (within season),mid,car_0_1_ff4,699,12,0.004507295034499495,0.7493439460829765,0.4536499267338684,0.0091,0.33,
+llm__noise_llm__tone_v1__raw_rk,size tercile (within season),large,car_0_1_ff4,703,12,-0.0003089278047204106,-0.07222803610635839,0.9424204338501448,-0.0084,-0.46,
+llm__noise_llm__tone_v1__raw_rk,NYSE 20th pct flag,below,car_0_1_ff4,433,12,0.012225629627367557,1.2143950099344818,0.2245969200358402,0.0702,2.08,
+llm__noise_llm__tone_v1__raw_rk,NYSE 20th pct flag,above,car_0_1_ff4,1678,12,6.424341116376321e-05,0.02028460200287007,0.9838163390827073,-0.006,-0.38,
+llm__noise_llm__tone_v1__raw_rk,period,2017-19,car_0_1_ff4,2111,12,0.002463700143540449,0.707830485238443,0.47905053255231567,0.0098,0.56,
+llm__noise_llm__tone_v1__raw_rk,Llama 3.1 cutoff,before 2024,car_0_1_ff4,2111,12,0.002463700143540449,0.707830485238443,0.47905053255231567,0.0098,0.56,
+llm__noise_llm__tone_v1__raw_rk,event window,post_car_1_ff4,post_car_1_ff4,2111,12,0.0035928180015433937,2.4048398569493057,0.016179554159811278,0.0344,3.68,
+llm__noise_llm__tone_v1__raw_rk,event window,post_car_60_ff4,post_car_60_ff4,2111,12,-0.00300307968062349,-0.3512512443275156,0.7253998687709513,-0.0123,-1.01,
+llm__noise_llm__tone_v1__raw_rk,event window,car_1_60_ff4,car_1_60_ff4,2111,12,-0.004688316280918521,-0.3684859682096749,0.71251090600076,-0.0159,-0.45,
+llm__noise_llm__tone_v1__raw_rk,event window,car_0_1_mkt,car_0_1_mkt,2111,12,0.0026706321639466688,0.7727266596405694,0.4396841655179896,0.0098,0.59,
+llm__noise_llm__tone_v1__raw_rk,event window,post_car_1_mkt,post_car_1_mkt,2111,12,0.002528715722010345,1.5590177984441396,0.11899216762352913,0.0255,3.2,
+llm__noise_llm__tone_v1__raw_rk,event window,post_car_60_mkt,post_car_60_mkt,2111,12,-0.0020326387949366055,-0.22690026862892076,0.8205012931656344,-0.0105,-0.84,
+llm__noise_llm__tone_v1__raw_rk,placebo (should be ~0),ar_m1,ar_m1,2111,12,0.0010162857092512116,0.7406531503680504,0.4589037724739806,0.0149,1.08,
+llm__noise_llm__tone_v1__raw_rk,sample,excluding basis_suspect,car_0_1_ff4,2049,12,0.0024562491785252963,0.7106009565771438,0.47733155016043827,0.009,0.49,
+llm__noise_llm__tone_v1__raw_rk,sample,excluding timing_suspect,car_0_1_ff4,2111,12,0.002463700143540449,0.707830485238443,0.47905053255231567,0.0098,0.56,
+llm__noise_llm__tone_v1__raw_rk,surprise definition,SUE scaled by dispersion (3+ analysts),car_0_1_ff4,2111,12,0.002232924432137298,0.7115325067981224,0.4767543143978622,0.0098,0.56,
