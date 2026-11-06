@@ -1,0 +1,17 @@
+group,n,outcome,mean_ic,t_nw
+primary,35508,car_0_1_ff4,0.3515,56.07
+primary,35508,post_car_1_ff4,0.0862,10.7
+primary,35508,post_car_60_ff4,0.0243,2.64
+primary,35508,car_1_60_ff4,0.002,0.21
+"primary, large",35131,car_0_1_ff4,0.3517,56.18
+"primary, large",35131,post_car_1_ff4,0.0864,10.7
+"primary, large",35131,post_car_60_ff4,0.0238,2.65
+"primary, large",35131,car_1_60_ff4,0.0018,0.19
+"primary, small",377,car_0_1_ff4,0.3373,13.51
+"primary, small",377,post_car_1_ff4,0.0794,1.9
+"primary, small",377,post_car_60_ff4,0.0077,0.2
+"primary, small",377,car_1_60_ff4,-0.0522,-1.16
+text sample,51529,car_0_1_ff4,0.3586,51.55
+text sample,51529,post_car_1_ff4,0.0914,11.52
+text sample,51529,post_car_60_ff4,0.0301,3.64
+text sample,51529,car_1_60_ff4,0.0071,0.82

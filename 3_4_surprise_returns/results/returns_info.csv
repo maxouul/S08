@@ -1,0 +1,11 @@
+,value
+trading days in panel,5283
+stocks in panel,7763
+factors,factor units: decimal (median |MKTRF| 0.0052)
+delisting returns available,4323
+delisting returns used alone (no daily return),17
+delisting returns compounded with the day's return,4099
+delisting returns already in the day's return,207
+events,217611
+events with a singular estimation window,0
+events with betas,212310

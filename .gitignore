@@ -1,0 +1,22 @@
+# Python and notebook caches
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.DS_Store
+
+# Local credentials
+.env
+.env.*
+!.env.example
+.pgpass
+.pg_service.conf
+
+# Local datasets and model caches (including licensed WRDS data)
+cache/
+data/
+/1_2nov/nov2_data/
+/files csv/
+**/three_source_timing.csv
+**/timing_handcheck_50.csv

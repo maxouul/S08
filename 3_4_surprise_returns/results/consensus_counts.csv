@@ -1,0 +1,9 @@
+,count
+estimates for the event's quarter,5129159
+dropped: issued or recorded on or after R's date,16972
+dropped: older than 90 days,3105699
+dropped: estimate not in US dollars,361
+dropped: broker stopped covering before R,53073
+estimates used (latest per analyst),1427964
+estimates rescaled for a split or distribution,3729
+estimates with no CRSP factor (left unscaled),211842

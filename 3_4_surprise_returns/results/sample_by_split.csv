@@ -1,0 +1,4 @@
+,dev,validation,excluded_2020,holdout,after Llama cutoff (2024-25),total
+in_text_sample,51529,14523,5232,26503,9899,97787
+in_primary,35508,11375,4114,22145,8579,73142
+in_primary_large,35131,11304,4096,22060,8552,72591

@@ -1,0 +1,10 @@
+step,remaining,removed,removed_pct
+I/B/E/S quarterly EPS actuals announced 2006-2025,415483,0,0.0
+one announcement per firm-quarter,415300,183,0.0
+actual EPS value present,351756,63544,15.3
+actual reported in US dollars,343267,8489,2.4
+linked to a CRSP permno on the announcement date (score <= 3),332818,10449,3.0
+announcement time known (I/B/E/S),332629,189,0.1
+at least one point-in-time estimate within 90 days,269439,63190,19.0
+stock is a US common share in CRSP,221248,48191,17.9
+CRSP price at t-2,217611,3637,1.6

@@ -1,0 +1,86 @@
+{
+ "written_utc": "2026-11-04T23:54:28+00:00",
+ "files": [
+  {
+   "path": "cache/raw/raw_2006.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-04T23:46:17+00:00",
+   "rows": 191,
+   "bytes": 2677754,
+   "sha256": "904f956f97203cbc7b8affd0f8017529310f915e1ca018642f03ab196935070f"
+  },
+  {
+   "path": "cache/raw_manifest.parquet",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-04T23:47:36+00:00",
+   "rows": 200,
+   "bytes": 31883,
+   "sha256": "cefdce9e163ce4dd0b7521c53dd03e981556d0e6e5c7abc5adb711bb5b38b692"
+  },
+  {
+   "path": "cache/model_outputs.sqlite",
+   "script": "model_cache.py",
+   "version": "",
+   "modified_utc": "2026-11-04T23:54:21+00:00",
+   "rows": null,
+   "bytes": 16384,
+   "sha256": "6a0e1a49aedae639b30a9278fef9039d3efa7cd0f2540d2c4ff2584693837e86"
+  },
+  {
+   "path": "data/clean/clean_2006.parquet",
+   "script": "clean_release.py",
+   "version": "v1",
+   "modified_utc": "2026-11-04T23:52:43+00:00",
+   "rows": 191,
+   "bytes": 2198311,
+   "sha256": "91d8ca901fcd983e8d3e7489d8467d91d7266837fef2d9043683cc37c5bc74e8"
+  },
+  {
+   "path": "data/entities.parquet",
+   "script": "entities.py",
+   "version": "",
+   "modified_utc": "2026-11-04T23:53:53+00:00",
+   "rows": 115976,
+   "bytes": 2860523,
+   "sha256": "e392be5c6a4329273d55e1daa187f862e6a89868247020729a114bb1905eed9a"
+  },
+  {
+   "path": "data/token_stats.parquet",
+   "script": "token_stats.py",
+   "version": "v1",
+   "modified_utc": "2026-11-04T23:54:16+00:00",
+   "rows": 191,
+   "bytes": 9556,
+   "sha256": "55bc1b6b51a68579bf1a21ca1129804d7e4003df7f71672f3bf3a06887a7ffaa"
+  },
+  {
+   "path": "results/token_quantiles.csv",
+   "script": "token_stats.py",
+   "version": "v1",
+   "modified_utc": "2026-11-04T23:54:16+00:00",
+   "rows": 2,
+   "bytes": 207,
+   "sha256": "5f619d9a401a0ee0917795cdd0a5e09e95ec0a697ac2cd62cf30029ceb0672cd"
+  },
+  {
+   "path": "data/dedup_flags.parquet",
+   "script": "dedup.py",
+   "version": "v1",
+   "modified_utc": "2026-11-04T23:54:20+00:00",
+   "rows": 6,
+   "bytes": 2460,
+   "sha256": "4fa67de4802400cbd5f4c554e3afc0245942d982114c9201e3bb8bf667de9bda"
+  },
+  {
+   "path": "data/splits_draft.parquet",
+   "script": "splits.py",
+   "version": "",
+   "modified_utc": "2026-11-04T23:54:27+00:00",
+   "rows": 115976,
+   "bytes": 1199139,
+   "sha256": "f52cb6285771f2a61e0c0347a4bf24a5cd99e3ede7ff57ce6a77e8e9c5f8f57f"
+  }
+ ]
+}
