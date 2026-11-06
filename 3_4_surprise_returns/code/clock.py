@@ -27,11 +27,12 @@ Usage:
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from common import ET, load_trading_calendar
+from common import ET, PROJECT_DIR, data_path, load_trading_calendar
 
 CLOCK_VERSION = "provisional_v0_wire_then_ibes"
 OPEN_MIN = 9 * 60 + 30
@@ -218,10 +219,10 @@ def summarise(clk: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--timing", default="three_source_timing.csv")
-    ap.add_argument("--events", default="event_table.csv")
+    ap.add_argument("--timing", default=data_path("three_source_timing.csv"))
+    ap.add_argument("--events", default=data_path("event_table.csv"))
     ap.add_argument("--calendar", default=None)
-    ap.add_argument("--out", default="clock_provisional.csv")
+    ap.add_argument("--out", default=str(PROJECT_DIR / "data" / "clock_provisional.csv"))
     args = ap.parse_args()
 
     cal = load_trading_calendar(args.calendar)
@@ -229,6 +230,7 @@ def main() -> int:
     validate_clock(clk, cal)
     print(summarise(clk).to_string())
     print(clk["session_type"].value_counts().to_string())
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     clk.to_csv(args.out, index=False)
     print(f"-> {args.out} ({len(clk):,} events)")
     return 0

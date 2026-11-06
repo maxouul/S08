@@ -50,7 +50,7 @@ The project asks whether earnings-release text carries information about returns
 
 ### Files
 
-All files are in `S08 NLP/3_4_surprise_returns/data/`. They are WRDS-derived, so they stay in the team Drive (see section 12).
+All files are in `S08/3_4_surprise_returns/data/`. They are WRDS-derived, so they stay in the team Drive (see section 12).
 
 | File | Rows | Contents |
 | :---- | :---- | :---- |
@@ -391,7 +391,7 @@ The holdout is about 22,000 events, not the 50,000 the feedback assumed. The eva
 
 ## 12\. Reproducibility and data handling
 
-**Run order** (`S08 NLP/3_4_surprise_returns/`). Each notebook locates the repository, adds its `code/` folder to the path and checks its inputs. `TEAM_DIR` can point to a separate private data folder.
+**Run order** (`S08/3_4_surprise_returns/`). Each notebook locates the repository, adds its `code/` folder to the path and checks its inputs. `TEAM_DIR` can point to a separate private data folder.
 
 | Step | What it does | Time |
 | :---- | :---- | :---- |

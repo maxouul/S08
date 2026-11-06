@@ -2,13 +2,13 @@
 Shared settings for part 5: where it reads and where it writes.
 
 Every script in code/ takes its default paths from here, so the folders are
-defined once. Override the two roots with environment variables (on Colab, WRDS
-or a laptop) instead of editing paths:
+defined once. Override the two roots with environment variables (in Jupyter, WRDS
+or a terminal) instead of editing paths:
   TEAM_DIR   the private data root (default: the repository root)
   STEP5_DIR  this folder (default: TEAM_DIR / "5_data cleaning")
 
 Part 5 writes only inside STEP5_DIR. It reads, without changing them:
-  1_2nov/nov2_data      event_table.csv, extraction_report*.csv, three_source_timing.csv
+  files csv      event_table.csv, extraction_report*.csv, three_source_timing.csv
   scripts/             fetch_releases.py, whose download and choice rules are reused
   3_4_surprise_returns  the release clock, the trading calendar, the CRSP names and
                         I/B/E/S link already pulled from WRDS, and SPLITS in common.py
@@ -20,22 +20,20 @@ import os
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-TEAM_DIR = Path(os.environ.get("TEAM_DIR", REPO_ROOT)).expanduser().resolve()
-STEP5_DIR = Path(os.environ.get("STEP5_DIR", TEAM_DIR / "5_data cleaning")).expanduser().resolve()
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+from project_paths import (REPO_ROOT, TEAM_DIR, SCRIPTS, DATA_DIR, PROJECT_DIR,
+                           STEP5_DIR, PART34_CODE, STEP5_CODE)
 
-CODE = REPO_ROOT / "5_data cleaning" / "code"
+CODE = STEP5_CODE
 CACHE = STEP5_DIR / "cache"        # raw EDGAR bytes and model outputs
 DATA = STEP5_DIR / "data"          # built tables keyed by accession
 RESULTS = STEP5_DIR / "results"    # tables for the report
 LOGS = STEP5_DIR / "logs"
 
 # Inputs from the other parts
-NOV2_DATA = TEAM_DIR / "1_2nov" / "nov2_data"
-if not NOV2_DATA.is_dir():
-    NOV2_DATA = TEAM_DIR / "files csv"
-NOV2_CODE = REPO_ROOT / "scripts"
-PART34 = TEAM_DIR / "3_4_surprise_returns"
+NOV2_DATA = DATA_DIR
+NOV2_CODE = SCRIPTS
+PART34 = PROJECT_DIR
 CLOCK = PART34 / "data" / "clock_provisional.csv"
 CALENDAR = PART34 / "data" / "trading_calendar.csv"
 CRSP_NAMES = PART34 / "cache" / "crsp_names.parquet"      # WRDS data: private
@@ -63,7 +61,7 @@ SPLITS_DRAFT = DATA / "splits_draft.parquet"
 HOLDOUT_IDS = DATA / "holdout_ids.txt"
 MANIFEST = STEP5_DIR / "manifest.json"
 
-# fetch_releases.py is imported from part 1-2's folder, not copied.
+# fetch_releases.py is imported from the repository scripts folder.
 if str(NOV2_CODE) not in sys.path:
     sys.path.append(str(NOV2_CODE))
 
@@ -76,7 +74,7 @@ def common_3_4():
     """Part 3-4's common.py, loaded from its file under another module name so it
     never shadows anything here. SPLITS and split_of come from it, so the texts and
     the returns are split by the same rule."""
-    path = REPO_ROOT / "3_4_surprise_returns" / "code" / "common.py"
+    path = PART34_CODE / "common.py"
     spec = importlib.util.spec_from_file_location("common_3_4", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
