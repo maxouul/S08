@@ -44,8 +44,13 @@ import hashlib
 import os
 import re
 import sys
+import warnings
 import zipfile
 from multiprocessing import Pool
+
+# Recent filings are XHTML; reading them with the HTML parser is intended (the same
+# parser for every document), so bs4's advice to use an XML parser is not shown.
+warnings.filterwarnings("ignore", message="It looks like you're parsing an XML document")
 
 # v1: first version. v2: page furniture and repeated content removed (drop_repeats),
 # SGML-wrapped documents read to their end, statement-shaped tables set aside,
@@ -55,8 +60,13 @@ CLEAN_VERSION = "v2"
 FIN_TABLE_DIGITS = 0.30          # same rule as to_text()
 SEP = " "                   # paragraph mark used while the HTML is flattened
 
-BLOCK_TAGS = ["p", "div", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6",
-              "table", "ul", "ol", "center", "blockquote", "title"]
+BLOCK_TAGS = {"p", "div", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6",
+              "table", "ul", "ol", "center", "blockquote", "title"}
+CELL_TAGS = {"td", "th"}
+PRE_TAGS = {"pre", "xmp", "plaintext"}
+# Removed with everything inside them, as are the elements styled display:none. Inline
+# XBRL hides its facts in ix:header.
+REMOVED_TAGS = {"script", "style", "head", "noscript", "ix:header", "ix:hidden"}
 SPACE_RE = re.compile(r"[ \t\r\n\f\v\xa0 -​  　]+")
 META_CHARSET_RE = re.compile(rb"""<meta[^>]+charset\s*=\s*["']?\s*([A-Za-z0-9_.:-]+)""", re.I)
 HIDDEN_RE = re.compile(r"display\s*:\s*none", re.I)
@@ -155,12 +165,20 @@ def is_financial_table(txt: str) -> bool:
     return numeric >= 3 and numeric >= 0.5 * len(rows)
 
 
+def tags_named(root, names: set[str]) -> list:
+    """The tags under root whose name is in names, in document order: what
+    root.find_all(list(names)) returns, without the slow matching bs4 applies to a list
+    of names (a third of the cleaning time)."""
+    from bs4 import Tag
+    return [t for t in root.descendants if isinstance(t, Tag) and t.name in names]
+
+
 def html_table_text(table) -> str:
     """One line per row, cells separated by tabs."""
     rows = []
     for tr in table.find_all("tr"):
         cells = [SPACE_RE.sub(" ", td.get_text(" ")).strip()
-                 for td in tr.find_all(["td", "th"])]
+                 for td in tags_named(tr, CELL_TAGS)]
         cells = [c for c in cells if c]
         if cells:
             rows.append("\t".join(cells))
@@ -199,6 +217,24 @@ def plain_paragraphs(text: str, fin_tables: list[str]) -> list[str]:
 
 # --- HTML -------------------------------------------------------------------------
 
+def drop_hidden(soup) -> None:
+    """Remove the REMOVED_TAGS and every element styled display:none, with their content,
+    in one walk of the tree; the subtree of a removed element is not visited."""
+    from bs4 import Tag
+    gone, stack = [], list(soup.contents)
+    while stack:
+        node = stack.pop()
+        if not isinstance(node, Tag):
+            continue
+        style = node.get("style")
+        if node.name in REMOVED_TAGS or (style is not None and HIDDEN_RE.search(style)):
+            gone.append(node)
+        else:
+            stack.extend(node.contents)
+    for t in gone:
+        t.decompose()
+
+
 def html_paragraphs(doc: str, fin_tables: list[str]) -> list[str]:
     from bs4 import BeautifulSoup
     try:
@@ -206,13 +242,7 @@ def html_paragraphs(doc: str, fin_tables: list[str]) -> list[str]:
     except Exception:
         soup = BeautifulSoup(doc, "html.parser")
 
-    for t in soup.find_all(["script", "style", "head", "noscript"]):
-        t.decompose()
-    # Inline XBRL hides its facts in ix:header; some filers hide whole blocks.
-    for t in soup.find_all(lambda tag: tag.name in ("ix:header", "ix:hidden")):
-        t.decompose()
-    for t in soup.find_all(style=HIDDEN_RE):
-        t.decompose()
+    drop_hidden(soup)
 
     # Innermost tables first: reversed document order visits children before parents.
     for table in reversed(soup.find_all("table")):
@@ -224,15 +254,15 @@ def html_paragraphs(doc: str, fin_tables: list[str]) -> list[str]:
             table.replace_with(SEP)
         # a layout table stays; its rows become paragraphs below
 
-    for pre in soup.find_all(["pre", "xmp", "plaintext"]):
+    for pre in tags_named(soup, PRE_TAGS):
         pre.replace_with(SEP + SEP.join(plain_paragraphs(pre.get_text(), fin_tables)) + SEP)
 
     for br in soup.find_all("br"):
         br.replace_with(SEP)
-    for tag in soup.find_all(BLOCK_TAGS):
+    for tag in tags_named(soup, BLOCK_TAGS):
         tag.insert_before(SEP)
         tag.insert_after(SEP)
-    for td in soup.find_all(["td", "th"]):
+    for td in tags_named(soup, CELL_TAGS):
         td.insert_after(" ")
 
     text = SPACE_RE.sub(" ", soup.get_text().translate(C1_TO_CP1252))
@@ -443,10 +473,17 @@ def clean(raw_bytes: bytes, filename: str) -> dict:
 
 # --- driver -----------------------------------------------------------------------
 
+_ZIPS: dict[str, zipfile.ZipFile] = {}     # one open archive per worker process
+
+
 def _work(args: tuple[str, str]) -> dict:
     zip_path, member = args
-    with zipfile.ZipFile(zip_path) as z:
-        raw = z.read(member)
+    if zip_path not in _ZIPS:              # reading the directory of 5,000 members costs
+        for z in _ZIPS.values():           # 0.1 s: once per worker, not per document
+            z.close()
+        _ZIPS.clear()
+        _ZIPS[zip_path] = zipfile.ZipFile(zip_path)
+    raw = _ZIPS[zip_path].read(member)
     acc, filename = member.split("__", 1)
     try:
         rec = clean(raw, filename)
@@ -489,14 +526,19 @@ def main() -> int:
     for name in zips:
         year = name[4:8]
         out = os.path.join(args.out_dir, f"clean_{year}.parquet")
-        if os.path.exists(out) and not args.force:
-            v = pq.read_table(out, columns=["clean_version"]).column(0).unique().to_pylist()
-            if v == [CLEAN_VERSION] and set(OUTPUT_COLUMNS) <= set(pq.read_schema(out).names):
-                print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
-                continue
         zp = os.path.join(args.raw_dir, name)
         with zipfile.ZipFile(zp) as z:
             members = [m for m in z.namelist() if "__" in m and not m.endswith("__index.htm")]
+        if os.path.exists(out) and not args.force:
+            # skipped only if built with this version and covering every document of the
+            # archive: a year cleaned during a test, before the full download, is redone
+            t = pq.read_table(out, columns=["accession", "clean_version"])
+            v = t.column("clean_version").unique().to_pylist()
+            done = set(t.column("accession").to_pylist())
+            if (v == [CLEAN_VERSION] and set(OUTPUT_COLUMNS) <= set(pq.read_schema(out).names)
+                    and done == {m.split("__", 1)[0] for m in members}):
+                print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
+                continue
         with Pool(args.workers) as pool:
             recs = pool.map(_work, [(zp, m) for m in members], chunksize=32)
         df = pd.DataFrame(recs).reindex(columns=OUTPUT_COLUMNS)

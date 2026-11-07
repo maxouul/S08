@@ -33,11 +33,11 @@ This folder turns the 8-K documents chosen in parts 1–2 into the inputs every 
 | Step | Reads | Writes | Time |
 |---|---|---|---|
 | `00_setup_check` | the inputs below | `logs/env_*.json` | 1 min |
-| `01_raw_cache` (200-event test, then `RUN_FULL = True` once) | `files csv/extraction_report.csv`, EDGAR | `cache/raw/raw_YYYY.zip`, `cache/raw_manifest.parquet` | 3–4 h for the ~117,000 documents; reruns fetch only what is missing |
-| `02_clean_prepare` | `cache/raw/`, parts 3–4 | everything in `data/`, `cache/model_outputs.sqlite`, `results/token_quantiles.csv`, `manifest.json` | not yet timed on all years |
+| `01_raw_cache` (200-event test, then `RUN_FULL = True` once) | `files csv/extraction_report.csv`, EDGAR | `cache/raw/raw_YYYY.zip`, `cache/raw_manifest.parquet` | 3 h 44 for the 116,983 documents (6–7 November); reruns fetch only what is missing |
+| `02_clean_prepare` | `cache/raw/`, parts 3–4 | everything in `data/`, `cache/model_outputs.sqlite`, `results/token_quantiles.csv`, `manifest.json` | cleaning: 17 min for 2006 on a 4-core laptop (3 workers); later years are faster per document, about 6 h for all years (estimate); the other steps not yet timed |
 | `python code/splits.py --freeze` | `data/splits_draft.parquet`, part 4's `events_final.parquet` | `data/holdout_ids.txt`, `.sha256`, `holdout_freeze.json` | once, at the end |
 
-Every step can be stopped and rerun. `cache_raw.py` commits its archives every 500 documents and retries failed downloads on the next run. `clean_release.py` skips a year already cleaned with the current `CLEAN_VERSION`. `token_stats.py` skips a year whose pieces match the texts and the window settings. `ModelCache` never pays for the same call twice.
+Every step can be stopped and rerun. `cache_raw.py` commits its archives every 500 documents and retries failed downloads on the next run. `clean_release.py` skips a year already cleaned with the current `CLEAN_VERSION` and covering every document of its archive. `token_stats.py` skips a year whose pieces match the texts and the window settings. `ModelCache` never pays for the same call twice.
 
 Inputs (read, never changed):
 
@@ -105,13 +105,13 @@ On the 2006 test (200 releases, cleaning v2), the median release is about 1,750 
 - `splits.py` checks its split against part 4's.
 - The freeze writes the holdout accessions of part 4's text sample (`in_text_sample`; the primary sample is a subset of it) with their sha256. It is refused without `events_final`, if the splits disagree, or if a freeze already exists.
 
-## Status (6 November 2026)
+## Status (7 November 2026)
 
 | | Status |
 |---|---|
 | Code and unit tests | done; end-to-end run on synthetic inputs, outputs read by part 7–8's own readers |
-| Raw cache | 200-event test only (2006); full pass not run |
-| Cleaning | 2006 test with v2 (200 releases, all 24 checks of `02_clean_prepare` agree); every year still to run |
+| Raw cache | complete: 116,983 documents, 2006–2025, 2.3 GB, none missing |
+| Cleaning | 2006 complete with v2 (5,534 documents, 0 errors); the other years to run |
 | Entities, split draft | built for all 115,976 filings from part 3–4's files of 6 November (Drive export); to rebuild after part 4's rerun |
 | Tokens, duplicates | 2006 test only; Llama not counted yet (needs `HF_TOKEN`) |
 | Model cache | created, empty; waiting for part 6 |

@@ -88,7 +88,10 @@ def from_report(job: dict, limiter: RateLimiter):
     """Report mode: the filename is known."""
     url = base_url(job["accession"], job["cik"]) + job["filename"]
     status, body = fetch_status(url, limiter)
-    return [("doc", job["source"], url, job["filename"], status, body)]
+    # a document that did not come back is marked as such: it is fetched again on the
+    # next run, and the failed count shows it
+    source = job["source"] if body is not None else "fetch failed"
+    return [("doc", source, url, job["filename"], status, body)]
 
 
 def from_index(job: dict, limiter: RateLimiter, keep_index: bool):
