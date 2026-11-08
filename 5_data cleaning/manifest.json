@@ -1,23 +1,194 @@
 {
- "written_utc": "2026-11-06T22:53:37+00:00",
+ "written_utc": "2026-11-08T16:58:56+00:00",
  "files": [
   {
    "path": "cache/raw/raw_2006.zip",
    "script": "cache_raw.py",
    "version": "",
-   "modified_utc": "2026-11-06T22:43:32+00:00",
-   "rows": 200,
-   "bytes": 2813244,
-   "sha256": "1ad10d9029479ef08a7962ac829cf90d8caedb92b3baf6ad1acbacea38e5b1b2"
+   "modified_utc": "2026-11-06T23:13:35+00:00",
+   "rows": 5534,
+   "bytes": 74893587,
+   "sha256": "020dc09a963c5abffbd39b7d68341c8044f982020e856ca2e105ce7fdff4dee1"
+  },
+  {
+   "path": "cache/raw/raw_2007.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T14:58:34+00:00",
+   "rows": 5467,
+   "bytes": 78062932,
+   "sha256": "49e8bd2351f015ecc05102cb544c8df1e131169922b1a2fa1ce5ea8190e6c512"
+  },
+  {
+   "path": "cache/raw/raw_2008.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-06T23:38:53+00:00",
+   "rows": 5734,
+   "bytes": 86399165,
+   "sha256": "88770444fd4fefc5bcfd9eefb9735a6a41b4fd44346203ed10ba969b3339071f"
+  },
+  {
+   "path": "cache/raw/raw_2009.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-06T23:49:13+00:00",
+   "rows": 5627,
+   "bytes": 89646304,
+   "sha256": "3d957b5b2660d2fb086dbd89293d03dd1d911bb831d40a30aaab767c3c84b72e"
+  },
+  {
+   "path": "cache/raw/raw_2010.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T00:00:21+00:00",
+   "rows": 5612,
+   "bytes": 93290005,
+   "sha256": "b68ad7677c77685fd87a722b61d83410eb4b5c449509bfdde365409f986b952d"
+  },
+  {
+   "path": "cache/raw/raw_2011.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T00:11:13+00:00",
+   "rows": 5663,
+   "bytes": 95181272,
+   "sha256": "5631e8f19bd97f3e07435bfea280386b05a96f755b3070c77420f85b59305ace"
+  },
+  {
+   "path": "cache/raw/raw_2012.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T00:21:27+00:00",
+   "rows": 5550,
+   "bytes": 99796158,
+   "sha256": "2224c6a105dd838ccfe6e35e396cad11bde121e735838a850ea22351dcc27866"
+  },
+  {
+   "path": "cache/raw/raw_2013.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T00:31:54+00:00",
+   "rows": 5580,
+   "bytes": 106310582,
+   "sha256": "ddc17ee03b4c927e8b9d79f1c7351844e39941cd11a3c1913ed7a9f595c8dbe8"
+  },
+  {
+   "path": "cache/raw/raw_2014.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T00:43:32+00:00",
+   "rows": 5782,
+   "bytes": 113453322,
+   "sha256": "daa63f019f81660b40b50411287eee0865e28a4e25fb213eb46c61a0607baff9"
+  },
+  {
+   "path": "cache/raw/raw_2015.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T00:55:07+00:00",
+   "rows": 5960,
+   "bytes": 119977361,
+   "sha256": "ff3fd98230a8387a84cc09a71a82297223c418cbd3bef429b19a3fb2219ea8cf"
+  },
+  {
+   "path": "cache/raw/raw_2016.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T01:05:22+00:00",
+   "rows": 5582,
+   "bytes": 120699596,
+   "sha256": "f41eacc3779eb40be062b5cc2af6655a49b084a1936ffd776d1423f462decdc6"
+  },
+  {
+   "path": "cache/raw/raw_2017.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T01:15:42+00:00",
+   "rows": 5700,
+   "bytes": 130849248,
+   "sha256": "8f2ac7fc345cab213b4bde218c658457c51df72e0cdd056527097a8aa5dd1d6d"
+  },
+  {
+   "path": "cache/raw/raw_2018.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T01:26:55+00:00",
+   "rows": 5705,
+   "bytes": 134775231,
+   "sha256": "a1c7342acf75b94341c0c3189ba83ae24ad1ba31dad720a3b8ec0a2dfd3d6a90"
+  },
+  {
+   "path": "cache/raw/raw_2019.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T01:37:15+00:00",
+   "rows": 5778,
+   "bytes": 141395504,
+   "sha256": "2ca950f623c0b13ad6adbea1c8f7dee1901bc5d969f4db9c397e891c07c3f21e"
+  },
+  {
+   "path": "cache/raw/raw_2020.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T01:49:49+00:00",
+   "rows": 6361,
+   "bytes": 150855626,
+   "sha256": "dbb47cc02f0f4d9677dc1dfda96822f70c64d661a8cab97c9ee283bf0a2df059"
+  },
+  {
+   "path": "cache/raw/raw_2021.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T02:02:01+00:00",
+   "rows": 6723,
+   "bytes": 149126879,
+   "sha256": "d4999b6d55900b26480396381c1e2dc1f4930e3568e27ddd205d20f8e12d7086"
+  },
+  {
+   "path": "cache/raw/raw_2022.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T02:15:08+00:00",
+   "rows": 6753,
+   "bytes": 154008242,
+   "sha256": "d556963c0f183d1d22e87ecf6342ccbf7aaa77a3f1f0de45c62a63db43346e89"
+  },
+  {
+   "path": "cache/raw/raw_2023.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T02:26:19+00:00",
+   "rows": 6227,
+   "bytes": 142182996,
+   "sha256": "5da3baf826357414097799a7042b6efa52b148ba1829f24ed39dffba897876fe"
+  },
+  {
+   "path": "cache/raw/raw_2024.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T02:37:38+00:00",
+   "rows": 5866,
+   "bytes": 131229774,
+   "sha256": "807a82dd966b8ad487cfb678205b3f7380b3c879a4ef424fd14630ee91e7c2d7"
+  },
+  {
+   "path": "cache/raw/raw_2025.zip",
+   "script": "cache_raw.py",
+   "version": "",
+   "modified_utc": "2026-11-07T02:48:13+00:00",
+   "rows": 5779,
+   "bytes": 137884840,
+   "sha256": "3014d2027e81871fde6ab766663ceda3108ac5f162242eef4a1857c7cc6b3e40"
   },
   {
    "path": "cache/raw_manifest.parquet",
    "script": "cache_raw.py",
    "version": "",
-   "modified_utc": "2026-11-06T22:43:32+00:00",
-   "rows": 200,
-   "bytes": 32774,
-   "sha256": "6b022884c48d156625559cd965c6b1930231dac98dc04d08e7f54ffc296127cd"
+   "modified_utc": "2026-11-07T14:58:45+00:00",
+   "rows": 116983,
+   "bytes": 14332663,
+   "sha256": "4d2e078490a6667e1abf7d067bb6b79bda0de0bec57fe6682c5fabdf5d7a2849"
   },
   {
    "path": "cache/model_outputs.sqlite",
@@ -31,17 +202,188 @@
   {
    "path": "data/clean/clean_2006.parquet",
    "script": "clean_release.py",
-   "version": "v2",
-   "modified_utc": "2026-11-06T22:47:49+00:00",
-   "rows": 200,
-   "bytes": 5020029,
-   "sha256": "7fe23fbeca3a48a8260612f703acd6c68b1aca7e0e917e54e062cc5fd134f9ed"
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:14:46+00:00",
+   "rows": 5534,
+   "bytes": 128333181,
+   "sha256": "3b576c349dbb038bec80de17f4b8559540c8d7f0c3eeef4eabf0ef6e099ffc38"
+  },
+  {
+   "path": "data/clean/clean_2007.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:15:17+00:00",
+   "rows": 5467,
+   "bytes": 129638776,
+   "sha256": "fabf9dcae15b241ead753222b32d144e885f70be7c0264f2fca021829e96548f"
+  },
+  {
+   "path": "data/clean/clean_2008.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:15:56+00:00",
+   "rows": 5734,
+   "bytes": 133506485,
+   "sha256": "f4a9169e33a6ea894f25a9a500594c8a0689eae4bb994fbb9b99a028433462a1"
+  },
+  {
+   "path": "data/clean/clean_2009.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:16:26+00:00",
+   "rows": 5627,
+   "bytes": 132918714,
+   "sha256": "07c710f77ae45e644216c9dfa3211f63de638d75279ffd99197e7e6ccb1e7594"
+  },
+  {
+   "path": "data/clean/clean_2010.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:17:28+00:00",
+   "rows": 5612,
+   "bytes": 137121287,
+   "sha256": "1819a459e093e2df03208224c8f5a9aef6ad9ea860667173beea974e7b27d1b9"
+  },
+  {
+   "path": "data/clean/clean_2011.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:18:27+00:00",
+   "rows": 5663,
+   "bytes": 140384515,
+   "sha256": "f58de397bc7580a2cb85e7f2cac6337e98263c2efa039e29800203b1611a5a64"
+  },
+  {
+   "path": "data/clean/clean_2012.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:19:40+00:00",
+   "rows": 5550,
+   "bytes": 140055251,
+   "sha256": "e63108fe64b0ac5a5a03dbc35eec33dcd2ccbd92396a0d9209b6592c59e91bcf"
+  },
+  {
+   "path": "data/clean/clean_2013.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:20:48+00:00",
+   "rows": 5580,
+   "bytes": 145258088,
+   "sha256": "9b9b5c8f255556a47c25521ccf51cb0043da5e212e1fde606b12af74c90fa853"
+  },
+  {
+   "path": "data/clean/clean_2014.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:22:06+00:00",
+   "rows": 5782,
+   "bytes": 154200734,
+   "sha256": "7a7b9f9d308c3c6422f1831097a0984ec1fd1fde5a890cc34c9dc74abcfa5423"
+  },
+  {
+   "path": "data/clean/clean_2015.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:23:30+00:00",
+   "rows": 5960,
+   "bytes": 160035971,
+   "sha256": "a1047c27805a26f3697f1cc21d07da02ea61361b4ce2dd8b13cb2ff5c9f6bddf"
+  },
+  {
+   "path": "data/clean/clean_2016.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:24:43+00:00",
+   "rows": 5582,
+   "bytes": 153973534,
+   "sha256": "dd14918916d8fff23335bf2aef5b251d8dff72b74d19504fec7dee66912a1fd2"
+  },
+  {
+   "path": "data/clean/clean_2017.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:26:59+00:00",
+   "rows": 5700,
+   "bytes": 163875447,
+   "sha256": "19cca073dca6b114d5364d87654daaded0b0511faa8c4a4b69a66459822e91a7"
+  },
+  {
+   "path": "data/clean/clean_2018.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:28:24+00:00",
+   "rows": 5705,
+   "bytes": 168777469,
+   "sha256": "3efc3907abdfd7107b756de03086657c534fb737c0850ded11184197a6073844"
+  },
+  {
+   "path": "data/clean/clean_2019.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:28:55+00:00",
+   "rows": 5778,
+   "bytes": 169639888,
+   "sha256": "e4ac83ccb8eb2259150446e13855500e58c5313ad0fe9035ced0551f22c6d59c"
+  },
+  {
+   "path": "data/clean/clean_2020.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:30:33+00:00",
+   "rows": 6361,
+   "bytes": 192115277,
+   "sha256": "521d2c4170ba2da2d5222268bf9d4217106eef89f86700ab7f50a89df3bf084b"
+  },
+  {
+   "path": "data/clean/clean_2021.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:32:16+00:00",
+   "rows": 6723,
+   "bytes": 203824798,
+   "sha256": "667e8d21873a63a30d18c43c679f10e7862e63692c2cd58761d21f33f8b1435d"
+  },
+  {
+   "path": "data/clean/clean_2022.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:34:04+00:00",
+   "rows": 6753,
+   "bytes": 207365073,
+   "sha256": "6fa9a72d4751e2490388d4a4b7faac1fa18d6efc55a2bc78ed787e50df7d04e0"
+  },
+  {
+   "path": "data/clean/clean_2023.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:35:38+00:00",
+   "rows": 6227,
+   "bytes": 192376570,
+   "sha256": "38d001aa8ba406467de152ddc2cc89f4abf37ed1a0470070367700c77a37db5c"
+  },
+  {
+   "path": "data/clean/clean_2024.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:37:11+00:00",
+   "rows": 5866,
+   "bytes": 180909625,
+   "sha256": "fec6714dde4e94c900b6503f22b6bfb5d1bba617bfde09f6fad0ff24b9c0d803"
+  },
+  {
+   "path": "data/clean/clean_2025.parquet",
+   "script": "clean_release.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:39:01+00:00",
+   "rows": 5779,
+   "bytes": 181792917,
+   "sha256": "3c15f79f0e312609dd808db5a324de0cb607b255c1ab96fdd81c3f4432accbbe"
   },
   {
    "path": "data/entities.parquet",
    "script": "entities.py",
    "version": "",
-   "modified_utc": "2026-11-06T22:52:33+00:00",
+   "modified_utc": "2026-11-08T03:47:54+00:00",
    "rows": 115976,
    "bytes": 2958656,
    "sha256": "07ce7a665c52e81e56163c0161c7a13c6b20f24a623062bd9e7c09642827f2c3"
@@ -49,53 +391,395 @@
   {
    "path": "data/chunks/chronogpt/chunks_2006.parquet",
    "script": "token_stats.py",
-   "version": "v2",
-   "modified_utc": "2026-11-06T22:53:07+00:00",
-   "rows": 486,
-   "bytes": 29504,
-   "sha256": "d38368f920c015dd361b1171cb25fa3cf28ff770e264c8a8a373478391499cd9"
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:15:21+00:00",
+   "rows": 12298,
+   "bytes": 552082,
+   "sha256": "3c4ba51d5dc13fa4ae6a7386112782c1fe5d1d6f085b4c29b61223803ec2bc60"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2007.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:16:32+00:00",
+   "rows": 12292,
+   "bytes": 533552,
+   "sha256": "8ff1690be2a3abee37a595e2560fb5386a698bbf4126ad29ff3d7098959261b5"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2008.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:17:43+00:00",
+   "rows": 12407,
+   "bytes": 562282,
+   "sha256": "fd2141bd40cf3d19b1b654ba8a66152a10122cf471e3a761aa82a8fef8de2a80"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2009.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:20:31+00:00",
+   "rows": 12247,
+   "bytes": 556944,
+   "sha256": "ad575436adad7fbd2c33ad22a4657158259b42f3f341417aec3fd4012806c9c3"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2010.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:22:21+00:00",
+   "rows": 12519,
+   "bytes": 552510,
+   "sha256": "55782b48ea49ef14902845496b827a700f5db19370f2d3973dbd23ccfd3f4f7d"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2011.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:23:46+00:00",
+   "rows": 12842,
+   "bytes": 558571,
+   "sha256": "e7bee1ef01f5eaad3dc284936cdc5e6b9256c8510285bee29723d2fbe06deea7"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2012.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:25:01+00:00",
+   "rows": 12738,
+   "bytes": 550591,
+   "sha256": "bd4ac03cc554eb4d20da0add911a21c8dffcc717b95eb58b985a2c7be4ec958a"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2013.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:26:16+00:00",
+   "rows": 13159,
+   "bytes": 560863,
+   "sha256": "cd849e22051e09f8113a07ca2019473abcd316cb6e590f26c0f15719e72867da"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2014.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:27:37+00:00",
+   "rows": 13896,
+   "bytes": 587178,
+   "sha256": "b33f97e16346b97ec1fe29a64c2acdc76bdda0e9900d08ebf8e1ab46d900cfb2"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2015.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:29:01+00:00",
+   "rows": 14448,
+   "bytes": 598718,
+   "sha256": "6b3cb0f62b9a3d19b697469918b1ae03e4a4ce21cd7186b18e7df86d770a7670"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2016.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:30:21+00:00",
+   "rows": 13800,
+   "bytes": 567375,
+   "sha256": "e87be96ac3f9779a47493fe203313b5c737887ed09d8d0e47b7fad49c57038c5"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2017.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:31:43+00:00",
+   "rows": 14734,
+   "bytes": 586888,
+   "sha256": "2b9709ed49b44f19f0711ceff4f52b1a4e80738fbcabaa21d16d3b781acbd15f"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2018.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:33:10+00:00",
+   "rows": 15225,
+   "bytes": 585963,
+   "sha256": "d9ca860c8e76501d6a22cc031df512e4843659a9bbc2afc6897cba5634d767ff"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2019.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:34:36+00:00",
+   "rows": 15244,
+   "bytes": 588801,
+   "sha256": "46997e8a4e8fc744387df6f9d2f8dbdb2a965ab14891f392df48212be0d60ffc"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2020.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:36:09+00:00",
+   "rows": 16968,
+   "bytes": 652969,
+   "sha256": "96ab4e3fa4e2ea10ad36ec64b5a96d292cc2d5275134edfeeff95e03bfab9fe5"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2021.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:37:51+00:00",
+   "rows": 18024,
+   "bytes": 693345,
+   "sha256": "62383373fe67afa4180f6795d312c347d4b09ffe6b5af7ab6959e921d9428ca3"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2022.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:39:32+00:00",
+   "rows": 18351,
+   "bytes": 692152,
+   "sha256": "61a73bcf6ce72a943a476e23d2ecc7aaccf9b100cf9323bb38936ccd97377318"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2023.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:41:08+00:00",
+   "rows": 17123,
+   "bytes": 642761,
+   "sha256": "17a77dc446c8bbbf54bf59d3f7ec2049991fd958037f48cd416cf102b00d004c"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2024.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:42:37+00:00",
+   "rows": 16119,
+   "bytes": 602420,
+   "sha256": "7cd9ac838a6eb69f492cbf104deb8aecc913657b3965648dba992970c1f73ebe"
+  },
+  {
+   "path": "data/chunks/chronogpt/chunks_2025.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:44:07+00:00",
+   "rows": 15955,
+   "bytes": 606349,
+   "sha256": "157e244d3a1be6cb03597466560b6d756620c735c6feab69e38c728677401e05"
   },
   {
    "path": "data/chunks/finbert/chunks_2006.parquet",
    "script": "token_stats.py",
-   "version": "v2",
-   "modified_utc": "2026-11-06T22:53:01+00:00",
-   "rows": 1394,
-   "bytes": 35250,
-   "sha256": "a0cf6cb64358e16a8872885083dc1a4dd5ba0fb4c4760bb4c6023c5cc9e34480"
+   "version": "v3",
+   "modified_utc": "2026-11-08T14:59:31+00:00",
+   "rows": 34755,
+   "bytes": 683724,
+   "sha256": "8e70333ab614c78d0004b34af18f462e2868e99777aeb9123a21f1e59738857c"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2007.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:02:44+00:00",
+   "rows": 34266,
+   "bytes": 661737,
+   "sha256": "06fffe864f44a05b9a0438438ea6322de88ab6eed3091dbcb4bf6c1e9a4f03b7"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2008.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:04:58+00:00",
+   "rows": 32775,
+   "bytes": 686841,
+   "sha256": "828b0c4059844861ca0d6bb1f59d6389d074acd8abc4baee1ab565e1ca7191e4"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2009.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:07:41+00:00",
+   "rows": 32579,
+   "bytes": 680392,
+   "sha256": "ac5db93d07f287f7c01cc5a169ae51c8876c29eb6dadcf6a0e9a8f0a01fb955c"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2010.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:10:49+00:00",
+   "rows": 33253,
+   "bytes": 678719,
+   "sha256": "8b7e44ee17479f660ac4c985ac8267dee61c9e5c96d31bf724f466a0e1923e51"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2011.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:14:10+00:00",
+   "rows": 34203,
+   "bytes": 693140,
+   "sha256": "f823457b6618bb9bb4a3ba4fc2450a9cb9f3fb6dd79cfe048cc026ba9c97643c"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2012.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:17:20+00:00",
+   "rows": 34031,
+   "bytes": 676344,
+   "sha256": "9cecaca1a0d0c85267c41ff97ea5a62853746659cfe07d6e9bdec0db3e8b3305"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2013.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:21:00+00:00",
+   "rows": 35362,
+   "bytes": 691666,
+   "sha256": "f55e987ad35c67cfc32991acd2dddf0ab55357c819556b1c971c80662e292bb0"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2014.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:23:56+00:00",
+   "rows": 37545,
+   "bytes": 723683,
+   "sha256": "2b7ea8fa2e3ada3e7ccdcea9057e3fe86faf51266fee9a19126535025479461e"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2015.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:27:43+00:00",
+   "rows": 38884,
+   "bytes": 738009,
+   "sha256": "007d1c7b4a556af5f520dc713b60448190eeb7143a1a178bbaddacee2d03cb76"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2016.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:31:07+00:00",
+   "rows": 37404,
+   "bytes": 700552,
+   "sha256": "5c775d438810f2000627d7b7d6ea66e3e6f5874b3997fdca6027c1f9f7ed000f"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2017.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:35:15+00:00",
+   "rows": 40259,
+   "bytes": 728779,
+   "sha256": "52066f1d9e2e59cef8aaea8b56b6ef56a2ec29e00e572ff42047932be105820d"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2018.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:39:21+00:00",
+   "rows": 41821,
+   "bytes": 731398,
+   "sha256": "98e5a65e9c0ddd8775a7a64e36423cda4e03d1fe746e4b9bc819b841e788ee08"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2019.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:43:42+00:00",
+   "rows": 41621,
+   "bytes": 726829,
+   "sha256": "46841c153e3ad6842d278ece9577963f5f329f81d574339168ae64a4d7ed3110"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2020.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:48:11+00:00",
+   "rows": 46518,
+   "bytes": 811960,
+   "sha256": "d9d486421a8fd749ffcc5874a1e2eea5d983364f64a8a7ba9614b808770f6219"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2021.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:53:12+00:00",
+   "rows": 49544,
+   "bytes": 865250,
+   "sha256": "07435967109bdeadedc2ec52b3e1da2f97d69a09d1974838e006bc864175d7ff"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2022.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T15:58:11+00:00",
+   "rows": 50612,
+   "bytes": 868344,
+   "sha256": "de3d78451a091a4e680b46422db69d0c38ff0b27863f4178e896b0e1fbf93ee1"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2023.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:02:55+00:00",
+   "rows": 47235,
+   "bytes": 805920,
+   "sha256": "1a885141139701a29f49ec8380539aa993adb5a1c161c3ad8e45e2e2c3aea3c5"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2024.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:08:02+00:00",
+   "rows": 44537,
+   "bytes": 756871,
+   "sha256": "c924c1bb14fe6473485a68f92bdba9914fc1dc636c3a9d0456c43fe377742945"
+  },
+  {
+   "path": "data/chunks/finbert/chunks_2025.parquet",
+   "script": "token_stats.py",
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:12:30+00:00",
+   "rows": 44395,
+   "bytes": 756878,
+   "sha256": "217ae57adf124bc7a0ebf5af665519478f3abb857049fc6ffd04b46d4bfb1d2f"
   },
   {
    "path": "data/token_stats.parquet",
    "script": "token_stats.py",
-   "version": "v2",
-   "modified_utc": "2026-11-06T22:53:07+00:00",
-   "rows": 200,
-   "bytes": 9695,
-   "sha256": "e170600cc78478dd38fe5e84678bea5cdf2e81a39e796340a5364c0f3adf46c6"
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:45:13+00:00",
+   "rows": 116983,
+   "bytes": 1496847,
+   "sha256": "23d2d8d2508c8ee2231cb9297f94e4ef1ebfb6e496cc95b32bfeeeed8b8b9738"
   },
   {
    "path": "results/token_quantiles.csv",
    "script": "token_stats.py",
-   "version": "v2",
-   "modified_utc": "2026-11-06T22:53:07+00:00",
-   "rows": 2,
-   "bytes": 209,
-   "sha256": "7343d155e9c1b2e6dbbf579f4c654d004a4e0eb2478962bfe40244159e0da59c"
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:45:13+00:00",
+   "rows": 40,
+   "bytes": 2274,
+   "sha256": "4f7d36b06e1d49507edf6388007e5e8f8eb8b54bc21145695eb62918b7131fc1"
   },
   {
    "path": "data/dedup_flags.parquet",
    "script": "dedup.py",
-   "version": "v2",
-   "modified_utc": "2026-11-06T22:53:25+00:00",
-   "rows": 6,
-   "bytes": 2391,
-   "sha256": "9ac6b2173085a26d8ee7978fcd8ea899028208bcdddf71733b59012f9c709a9d"
+   "version": "v3",
+   "modified_utc": "2026-11-08T16:58:04+00:00",
+   "rows": 1663,
+   "bytes": 24145,
+   "sha256": "01d995d60f5907ff34f8c5d339bf5da9ca5b776611deb13aec017553ca44d927"
   },
   {
    "path": "data/splits_draft.parquet",
    "script": "splits.py",
    "version": "",
-   "modified_utc": "2026-11-06T22:53:34+00:00",
+   "modified_utc": "2026-11-08T16:58:37+00:00",
    "rows": 115976,
    "bytes": 2007007,
    "sha256": "da0783f94d89fed77a4acbabea114d59f18442b6c2bcd5c730480ff3b806cfea"

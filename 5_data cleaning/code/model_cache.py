@@ -26,7 +26,7 @@ In a scoring script (part 6):
     mc = ModelCache()
     config = {"template": PROMPT, "max_new_tokens": 200, "do_sample": False,
               "mask_protocol": "none"}
-    jobs = [dict(accession=a, sha256_text=h, clean_version="v2", variant="raw",
+    jobs = [dict(accession=a, sha256_text=h, clean_version="v3", variant="raw",
                  model_id=MODEL, model_revision=REV, prompt_id="tone_v1",
                  prompt_config=config) for a, h in texts]
     for parts in mc.missing(jobs):               # only what is not cached yet

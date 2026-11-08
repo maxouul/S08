@@ -23,6 +23,11 @@ Compared with to_text() in fetch_releases.py:
   content repeated inside a document: a paragraph pasted twice, the page header or
   footer an old filing repeats on every page, a table printed twice. The counts are
   kept, so nothing disappears unseen;
+- a document that opens with a closing tag ("</head>" with no <head> before it) is read
+  in full: lxml would return it empty;
+- a PDF document is read with pypdf instead of being decoded as text;
+- a safe harbor that is not followed by a heading (transcripts, slide decks, page
+  images with a text layer) no longer takes the rest of the text with it;
 - the text is split into sentences, never across paragraphs;
 - part 2's check that the document is an earnings release (2_EDGAR.ipynb: earnings
   vocabulary against that of the monthly sales and traffic reports some filers also
@@ -41,6 +46,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import os
 import re
 import sys
@@ -54,8 +60,11 @@ warnings.filterwarnings("ignore", message="It looks like you're parsing an XML d
 
 # v1: first version. v2: page furniture and repeated content removed (drop_repeats),
 # SGML-wrapped documents read to their end, statement-shaped tables set aside,
-# cp1252 numeric references decoded.
-CLEAN_VERSION = "v2"
+# cp1252 numeric references decoded. v3: leading closing tags dropped before parsing
+# (39 documents came out empty), PDF documents read with pypdf (6), a safe harbor taking
+# more than half the text read again with a stricter rule, and short listed factors no
+# longer closing the safe harbor (label_paragraphs).
+CLEAN_VERSION = "v3"
 
 FIN_TABLE_DIGITS = 0.30          # same rule as to_text()
 SEP = " "                   # paragraph mark used while the HTML is flattened
@@ -71,6 +80,14 @@ SPACE_RE = re.compile(r"[ \t\r\n\f\v\xa0 -​  　]+")
 META_CHARSET_RE = re.compile(rb"""<meta[^>]+charset\s*=\s*["']?\s*([A-Za-z0-9_.:-]+)""", re.I)
 HIDDEN_RE = re.compile(r"display\s*:\s*none", re.I)
 SGML_TEXT_END_RE = re.compile(r"</TEXT>", re.I)
+# What may come before the first opening tag: blanks, comments, a doctype, and the stray
+# closing tags some word processors export ("</head>" with no <head>).
+LEADING_RE = re.compile(r"^(?:\s|<!--.*?-->|<![^>]*>|<\?[^>]*>|</[A-Za-z][^>]*>)+", re.S)
+COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
+END_TAG_RE = re.compile(r"</[A-Za-z]")
+# PDF text from pypdf: one line per printed line, bullets often in the Symbol font
+PDF_BULLET_RE = re.compile(r"^[•▪●◦○■□➢✓]\s*")
+PDF_SHORT_LINE = 60       # characters: a shorter line ends its paragraph (heading, name, last line)
 SGML_TABLE_RE = re.compile(r"<TABLE>(.*?)</TABLE>", re.S | re.I)
 SGML_TAG_RE = re.compile(r"</?(?:PAGE|S|C|FN|F\d+|CAPTION|PRE|DOCUMENT|TYPE|SEQUENCE|"
                          r"FILENAME|DESCRIPTION|TEXT)\b[^>]*>", re.I)
@@ -215,6 +232,59 @@ def plain_paragraphs(text: str, fin_tables: list[str]) -> list[str]:
     return out
 
 
+# --- PDF ----------------------------------------------------------------------------
+
+def is_pdf(raw: bytes) -> bool:
+    return raw[:1024].lstrip().startswith(b"%PDF-")
+
+
+def pdf_text(raw: bytes) -> str:
+    """The text of every page, pages separated by a blank line."""
+    from pypdf import PdfReader
+    return "\n\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(raw)).pages)
+
+
+def pdf_paragraphs(text: str, fin_tables: list[str]) -> list[str]:
+    """pypdf gives one line per printed line and no blank line between paragraphs. A
+    paragraph ends at a line closed by . ! ? : ; or at a short line (a heading, a name,
+    the last line of a paragraph); a bulleted line opens one; consecutive lines that are
+    mostly digits make a financial table."""
+    paras: list[str] = []
+    cur: list[str] = []
+    table: list[str] = []
+
+    def end_para():
+        if cur:
+            paras.append(" ".join(cur))
+            cur.clear()
+
+    def end_table():
+        if table:
+            fin_tables.append("\n".join(table))
+            table.clear()
+
+    for line in text.split("\n"):
+        s = SPACE_RE.sub(" ", line).strip()
+        if not s:
+            end_para()
+            end_table()
+            continue
+        if len(s.split()) >= 2 and is_financial(s):
+            end_para()
+            table.append(s)
+            continue
+        end_table()
+        if PDF_BULLET_RE.match(s):
+            end_para()
+            s = PDF_BULLET_RE.sub("• ", s)
+        cur.append(s)
+        if s[-1] in ".!?:;" or len(s) < PDF_SHORT_LINE:
+            end_para()
+    end_para()
+    end_table()
+    return paras
+
+
 # --- HTML -------------------------------------------------------------------------
 
 def drop_hidden(soup) -> None:
@@ -235,8 +305,19 @@ def drop_hidden(soup) -> None:
         t.decompose()
 
 
+def drop_leading_end_tags(doc: str) -> str:
+    """A document that opens with closing tags ("</head>" with no <head>) is read by lxml
+    as empty: what precedes the first opening tag is dropped when it holds a closing
+    tag. Any other document is returned unchanged."""
+    m = LEADING_RE.match(doc)
+    if m and END_TAG_RE.search(COMMENT_RE.sub("", m.group(0))):
+        return doc[m.end():]
+    return doc
+
+
 def html_paragraphs(doc: str, fin_tables: list[str]) -> list[str]:
     from bs4 import BeautifulSoup
+    doc = drop_leading_end_tags(doc)
     try:
         soup = BeautifulSoup(doc, "lxml")
     except Exception:
@@ -293,6 +374,22 @@ CALL_PARA = re.compile(r"\b(conference call|webcast|earnings call)\b", re.I)
 CALL_DETAIL = re.compile(r"\b(dial|replay|listen|passcode|pass code|toll[- ]free|"
                          r"conference id|www\.|https?://)", re.I)
 CONTACT_LINE = re.compile(r"@|\(\d{3}\)|\d{3}[-.\s]\d{3}[-.\s]\d{4}", re.I)
+# The stricter reading of a safe harbor that takes more than SAFE_MAX_SHARE of the text:
+# it goes on through short paragraphs, list items, and paragraphs in its own vocabulary.
+SAFE_MAX_SHARE = 0.5
+SAFE_SHORT_PARA = 40      # words: shorter paragraphs never end it (factors listed one per line)
+SAFE_LONG_PARA = 300      # words: a longer one goes on only if it would open a safe harbor
+SAFE_WORDS = re.compile(
+    r"forward[- ]looking|\brisks?\b|uncertaint|actual (results|events|performance|outcomes)"
+    r"|differ materially|could cause|undue reliance|speaks? only as of|no (obligation|duty)"
+    r"|undertakes? no|cautionary|safe harbor|litigation reform|factors that", re.I)
+LIST_BULLET = r"^\s*(?:[•·▪●◦○■□➢✓§*–—-]|\(?(?:\d{1,2}|[a-z]|[ivx]{1,4})[.)])\s"
+LIST_ITEM = re.compile(LIST_BULLET + r"|[;,:]\s*(?:and|or)?\s*$", re.I)
+# A factor listed in a safe harbor can be short enough to pass for a heading ("• the
+# loss of key suppliers; and"): it stays in the safe harbor instead of closing it, as
+# does a heading in the safe harbor's vocabulary ("These risks include:"). Other
+# headings ending in a colon, such as a speaker's name in a transcript, still close it.
+HEADING_ITEM = re.compile(LIST_BULLET + r"|\b(?:and|or)\s*$", re.I)
 
 
 def is_heading(p: str) -> bool:
@@ -303,12 +400,35 @@ def is_heading(p: str) -> bool:
     return 0 < len(words) <= 8 and any(rx.search(p) for _, rx in HEAD_PATTERNS)
 
 
+def safe_harbor_goes_on(p: str) -> bool:
+    n = len(p.split())
+    return (n < SAFE_SHORT_PARA or bool(LIST_ITEM.search(p))
+            or (n < SAFE_LONG_PARA and bool(SAFE_WORDS.search(p)))
+            or bool(SAFE_HARBOR_PARA.search(p) and RISK_WORDS.search(p)))
+
+
 def label_paragraphs(paras: list[str]) -> list[str]:
     """Heading-driven labelling. A heading that matches a pattern opens that section;
     any other heading closes it, except inside contacts, where names and phone numbers
-    look like headings and only a long paragraph closes the block. Without a heading,
+    look like headings and only a long paragraph closes the block, and inside the safe
+    harbor, where a short listed factor looks like a heading too (HEADING_ITEM). Without a heading,
     a forward-looking paragraph that cites risks opens the safe harbor, and a
-    paragraph giving dial-in details is labelled conference_call on its own."""
+    paragraph giving dial-in details is labelled conference_call on its own.
+
+    A safe harbor at the top of a transcript or a slide deck is followed by no heading,
+    and would take the whole text. So when the safe harbor holds more than
+    SAFE_MAX_SHARE of the words, the text is labelled again with a stricter rule: the
+    safe harbor then ends at the first paragraph that is not short, not a list item,
+    and not in its vocabulary. Every other text keeps the first labelling."""
+    labels = _labels(paras, strict=False)
+    words = [len(p.split()) for p in paras]
+    safe = sum(w for w, lab in zip(words, labels) if lab == "safe_harbor")
+    if safe > SAFE_MAX_SHARE * max(sum(words), 1):
+        labels = _labels(paras, strict=True)
+    return labels
+
+
+def _labels(paras: list[str], strict: bool) -> list[str]:
     labels, current = [], "body"
     for p in paras:
         lab = None
@@ -321,11 +441,15 @@ def label_paragraphs(paras: list[str]) -> list[str]:
                 current = lab
             elif current == "contacts" and (CONTACT_LINE.search(p) or len(p.split()) <= 6):
                 pass
+            elif current == "safe_harbor" and (HEADING_ITEM.search(p) or SAFE_WORDS.search(p)):
+                pass
             else:
                 current = "body"
             labels.append(current)
             continue
         if current == "contacts" and len(p.split()) > 25:
+            current = "body"
+        if strict and current == "safe_harbor" and not safe_harbor_goes_on(p):
             current = "body"
         if SAFE_HARBOR_PARA.search(p) and RISK_WORDS.search(p):
             current = "safe_harbor"
@@ -403,21 +527,24 @@ def drop_repeats(paras: list[str]) -> tuple[list[str], int, int]:
 # --- the pure function ------------------------------------------------------------
 
 def clean(raw_bytes: bytes, filename: str) -> dict:
-    text, encoding = decode(raw_bytes)
     fin_tables: list[str] = []
-
-    # EDGAR's SGML wrapper: the document is what lies between <TEXT> and </TEXT>. The
-    # opening tag sits in the header, but the closing one can be anywhere in the file.
-    start = text[:20000].upper().find("<TEXT>")
-    if start >= 0:
-        end = SGML_TEXT_END_RE.search(text, start)
-        inner = text[start + len("<TEXT>"):end.start() if end else len(text)]
+    if is_pdf(raw_bytes):                    # a release filed as a PDF document
+        text, encoding = pdf_text(raw_bytes), "pdf"
+        paras = pdf_paragraphs(text, fin_tables)
     else:
-        inner = text
-    if is_html(inner[:5000], filename):
-        paras = html_paragraphs(inner, fin_tables)
-    else:
-        paras = plain_paragraphs(inner, fin_tables)
+        text, encoding = decode(raw_bytes)
+        # EDGAR's SGML wrapper: the document is what lies between <TEXT> and </TEXT>.
+        # The opening tag sits in the header, but the closing one can be anywhere.
+        start = text[:20000].upper().find("<TEXT>")
+        if start >= 0:
+            end = SGML_TEXT_END_RE.search(text, start)
+            inner = text[start + len("<TEXT>"):end.start() if end else len(text)]
+        else:
+            inner = text
+        if is_html(inner[:5000], filename):
+            paras = html_paragraphs(inner, fin_tables)
+        else:
+            paras = plain_paragraphs(inner, fin_tables)
 
     paras, n_furniture, n_copies = drop_repeats(paras)
     n_tables_found = len(fin_tables)
