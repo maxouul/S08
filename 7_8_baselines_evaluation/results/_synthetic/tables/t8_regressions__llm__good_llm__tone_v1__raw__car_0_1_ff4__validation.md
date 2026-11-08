@@ -1,0 +1,22 @@
+<!-- Abnormal return on text rank, llm__good_llm__tone_v1__raw, car_0_1_ff4 -->
+| index | (1) SUE | (2) text | (3) SUE + text | (4) + controls | (5) + text x miss |
+|---|---|---|---|---|---|
+| llm__good_llm__tone_v1__raw_rk |  | 0.0589*** | 0.0380*** | 0.0377*** | 0.0429*** |
+|  |  | (18.43) | (12.83) | (14.26) | (12.51) |
+| text_x_miss |  |  |  |  | -0.0135 |
+|  |  |  |  |  | (-1.64) |
+| miss |  |  |  |  | -0.0143** |
+|  |  |  |  |  | (-2.13) |
+| log_mktcap |  |  |  | -0.0004 | -0.0004 |
+|  |  |  |  | (-0.42) | (-0.42) |
+| log_analysts |  |  |  | 0.0035** | 0.0034** |
+|  |  |  |  | (2.44) | (2.41) |
+| disp_price |  |  |  | 0.6449 | 0.5232 |
+|  |  |  |  | (0.75) | (0.62) |
+| ret_prior_1m_w |  |  |  | -0.0067 | -0.0085 |
+|  |  |  |  | (-0.56) | (-0.70) |
+| SUE deciles | yes | no | yes | yes | yes |
+| season FE | yes | yes | yes | yes | yes |
+| sector FE | no | no | no | yes | yes |
+| N | 2,111 | 2,111 | 2,111 | 2,111 | 2,111 |
+| R2 | 0.1406 | 0.1098 | 0.1738 | 0.1795 | 0.1818 |

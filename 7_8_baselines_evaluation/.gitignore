@@ -1,0 +1,20 @@
+# Row-level, WRDS-derived data: never committed (see README, "Data provenance and licensing")
+data/
+*.parquet
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# The Loughran-McDonald dictionary is licensed separately: each user downloads it
+resources/lm/*.csv
+
+# Test outputs
+results/_tests/
+logs/runs_tests.jsonl
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.DS_Store

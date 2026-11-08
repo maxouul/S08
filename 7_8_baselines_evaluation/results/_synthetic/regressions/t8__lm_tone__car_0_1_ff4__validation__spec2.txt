@@ -1,0 +1,38 @@
+(2) text; text=lm_tone
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          car_0_1_ff4_w   R-squared:                       0.099
+Model:                            OLS   Adj. R-squared:                  0.094
+Method:                 Least Squares   F-statistic:                     21.31
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           7.00e-06
+Time:                        10:09:09   Log-Likelihood:                 3272.7
+No. Observations:                2111   AIC:                            -6519.
+Df Residuals:                    2098   BIC:                            -6446.
+Df Model:                          12                                         
+Covariance Type:              cluster                                         
+=================================================================================
+                    coef    std err          z      P>|z|      [0.025      0.975]
+---------------------------------------------------------------------------------
+const            -0.0062      0.000    -24.348      0.000      -0.007      -0.006
+lm_tone_rk        0.0556      0.004     12.848      0.000       0.047       0.064
+season_2017Q2    -0.0026        nan        nan        nan         nan         nan
+season_2017Q3    -0.0055      0.001     -6.433      0.000      -0.007      -0.004
+season_2017Q4    -0.0018      0.001     -1.347      0.178      -0.004       0.001
+season_2018Q1     0.0086      0.002      3.781      0.000       0.004       0.013
+season_2018Q2    -0.0013      0.001     -0.946      0.344      -0.004       0.001
+season_2018Q3     0.0117   8.99e-05    130.081      0.000       0.012       0.012
+season_2018Q4     0.0020        nan        nan        nan         nan         nan
+season_2019Q1    -0.0036        nan        nan        nan         nan         nan
+season_2019Q2    -0.0089      0.002     -5.475      0.000      -0.012      -0.006
+season_2019Q3    -0.0027      0.002     -1.704      0.088      -0.006       0.000
+season_2019Q4    -0.0011        nan        nan        nan         nan         nan
+==============================================================================
+Omnibus:                       14.089   Durbin-Watson:                   2.052
+Prob(Omnibus):                  0.001   Jarque-Bera (JB):               10.031
+Skew:                           0.019   Prob(JB):                      0.00664
+Kurtosis:                       2.664   Cond. No.                         12.9
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)

@@ -1,0 +1,3 @@
+signal,model_id,prompt_id,variant,model_revisions,clean_versions,n_scored,n_parsed
+llm__good_llm__tone_v1__raw,demo/good-llm,tone_v1,raw,r1,synthetic,17696,17696
+llm__noise_llm__tone_v1__raw,demo/noise-llm,tone_v1,raw,r1,synthetic,17696,17696

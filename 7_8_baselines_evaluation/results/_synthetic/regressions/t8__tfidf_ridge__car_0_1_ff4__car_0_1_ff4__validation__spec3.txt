@@ -1,0 +1,47 @@
+(3) SUE + text; text=tfidf_ridge__car_0_1_ff4
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:          car_0_1_ff4_w   R-squared:                       0.157
+Model:                            OLS   Adj. R-squared:                  0.149
+Method:                 Least Squares   F-statistic:                     20.95
+Date:                Fri, 06 Nov 2026   Prob (F-statistic):           4.44e-06
+Time:                        10:09:09   Log-Likelihood:                 3343.4
+No. Observations:                2111   AIC:                            -6643.
+Df Residuals:                    2089   BIC:                            -6518.
+Df Model:                          21                                         
+Covariance Type:              cluster                                         
+===============================================================================================
+                                  coef    std err          z      P>|z|      [0.025      0.975]
+-----------------------------------------------------------------------------------------------
+const                          -0.0280      0.004     -7.251      0.000      -0.036      -0.020
+tfidf_ridge__car_0_1_ff4_rk     0.0265      0.005      5.159      0.000       0.016       0.037
+sue_decile_10.0                 0.0422      0.006      7.137      0.000       0.031       0.054
+sue_decile_2.0                  0.0018      0.006      0.289      0.772      -0.011       0.014
+sue_decile_3.0                  0.0040      0.004      1.011      0.312      -0.004       0.012
+sue_decile_4.0                  0.0070      0.005      1.500      0.134      -0.002       0.016
+sue_decile_5.0                  0.0240      0.005      4.426      0.000       0.013       0.035
+sue_decile_6.0                  0.0263      0.005      5.772      0.000       0.017       0.035
+sue_decile_7.0                  0.0359      0.005      6.636      0.000       0.025       0.046
+sue_decile_8.0                  0.0326      0.006      5.429      0.000       0.021       0.044
+sue_decile_9.0                  0.0455      0.005      9.937      0.000       0.037       0.054
+season_2017Q2                  -0.0028        nan        nan        nan         nan         nan
+season_2017Q3                  -0.0057      0.001     -4.493      0.000      -0.008      -0.003
+season_2017Q4                  -0.0019      0.001     -1.917      0.055      -0.004    4.32e-05
+season_2018Q1                   0.0085      0.002      4.256      0.000       0.005       0.012
+season_2018Q2                  -0.0014      0.001     -1.120      0.263      -0.004       0.001
+season_2018Q3                   0.0116        nan        nan        nan         nan         nan
+season_2018Q4                   0.0019        nan        nan        nan         nan         nan
+season_2019Q1                  -0.0037        nan        nan        nan         nan         nan
+season_2019Q2                  -0.0090      0.002     -5.713      0.000      -0.012      -0.006
+season_2019Q3                  -0.0028      0.001     -2.233      0.026      -0.005      -0.000
+season_2019Q4                  -0.0012        nan        nan        nan         nan         nan
+==============================================================================
+Omnibus:                       12.386   Durbin-Watson:                   2.027
+Prob(Omnibus):                  0.002   Jarque-Bera (JB):                9.115
+Skew:                           0.030   Prob(JB):                       0.0105
+Kurtosis:                       2.684   Cond. No.                         13.6
+==============================================================================
+
+Notes:
+[1] Standard Errors are robust to cluster correlation (CRV1)

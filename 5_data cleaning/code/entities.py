@@ -11,8 +11,8 @@ The CRSP names and the I/B/E/S link are read from the WRDS pulls part 3-4 alread
 cached (3_4_surprise_returns/cache: crsp_names.parquet, link_ibes_crsp.parquet), so
 this script does not query WRDS. The event date is the filing date, which the timing corrections do not move.
 
-The output holds WRDS data: it stays on our private drive and must never be pushed
-to a public repository.
+The output holds WRDS data: it stays in the team's private storage (data/ is ignored
+by git) and must never be pushed to a public repository.
 
 Output: data/entities.parquet
 
@@ -96,7 +96,7 @@ def main() -> int:
     print(f"  with a CRSP ticker at date : {out.crsp_ticker_at_event.notna().sum():,}")
     print(f"  with an I/B/E/S ticker     : {out.ibes_ticker.notna().sum():,}")
     print(f"  with more than one name    : {(out.crsp_names.str.len() > 1).sum():,}")
-    print(f"-> {args.out}  (WRDS data: private drive only)")
+    print(f"-> {args.out}  (WRDS data: private storage only)")
     return 0
 
 

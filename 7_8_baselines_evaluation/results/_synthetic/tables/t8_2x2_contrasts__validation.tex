@@ -1,0 +1,220 @@
+\begin{table}
+\caption{2x2 contrasts: text effect within surprise sign}
+\label{tab:t8_2x2_contrasts__validation}
+\begin{tabular}{llllrrrrrr}
+\toprule
+signal & outcome & text\_rule & contrast & estimate & se\_cluster & t\_cluster & p\_cluster & ci95\_lo & ci95\_hi \\
+\midrule
+lm\_tone & car\_0\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.013400 & 0.003800 & 3.488600 & 0.000500 & 0.005900 & 0.020900 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.018200 & 0.003600 & 5.066700 & 0.000000 & 0.011200 & 0.025200 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & average text effect & 0.015800 & 0.003000 & 5.248100 & 0.000000 & 0.009900 & 0.021700 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.004800 & 0.004400 & -1.105900 & 0.268800 & -0.013400 & 0.003700 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.034800 & 0.003400 & 10.247700 & 0.000000 & 0.028100 & 0.041400 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.039600 & 0.003700 & 10.763500 & 0.000000 & 0.032400 & 0.046800 \\
+lm\_tone & car\_0\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.021400 & 0.004600 & 4.617300 & 0.000000 & 0.012300 & 0.030500 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.005000 & 0.002700 & 1.869900 & 0.061500 & -0.000200 & 0.010300 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.005000 & 0.002700 & 1.855200 & 0.063600 & -0.000300 & 0.010300 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & average text effect & 0.005000 & 0.001700 & 3.001500 & 0.002700 & 0.001700 & 0.008300 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.000000 & 0.004200 & -0.002500 & 0.998000 & -0.008300 & 0.008300 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.007900 & 0.003200 & 2.487100 & 0.012900 & 0.001700 & 0.014200 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.007900 & 0.001900 & 4.207400 & 0.000000 & 0.004200 & 0.011600 \\
+lm\_tone & post\_car\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.002900 & 0.002600 & 1.105300 & 0.269000 & -0.002300 & 0.008100 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.003600 & 0.011500 & 0.309000 & 0.757300 & -0.019000 & 0.026200 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.006400 & 0.008600 & 0.748100 & 0.454400 & -0.010400 & 0.023300 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & average text effect & 0.005000 & 0.007000 & 0.713900 & 0.475300 & -0.008700 & 0.018700 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.002900 & 0.014800 & -0.194800 & 0.845600 & -0.031800 & 0.026000 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.007900 & 0.008400 & -0.947900 & 0.343200 & -0.024400 & 0.008500 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & -0.005100 & 0.008300 & -0.610000 & 0.541900 & -0.021300 & 0.011200 \\
+lm\_tone & post\_car\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.011500 & 0.006800 & -1.694200 & 0.090200 & -0.024800 & 0.001800 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.004000 & 0.006900 & -0.578600 & 0.562900 & -0.017400 & 0.009500 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.025600 & 0.011600 & 2.206700 & 0.027300 & 0.002900 & 0.048400 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & average text effect & 0.010800 & 0.008300 & 1.307100 & 0.191200 & -0.005400 & 0.027100 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.029600 & 0.009500 & -3.125500 & 0.001800 & -0.048200 & -0.011000 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.028200 & 0.009400 & -3.014000 & 0.002600 & -0.046500 & -0.009900 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.001400 & 0.007600 & 0.186700 & 0.851900 & -0.013400 & 0.016300 \\
+lm\_tone & car\_1\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.024200 & 0.013100 & -1.842300 & 0.065400 & -0.050000 & 0.001500 \\
+lm\_tone & ar\_m1 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.004000 & 0.001700 & -2.310100 & 0.020900 & -0.007400 & -0.000600 \\
+lm\_tone & ar\_m1 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.002100 & 0.001500 & 1.392400 & 0.163800 & -0.000900 & 0.005100 \\
+lm\_tone & ar\_m1 & season\_median & average text effect & -0.000900 & 0.001200 & -0.787100 & 0.431200 & -0.003300 & 0.001400 \\
+lm\_tone & ar\_m1 & season\_median & diff-in-diff (beat effect - miss effect) & -0.006100 & 0.002200 & -2.745900 & 0.006000 & -0.010500 & -0.001800 \\
+lm\_tone & ar\_m1 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.001900 & 0.001100 & -1.746500 & 0.080700 & -0.004000 & 0.000200 \\
+lm\_tone & ar\_m1 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.004200 & 0.001800 & 2.334800 & 0.019600 & 0.000700 & 0.007800 \\
+lm\_tone & ar\_m1 & season\_median & beat, bad text vs miss, good text & 0.002100 & 0.001800 & 1.195600 & 0.231900 & -0.001400 & 0.005600 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.012600 & 0.003700 & 3.412800 & 0.000600 & 0.005300 & 0.019800 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.009900 & 0.003800 & 2.609400 & 0.009100 & 0.002500 & 0.017300 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & average text effect & 0.011200 & 0.002700 & 4.189200 & 0.000000 & 0.006000 & 0.016500 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.002700 & 0.005200 & 0.514700 & 0.606800 & -0.007500 & 0.012900 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.041900 & 0.004000 & 10.553300 & 0.000000 & 0.034100 & 0.049600 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.039200 & 0.004500 & 8.683100 & 0.000000 & 0.030300 & 0.048000 \\
+lm\_negshare & car\_0\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.029300 & 0.005100 & 5.745400 & 0.000000 & 0.019300 & 0.039300 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.005000 & 0.003400 & 1.469900 & 0.141600 & -0.001700 & 0.011800 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.004800 & 0.003100 & 1.536600 & 0.124400 & -0.001300 & 0.010900 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & average text effect & 0.004900 & 0.002300 & 2.093600 & 0.036300 & 0.000300 & 0.009500 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.000300 & 0.004600 & 0.054700 & 0.956400 & -0.008700 & 0.009200 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.008600 & 0.003400 & 2.535300 & 0.011200 & 0.002000 & 0.015300 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.008400 & 0.002300 & 3.621700 & 0.000300 & 0.003800 & 0.012900 \\
+lm\_negshare & post\_car\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.003600 & 0.003600 & 1.008800 & 0.313100 & -0.003400 & 0.010500 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.002200 & 0.010300 & 0.214100 & 0.830500 & -0.018000 & 0.022500 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.005200 & 0.009900 & 0.525000 & 0.599600 & -0.014200 & 0.024600 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & average text effect & 0.003700 & 0.007900 & 0.469100 & 0.639000 & -0.011800 & 0.019200 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.003000 & 0.012600 & -0.236600 & 0.813000 & -0.027800 & 0.021800 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.006600 & 0.007100 & -0.937900 & 0.348300 & -0.020500 & 0.007200 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & -0.003600 & 0.008300 & -0.439300 & 0.660500 & -0.019900 & 0.012600 \\
+lm\_negshare & post\_car\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.008800 & 0.008300 & -1.061000 & 0.288700 & -0.025200 & 0.007500 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.007700 & 0.006900 & -1.111600 & 0.266300 & -0.021200 & 0.005900 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.019300 & 0.009100 & 2.122600 & 0.033800 & 0.001500 & 0.037100 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & average text effect & 0.005800 & 0.006500 & 0.897800 & 0.369300 & -0.006900 & 0.018400 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.027000 & 0.009700 & -2.780300 & 0.005400 & -0.046000 & -0.008000 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.027500 & 0.006800 & -4.029200 & 0.000100 & -0.040800 & -0.014100 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & -0.000500 & 0.008200 & -0.061400 & 0.951100 & -0.016500 & 0.015500 \\
+lm\_negshare & car\_1\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.019800 & 0.009700 & -2.032200 & 0.042100 & -0.038800 & -0.000700 \\
+lm\_negshare & ar\_m1 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.002300 & 0.001400 & -1.689700 & 0.091100 & -0.005000 & 0.000400 \\
+lm\_negshare & ar\_m1 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.001600 & 0.001500 & 1.039100 & 0.298800 & -0.001400 & 0.004600 \\
+lm\_negshare & ar\_m1 & season\_median & average text effect & -0.000400 & 0.000900 & -0.411000 & 0.681100 & -0.002000 & 0.001300 \\
+lm\_negshare & ar\_m1 & season\_median & diff-in-diff (beat effect - miss effect) & -0.003900 & 0.002300 & -1.668900 & 0.095100 & -0.008500 & 0.000700 \\
+lm\_negshare & ar\_m1 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.001100 & 0.001300 & -0.828300 & 0.407500 & -0.003800 & 0.001500 \\
+lm\_negshare & ar\_m1 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.002800 & 0.001800 & 1.551600 & 0.120800 & -0.000700 & 0.006300 \\
+lm\_negshare & ar\_m1 & season\_median & beat, bad text vs miss, good text & 0.001200 & 0.001400 & 0.833100 & 0.404800 & -0.001600 & 0.004000 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.010400 & 0.003300 & 3.208100 & 0.001300 & 0.004100 & 0.016800 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.010900 & 0.003400 & 3.221300 & 0.001300 & 0.004300 & 0.017600 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & average text effect & 0.010700 & 0.002800 & 3.750200 & 0.000200 & 0.005100 & 0.016300 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.000500 & 0.003400 & -0.143100 & 0.886200 & -0.007200 & 0.006200 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.039700 & 0.003400 & 11.678100 & 0.000000 & 0.033100 & 0.046400 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.040200 & 0.002900 & 14.088500 & 0.000000 & 0.034600 & 0.045800 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_0\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.029300 & 0.004400 & 6.683800 & 0.000000 & 0.020700 & 0.037900 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.003500 & 0.002500 & 1.425900 & 0.153900 & -0.001300 & 0.008300 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.003500 & 0.002700 & 1.298900 & 0.194000 & -0.001800 & 0.008700 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & average text effect & 0.003500 & 0.001800 & 1.907300 & 0.056500 & -0.000100 & 0.007100 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.000000 & 0.003600 & 0.011500 & 0.990800 & -0.007000 & 0.007100 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.008700 & 0.003000 & 2.902300 & 0.003700 & 0.002800 & 0.014500 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.008600 & 0.001900 & 4.627300 & 0.000000 & 0.005000 & 0.012300 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.005100 & 0.003000 & 1.716800 & 0.086000 & -0.000700 & 0.011000 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.007700 & 0.012300 & -0.624500 & 0.532300 & -0.031700 & 0.016400 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.009000 & 0.007500 & 1.200200 & 0.230100 & -0.005700 & 0.023600 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & average text effect & 0.000600 & 0.007400 & 0.088200 & 0.929700 & -0.013800 & 0.015100 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.016600 & 0.014000 & -1.188400 & 0.234700 & -0.044100 & 0.010800 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.013400 & 0.008000 & -1.667200 & 0.095500 & -0.029100 & 0.002300 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.003300 & 0.008400 & 0.387900 & 0.698100 & -0.013200 & 0.019800 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & post\_car\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.005700 & 0.008000 & -0.711800 & 0.476600 & -0.021400 & 0.010000 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.005000 & 0.007200 & -0.697100 & 0.485700 & -0.019200 & 0.009100 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.033500 & 0.012100 & 2.762100 & 0.005700 & 0.009700 & 0.057200 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & average text effect & 0.014200 & 0.006600 & 2.143600 & 0.032100 & 0.001200 & 0.027200 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.038500 & 0.014900 & -2.585100 & 0.009700 & -0.067700 & -0.009300 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.034000 & 0.009600 & -3.539700 & 0.000400 & -0.052800 & -0.015200 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.004600 & 0.010800 & 0.421100 & 0.673700 & -0.016600 & 0.025800 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & car\_1\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.028900 & 0.011800 & -2.442300 & 0.014600 & -0.052100 & -0.005700 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.003000 & 0.001200 & -2.558400 & 0.010500 & -0.005300 & -0.000700 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.000900 & 0.001100 & 0.890400 & 0.373200 & -0.001100 & 0.003000 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & average text effect & -0.001000 & 0.000900 & -1.164900 & 0.244100 & -0.002800 & 0.000700 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & diff-in-diff (beat effect - miss effect) & -0.004000 & 0.001400 & -2.902400 & 0.003700 & -0.006700 & -0.001300 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.000900 & 0.001000 & -0.893500 & 0.371600 & -0.002800 & 0.001100 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.003100 & 0.001300 & 2.331700 & 0.019700 & 0.000500 & 0.005700 \\
+tfidf\_ridge\_\_car\_0\_1\_ff4 & ar\_m1 & season\_median & beat, bad text vs miss, good text & 0.002100 & 0.001500 & 1.448900 & 0.147400 & -0.000800 & 0.005000 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.012400 & 0.003400 & 3.609000 & 0.000300 & 0.005600 & 0.019100 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.010600 & 0.003300 & 3.251900 & 0.001100 & 0.004200 & 0.017000 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & average text effect & 0.011500 & 0.003000 & 3.792300 & 0.000100 & 0.005600 & 0.017400 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.001700 & 0.002800 & 0.609700 & 0.542000 & -0.003800 & 0.007300 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.040700 & 0.003500 & 11.536500 & 0.000000 & 0.033800 & 0.047600 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.039000 & 0.002700 & 14.246900 & 0.000000 & 0.033600 & 0.044300 \\
+tfidf\_logit\_\_up & car\_0\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.028300 & 0.004900 & 5.726300 & 0.000000 & 0.018600 & 0.038000 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.003500 & 0.002000 & 1.705600 & 0.088100 & -0.000500 & 0.007400 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.004300 & 0.002400 & 1.834700 & 0.066600 & -0.000300 & 0.009000 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & average text effect & 0.003900 & 0.001600 & 2.458700 & 0.013900 & 0.000800 & 0.007000 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.000900 & 0.003100 & -0.286300 & 0.774600 & -0.006900 & 0.005100 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.008300 & 0.002400 & 3.479100 & 0.000500 & 0.003600 & 0.013000 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.009200 & 0.002000 & 4.634800 & 0.000000 & 0.005300 & 0.013100 \\
+tfidf\_logit\_\_up & post\_car\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.004900 & 0.002400 & 1.999600 & 0.045500 & 0.000100 & 0.009600 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.001500 & 0.012600 & 0.115500 & 0.908000 & -0.023300 & 0.026200 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & -0.005400 & 0.007600 & -0.715300 & 0.474400 & -0.020200 & 0.009400 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & average text effect & -0.002000 & 0.008000 & -0.247800 & 0.804300 & -0.017600 & 0.013700 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.006900 & 0.013400 & 0.514100 & 0.607200 & -0.019300 & 0.033100 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.001100 & 0.008000 & -0.140800 & 0.888100 & -0.016900 & 0.014600 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & -0.008000 & 0.008400 & -0.957100 & 0.338500 & -0.024400 & 0.008400 \\
+tfidf\_logit\_\_up & post\_car\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.002600 & 0.009600 & -0.268600 & 0.788200 & -0.021500 & 0.016300 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.004100 & 0.007200 & -0.567100 & 0.570600 & -0.018300 & 0.010100 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.032700 & 0.010600 & 3.081600 & 0.002100 & 0.011900 & 0.053500 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & average text effect & 0.014300 & 0.006500 & 2.201600 & 0.027700 & 0.001600 & 0.027100 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.036800 & 0.012700 & -2.903300 & 0.003700 & -0.061700 & -0.012000 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.032900 & 0.009300 & -3.543300 & 0.000400 & -0.051000 & -0.014700 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.003900 & 0.009400 & 0.418600 & 0.675500 & -0.014500 & 0.022400 \\
+tfidf\_logit\_\_up & car\_1\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.028800 & 0.011200 & -2.566700 & 0.010300 & -0.050700 & -0.006800 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.002000 & 0.001200 & -1.682500 & 0.092500 & -0.004300 & 0.000300 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.002400 & 0.001300 & 1.805800 & 0.071000 & -0.000200 & 0.005000 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & average text effect & 0.000200 & 0.001000 & 0.208100 & 0.835200 & -0.001800 & 0.002200 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & diff-in-diff (beat effect - miss effect) & -0.004400 & 0.001500 & -2.962700 & 0.003100 & -0.007300 & -0.001500 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.001600 & 0.001100 & -1.519900 & 0.128500 & -0.003700 & 0.000500 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.002800 & 0.001300 & 2.153500 & 0.031300 & 0.000200 & 0.005300 \\
+tfidf\_logit\_\_up & ar\_m1 & season\_median & beat, bad text vs miss, good text & 0.000400 & 0.001500 & 0.254900 & 0.798800 & -0.002500 & 0.003200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.018800 & 0.002700 & 6.910800 & 0.000000 & 0.013500 & 0.024100 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.016000 & 0.003700 & 4.388100 & 0.000000 & 0.008900 & 0.023200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & average text effect & 0.017400 & 0.003000 & 5.885100 & 0.000000 & 0.011600 & 0.023200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.002800 & 0.002500 & 1.082800 & 0.278900 & -0.002200 & 0.007700 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.038600 & 0.003800 & 10.233400 & 0.000000 & 0.031200 & 0.046000 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.035800 & 0.003000 & 11.855700 & 0.000000 & 0.029900 & 0.041800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.019800 & 0.005300 & 3.720900 & 0.000200 & 0.009400 & 0.030200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.007500 & 0.002700 & 2.719500 & 0.006500 & 0.002100 & 0.012800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.004600 & 0.002500 & 1.880800 & 0.060000 & -0.000200 & 0.009400 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & average text effect & 0.006000 & 0.001600 & 3.730400 & 0.000200 & 0.002900 & 0.009200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.002900 & 0.004100 & 0.699400 & 0.484300 & -0.005100 & 0.010800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.009100 & 0.002900 & 3.142700 & 0.001700 & 0.003400 & 0.014800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.006300 & 0.002300 & 2.680500 & 0.007400 & 0.001700 & 0.010900 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.001700 & 0.002800 & 0.589000 & 0.555900 & -0.003900 & 0.007200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.010300 & 0.011800 & -0.876700 & 0.380700 & -0.033500 & 0.012800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & -0.004400 & 0.007900 & -0.558500 & 0.576500 & -0.019900 & 0.011100 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & average text effect & -0.007400 & 0.008200 & -0.897400 & 0.369500 & -0.023500 & 0.008700 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.005900 & 0.011500 & -0.514800 & 0.606700 & -0.028500 & 0.016700 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.004800 & 0.006100 & -0.791100 & 0.428900 & -0.016700 & 0.007100 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.001100 & 0.009000 & 0.125000 & 0.900500 & -0.016500 & 0.018800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & beat, bad text vs miss, good text & 0.005500 & 0.010500 & 0.525000 & 0.599600 & -0.015100 & 0.026200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.003700 & 0.009500 & -0.388600 & 0.697600 & -0.022400 & 0.015000 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.010400 & 0.010300 & 1.007200 & 0.313900 & -0.009800 & 0.030700 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & average text effect & 0.003400 & 0.007300 & 0.461300 & 0.644600 & -0.010900 & 0.017600 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.014100 & 0.013500 & -1.041400 & 0.297700 & -0.040700 & 0.012400 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.018300 & 0.008400 & -2.177100 & 0.029500 & -0.034700 & -0.001800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & -0.004200 & 0.011700 & -0.357900 & 0.720400 & -0.027100 & 0.018700 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.014600 & 0.013000 & -1.120900 & 0.262300 & -0.040100 & 0.010900 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.004600 & 0.001200 & -3.766500 & 0.000200 & -0.007000 & -0.002200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.001600 & 0.001400 & 1.124100 & 0.261000 & -0.001200 & 0.004500 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & average text effect & -0.001500 & 0.001200 & -1.292900 & 0.196000 & -0.003800 & 0.000800 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & diff-in-diff (beat effect - miss effect) & -0.006300 & 0.001300 & -4.639800 & 0.000000 & -0.008900 & -0.003600 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.001700 & 0.000700 & -2.574000 & 0.010100 & -0.003000 & -0.000400 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.004500 & 0.001400 & 3.341800 & 0.000800 & 0.001900 & 0.007200 \\
+llm\_\_good\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & beat, bad text vs miss, good text & 0.002900 & 0.001500 & 1.989400 & 0.046700 & 0.000000 & 0.005800 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.002900 & 0.002700 & 1.071600 & 0.283900 & -0.002400 & 0.008300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.002800 & 0.003800 & 0.719200 & 0.472000 & -0.004800 & 0.010300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & average text effect & 0.002800 & 0.002800 & 1.026000 & 0.304900 & -0.002600 & 0.008300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.000200 & 0.003700 & 0.044700 & 0.964300 & -0.007100 & 0.007400 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.043900 & 0.002800 & 15.904100 & 0.000000 & 0.038500 & 0.049300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.043700 & 0.003700 & 11.845800 & 0.000000 & 0.036500 & 0.051000 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_0\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.041000 & 0.003600 & 11.431800 & 0.000000 & 0.034000 & 0.048000 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.000600 & 0.001800 & -0.353800 & 0.723500 & -0.004200 & 0.002900 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.001600 & 0.001400 & 1.111000 & 0.266600 & -0.001200 & 0.004300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & average text effect & 0.000500 & 0.000700 & 0.613700 & 0.539400 & -0.001000 & 0.001900 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.002200 & 0.002900 & -0.760000 & 0.447300 & -0.007900 & 0.003500 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.008800 & 0.002000 & 4.412100 & 0.000000 & 0.004900 & 0.012800 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.011000 & 0.002200 & 5.050300 & 0.000000 & 0.006800 & 0.015300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_1\_ff4 & season\_median & beat, bad text vs miss, good text & 0.009500 & 0.001900 & 5.071300 & 0.000000 & 0.005800 & 0.013100 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & -0.005200 & 0.008700 & -0.601100 & 0.547800 & -0.022200 & 0.011800 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.007400 & 0.007700 & 0.964900 & 0.334600 & -0.007600 & 0.022500 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & average text effect & 0.001100 & 0.006100 & 0.182000 & 0.855600 & -0.010800 & 0.013000 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & -0.012600 & 0.011000 & -1.151200 & 0.249600 & -0.034100 & 0.008900 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.011600 & 0.008800 & -1.322600 & 0.186000 & -0.028800 & 0.005600 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.001000 & 0.006400 & 0.157600 & 0.874800 & -0.011500 & 0.013500 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & post\_car\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.006400 & 0.008900 & -0.716100 & 0.473900 & -0.023900 & 0.011100 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.001500 & 0.008400 & 0.175100 & 0.861000 & -0.014900 & 0.017900 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & -0.015600 & 0.008400 & -1.847500 & 0.064700 & -0.032100 & 0.000900 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & average text effect & -0.007000 & 0.006300 & -1.122400 & 0.261700 & -0.019300 & 0.005300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & diff-in-diff (beat effect - miss effect) & 0.017000 & 0.011100 & 1.526800 & 0.126800 & -0.004800 & 0.038900 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & -0.000500 & 0.007400 & -0.063700 & 0.949200 & -0.015000 & 0.014100 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & -0.017500 & 0.009200 & -1.893800 & 0.058200 & -0.035600 & 0.000600 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & car\_1\_60\_ff4 & season\_median & beat, bad text vs miss, good text & -0.001900 & 0.007800 & -0.248800 & 0.803500 & -0.017200 & 0.013300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & text effect | beat  (beat\_pos - beat\_neg) & 0.001500 & 0.001600 & 0.931300 & 0.351700 & -0.001700 & 0.004600 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & text effect | miss  (miss\_pos - miss\_neg) & 0.000500 & 0.000800 & 0.641700 & 0.521100 & -0.001100 & 0.002200 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & average text effect & 0.001000 & 0.000900 & 1.166900 & 0.243200 & -0.000700 & 0.002700 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & diff-in-diff (beat effect - miss effect) & 0.001000 & 0.001900 & 0.512400 & 0.608400 & -0.002700 & 0.004600 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & surprise effect | text pos (beat\_pos - miss\_pos) & 0.001200 & 0.001500 & 0.754500 & 0.450600 & -0.001800 & 0.004100 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & surprise effect | text neg (beat\_neg - miss\_neg) & 0.000200 & 0.001100 & 0.173300 & 0.862400 & -0.002000 & 0.002300 \\
+llm\_\_noise\_llm\_\_tone\_v1\_\_raw & ar\_m1 & season\_median & beat, bad text vs miss, good text & -0.000300 & 0.001000 & -0.351000 & 0.725600 & -0.002300 & 0.001600 \\
+\bottomrule
+\end{tabular}
+\end{table}

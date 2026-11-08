@@ -24,7 +24,9 @@ also carries what the pieces depend on: sha256_text, clean_version, tokenizer_id
 max_tokens and overlap. A text with no body sentence gets one row with chunk_idx -1.
 Token ids themselves are not stored: they are rebuilt exactly, and fast, from the
 boundaries (see pieces()), while storing them would take gigabytes.
-A year whose cache already matches the cleaned texts and the settings is skipped.
+A year whose cache already matches the cleaned texts and the settings is skipped. The
+match is on sha256_text and clean_version together: the hash covers text_full, while
+the body sentences also depend on the labelling, which the version carries.
 
 Output: the cache above; data/token_stats.parquet, one row per accession (tokens,
 pieces and truncated sentences per model), rebuilt from the cache; and
@@ -54,7 +56,7 @@ MODELS = {
     "llama31_8b": ("meta-llama/Llama-3.1-8B-Instruct", 8000),
     "chronogpt": ("manelalab/chrono-gpt-v1-20231231", 1500),
 }
-BATCH = 500        # texts tokenized together; bounds memory on Colab
+BATCH = 500        # texts tokenized together; bounds memory
 PARAMS = ["sha256_text", "clean_version", "tokenizer_id", "max_tokens", "overlap"]
 
 
@@ -121,9 +123,10 @@ def pieces(clean_row, chunk_rows: pd.DataFrame) -> list[str]:
     data/clean/clean_<year>.parquet; chunk_rows its rows of the chunk cache. Refuses
     pieces cut from another version of the text."""
     rows = chunk_rows[chunk_rows.chunk_idx >= 0].sort_values("chunk_idx")
-    if len(rows) and (rows.sha256_text != clean_row["sha256_text"]).any():
-        raise ValueError(f"{clean_row['accession']}: pieces were cut from another text; "
-                         f"rerun token_stats.py")
+    if len(rows) and ((rows.sha256_text != clean_row["sha256_text"]).any()
+                      or (rows.clean_version != clean_row["clean_version"]).any()):
+        raise ValueError(f"{clean_row['accession']}: pieces were cut from another text "
+                         f"or another cleaning version; rerun token_stats.py")
     sents = body_sentences(clean_row)
     return [" ".join(sents[a:b]) for a, b in zip(rows.start, rows.end)]
 
@@ -158,8 +161,8 @@ def up_to_date(path: str, df: pd.DataFrame, name: str, overlap: int) -> bool:
     tok_id, max_tokens = MODELS[name]
     same_settings = (old.tokenizer_id.eq(tok_id).all() and old.max_tokens.eq(max_tokens).all()
                      and old.overlap.eq(overlap).all())
-    texts = set(zip(df.accession, df.sha256_text))
-    return same_settings and set(zip(old.accession, old.sha256_text)) == texts
+    texts = set(zip(df.accession, df.sha256_text, df.clean_version))
+    return same_settings and set(zip(old.accession, old.sha256_text, old.clean_version)) == texts
 
 
 def main() -> int:
