@@ -9,7 +9,7 @@ or a terminal) instead of editing paths:
 
 Part 5 writes only inside STEP5_DIR. It reads, without changing them:
   files csv      event_table.csv, extraction_report*.csv, three_source_timing.csv
-  scripts/             fetch_releases.py, whose download and choice rules are reused
+  1_2nov/code          fetch_releases.py, whose download and choice rules are reused
   3_4_surprise_returns  the release clock, the trading calendar, the CRSP names and
                         I/B/E/S link already pulled from WRDS, and SPLITS in common.py
 """
@@ -22,7 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from project_paths import (REPO_ROOT, TEAM_DIR, SCRIPTS, DATA_DIR, PROJECT_DIR,
-                           STEP5_DIR, PART34_CODE, STEP5_CODE)
+                           STEP5_DIR, PART1_CODE, PART34_CODE, STEP5_CODE)
 
 CODE = STEP5_CODE
 CACHE = STEP5_DIR / "cache"        # raw EDGAR bytes and model outputs
@@ -32,7 +32,7 @@ LOGS = STEP5_DIR / "logs"
 
 # Inputs from the other parts
 NOV2_DATA = DATA_DIR
-NOV2_CODE = SCRIPTS
+NOV2_CODE = PART1_CODE
 PART34 = PROJECT_DIR
 CLOCK = PART34 / "data" / "clock_provisional.csv"
 CALENDAR = PART34 / "data" / "trading_calendar.csv"
@@ -61,7 +61,7 @@ SPLITS_DRAFT = DATA / "splits_draft.parquet"
 HOLDOUT_IDS = DATA / "holdout_ids.txt"
 MANIFEST = STEP5_DIR / "manifest.json"
 
-# fetch_releases.py is imported from the repository scripts folder.
+# fetch_releases.py is imported from part 1's code folder (1_2nov/code).
 if str(NOV2_CODE) not in sys.path:
     sys.path.append(str(NOV2_CODE))
 

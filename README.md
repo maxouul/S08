@@ -2,17 +2,21 @@
 
 Open the notebooks in Jupyter or VS Code from this checkout. Paths are defined in `scripts/project_paths.py` and work from the repository root or a notebook subfolder. Google Colab and Google Drive are no longer required. `%pip` cells install into the active notebook kernel; Python subprocesses use that same interpreter.
 
+Every part uses the same layout: `code/` (Python modules), `data/` (inputs and built tables), `cache/` (downloads), `results/` (tables and figures for the report) and `logs/`.
+
 | Location inside S08 | Use |
 | --- | --- |
-| `files csv/` | Shared CSV inputs and acquisition outputs for parts 1–2 |
-| `scripts/` | Acquisition scripts and shared path configuration |
-| `results/1_results/`, `results/2_results/` | Figures and reports for parts 1–2 |
-| `2_EDGAR text/Manual validation/` | Extraction hand-check sheets |
+| `scripts/project_paths.py` | Shared path configuration for every part |
+| `files csv/` | Shared CSV files built by part 1 and read by parts 2–5 |
+| `1_2nov/code/` | Part 1 pipeline scripts (written by the `%%writefile` cells of the notebook) |
+| `1_2nov/data/` | Part 1 base files pulled from WRDS and the SEC (formerly `nov2_data`) |
+| `1_2nov/cache/` | Downloads made by the part 1 scripts (SEC bulk archive, release zips) |
+| `1_2nov/results/`, `2_EDGAR text/results/` | Figures and reports for parts 1–2 |
+| `2_EDGAR text/Manual validation/` | Extraction and timing hand-check sheets |
 | `3_4_surprise_returns/cache/`, `data/` | Private financial inputs and built tables |
 | `3_4_surprise_returns/results/` | Summary tables for parts 3–4 |
 | `5_data cleaning/cache/`, `data/`, `results/` | Cleaning caches, outputs and summaries |
 | `6_Models, GPU setup and inference/` | Modeling stage (currently a placeholder) |
-| `cache/submissions.zip` | Local SEC bulk archive for a fresh acquisition pass |
 
 Run notebooks in numerical order within each part. Private caches and datasets belong in the stage folders and remain ignored by Git. A fresh clone needs those folders from team storage, or regeneration using the acquisition notebooks and WRDS access. No credentials are embedded: set `HF_TOKEN` in your environment before launching Jupyter when using gated Hugging Face models.
 

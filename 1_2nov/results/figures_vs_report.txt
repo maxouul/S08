@@ -1,0 +1,98 @@
+1. raw counts
+  ok TOTAL row agrees with the sum of the years               383,153
+  ok Item 2.02 filings, 2006-2025                             383,153
+  ok all 8-K filings                                        1,549,567
+  ok fewest distinct filers in a year                           4,277
+  ok most distinct filers in a year                             6,003
+  ok years covered                                                 20
+  ok fall in Item 2.02 count, 2006 to 2025, in percent             27
+
+2. match attrition
+  NO events after the last stage                              115,561
+  NO matched sample rows                                      115,561
+  ok stages where removed equals the drop in remaining              7
+  NO largest single removal, the size cut                      81,231
+  NO median market capitalisation, $bn                            3.5
+  NO median number of analysts                                      7
+  NO events in 2025, lost with the legacy CRSP file             5,664
+
+3. release text
+  NO events with a release recovered                          114,578  (99.1%)
+  NO EX-99.1 and its variants                                 101,688  (88.0%)
+  NO other EX-99 exhibits                                      10,970  (9.5%)
+  NO the 8-K body itself                                        1,920  (1.7%)
+  NO no prose document found                                      981  (0.8%)
+  ok index page unreachable                                         2
+  ok share lost by taking EX-99.1 alone, in percent              11.2
+  NO median release, words                                      3,161
+  NO tenth percentile, words                                    1,425
+  NO ninetieth percentile, words                                5,978
+  ok median tables dropped                                          3
+
+4. release timing
+  ok firm-days with a Dow Jones wire time                     444,915
+  ok distinct securities on the wire file                       8,853
+  NO events with an I/B/E/S announcement                      101,706  (89.9%)
+  NO EDGAR and I/B/E/S on the same session                     96,827  (95.2%)
+  NO kept if two sources must agree, in percent                  85.6
+  NO dropped by that rule                                      16,253
+  NO   of those, no I/B/E/S match                              11,374
+  NO   of those, matched to a different session                 4,879
+  NO same date, I/B/E/S after the close, EDGAR in session         199
+  NO same date, I/B/E/S after the close, EDGAR pre-open           187
+  NO same date, both after the close, different session            36
+  NO same date, differing only on the side of the close           422
+  NO EDGAR session one to three days after the I/B/E/S date       4,211
+  NO EDGAR session before the I/B/E/S date                        246
+  NO events given a wire time                                  86,538  (76.5%)
+  NO I/B/E/S agrees with the wire                              82,650  (98.6%)
+  NO   out of events where both exist                          83,829
+  NO EDGAR agrees with the wire                                82,363  (95.2%)
+  NO EDGAR agrees with I/B/E/S                                 96,827  (95.2%)
+  NO retained when two of three sources agree                 102,726  (90.8%)
+  NO dropped by that rule                                      10,354
+  NO   of those, with no second source                          8,665
+  NO   of those, with a second source that disagrees            1,689
+  NO events the wire moves to another session                   4,175  (3.7%)
+  NO   EDGAR one to three sessions too early                      574
+  NO   EDGAR one to three sessions too late                     3,601
+
+13 of 51 figures reproduce the report
+  MISMATCH events after the last stage: got 115561, report says 117926
+  MISMATCH matched sample rows: got 115561, report says 117926
+  MISMATCH largest single removal, the size cut: got 81231, report says 79505
+  MISMATCH median market capitalisation, $bn: got 3.5, report says 3.4
+  MISMATCH median number of analysts: got 7, report says 9
+  MISMATCH events in 2025, lost with the legacy CRSP file: got 5664, report says 5791
+  MISMATCH events with a release recovered: got 114578, report says 116983
+  MISMATCH EX-99.1 and its variants: got 101688, report says 103852
+  MISMATCH other EX-99 exhibits: got 10970, report says 11269
+  MISMATCH the 8-K body itself: got 1920, report says 1862
+  MISMATCH no prose document found: got 981, report says 941
+  MISMATCH median release, words: got 3161, report says 3157
+  MISMATCH tenth percentile, words: got 1425, report says 1437
+  MISMATCH ninetieth percentile, words: got 5978, report says 5960
+  MISMATCH events with an I/B/E/S announcement: got 101706, report says 106418
+  MISMATCH EDGAR and I/B/E/S on the same session: got 96827, report says 88448
+  MISMATCH kept if two sources must agree, in percent: got 85.6, report says 75.0
+  MISMATCH dropped by that rule: got 16253, report says 29478
+  MISMATCH   of those, no I/B/E/S match: got 11374, report says 11508
+  MISMATCH   of those, matched to a different session: got 4879, report says 17970
+  MISMATCH same date, I/B/E/S after the close, EDGAR in session: got 199, report says 12809
+  MISMATCH same date, I/B/E/S after the close, EDGAR pre-open: got 187, report says 154
+  MISMATCH same date, both after the close, different session: got 36, report says 27
+  MISMATCH same date, differing only on the side of the close: got 422, report says 12990
+  MISMATCH EDGAR session one to three days after the I/B/E/S date: got 4211, report says 4706
+  MISMATCH EDGAR session before the I/B/E/S date: got 246, report says 274
+  MISMATCH events given a wire time: got 86538, report says 90437
+  MISMATCH I/B/E/S agrees with the wire: got 82650, report says 86374
+  MISMATCH   out of events where both exist: got 83829, report says 87647
+  MISMATCH EDGAR agrees with the wire: got 82363, report says 75775
+  MISMATCH EDGAR agrees with I/B/E/S: got 96827, report says 88448
+  MISMATCH retained when two of three sources agree: got 102726, report says 104259
+  MISMATCH dropped by that rule: got 10354, report says 13667
+  MISMATCH   of those, with no second source: got 8665, report says 8718
+  MISMATCH   of those, with a second source that disagrees: got 1689, report says 4949
+  MISMATCH events the wire moves to another session: got 4175, report says 14662
+  MISMATCH   EDGAR one to three sessions too early: got 574, report says 10526
+  MISMATCH   EDGAR one to three sessions too late: got 3601, report says 4136
