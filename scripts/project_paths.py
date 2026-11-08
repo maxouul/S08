@@ -1,7 +1,7 @@
 """Shared project layout for scripts and notebooks.
 
 All defaults live inside the checkout. TEAM_DIR optionally relocates data;
-PROJECT_DIR and STEP5_DIR can override the two stage output directories.
+PROJECT_DIR, STEP5_DIR and STEP78_DIR can override the stage output directories.
 
 Every part follows the same layout:
   <part>/code     Python modules (always read from the checkout)
@@ -27,6 +27,8 @@ PROJECT_DIR = Path(os.environ.get("PROJECT_DIR", TEAM_DIR / "3_4_surprise_return
 STEP5_DIR = Path(os.environ.get("STEP5_DIR", TEAM_DIR / "5_data cleaning")).expanduser().resolve()
 PART34_CODE = REPO_ROOT / "3_4_surprise_returns" / "code"
 STEP5_CODE = REPO_ROOT / "5_data cleaning" / "code"
+STEP78_DIR = Path(os.environ.get("STEP78_DIR", TEAM_DIR / "7_8_baselines_evaluation")).expanduser().resolve()
+STEP78_CODE = REPO_ROOT / "7_8_baselines_evaluation" / "code"
 MODEL_DIR = TEAM_DIR / "6_Models, GPU setup and inference"
 
 

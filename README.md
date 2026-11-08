@@ -16,11 +16,12 @@ Every part uses the same layout: `code/` (Python modules), `data/` (inputs and b
 | `3_4_surprise_returns/cache/`, `data/` | Private financial inputs and built tables |
 | `3_4_surprise_returns/results/` | Summary tables for parts 3–4 |
 | `5_data cleaning/cache/`, `data/`, `results/` | Cleaning caches, outputs and summaries |
+| `7_8_baselines_evaluation/` | Baselines, model comparisons and financial evaluation (parts 7–8) |
 | `6_Models, GPU setup and inference/` | Modeling stage (currently a placeholder) |
 
 Run notebooks in numerical order within each part. Private caches and datasets belong in the stage folders and remain ignored by Git. A fresh clone needs those folders from team storage, or regeneration using the acquisition notebooks and WRDS access. No credentials are embedded: set `HF_TOKEN` in your environment before launching Jupyter when using gated Hugging Face models.
 
-Defaults keep inputs and outputs inside S08. Advanced overrides are optional: `TEAM_DIR` relocates the data tree, `PROJECT_DIR` relocates parts 3–4, and `STEP5_DIR` relocates part 5. Code always comes from the checkout. If the notebook kernel starts outside S08, set `S08_ROOT` to the checkout path before running the setup cell.
+Defaults keep inputs and outputs inside S08. Advanced overrides are optional: `TEAM_DIR` relocates the data tree, `PROJECT_DIR` relocates parts 3–4, `STEP5_DIR` relocates part 5, and `STEP78_DIR` relocates parts 7–8. Code always comes from the checkout. If the notebook kernel starts outside S08, set `S08_ROOT` to the checkout path before running the setup cell.
 
 Run checks from the repository root with your Python interpreter:
 

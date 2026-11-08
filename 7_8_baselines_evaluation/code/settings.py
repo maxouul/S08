@@ -16,11 +16,11 @@ We follow the same convention so that:
 
 Override the roots with environment variables instead of editing this file::
 
-    TEAM_DIR   the shared "S08 NLP" folder
-               (default: the folder that contains this repository, which is
-               right both on a laptop and on Google Drive, since the layout is
-               the same)
+    TEAM_DIR   the private data root (default: the repository root)
     STEP78_DIR this folder (default: TEAM_DIR / "7_8_baselines_evaluation")
+
+The roots come from scripts/project_paths.py, like every other part, so
+PROJECT_DIR and STEP5_DIR relocate parts 3-4 and 5 here as well.
 
 Parts 7-8 write only inside STEP78_DIR. They read, without changing them:
 
@@ -36,18 +36,21 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+from project_paths import (TEAM_DIR, DATA_DIR, PART2_DIR, PROJECT_DIR, STEP5_DIR,
+                           STEP78_DIR, STEP78_CODE)
+
 # ---------------------------------------------------------------------------
 # Folders
 # ---------------------------------------------------------------------------
-_HERE = Path(__file__).resolve().parent            # .../7_8_baselines_evaluation/code
-STEP78_DIR = Path(os.environ.get("STEP78_DIR", _HERE.parent))
-TEAM_DIR = Path(os.environ.get("TEAM_DIR", STEP78_DIR.parent))
-
-CODE = STEP78_DIR / "code"
+# STEP78_DIR and TEAM_DIR come from scripts/project_paths.py. Code always comes
+# from the checkout; data and results live under STEP78_DIR.
+CODE = STEP78_CODE
 DATA = STEP78_DIR / "data"            # row-level, WRDS-derived: never committed
 RESULTS = STEP78_DIR / "results"      # tables and figures: summary statistics only
 TABLES = RESULTS / "tables"
@@ -57,8 +60,8 @@ LOGS = STEP78_DIR / "logs"
 RESOURCES = STEP78_DIR / "resources"
 
 # Inputs owned by other parts ------------------------------------------------
-PART34 = TEAM_DIR / "3_4_surprise_returns"
-STEP5 = TEAM_DIR / "5_data cleaning"
+PART34 = PROJECT_DIR
+STEP5 = STEP5_DIR
 
 EVENTS = PART34 / "data" / "events_final.parquet"
 CRSP_NAMES = PART34 / "cache" / "crsp_names.parquet"          # WRDS data: private
@@ -69,8 +72,8 @@ MODEL_CACHE = STEP5 / "cache" / "model_outputs.sqlite"
 
 # Older text export from part 2 (accession, text). Used only when part 5 has not
 # cleaned a filing yet, and always marked as such (text_source column).
-RELEASE_TEXTS_FALLBACK = [TEAM_DIR / "results" / "2_results" / "release_texts.csv",
-                          TEAM_DIR / "files csv" / "release_texts.csv"]
+RELEASE_TEXTS_FALLBACK = [PART2_DIR / "results" / "release_texts.csv",
+                          DATA_DIR / "release_texts.csv"]
 
 # The Loughran-McDonald master dictionary is licensed for academic use and is not
 # redistributed here: download it once into resources/lm/ (see the README there).

@@ -36,7 +36,7 @@ and `code/returns.py` (`newey_west_se`, `rank_ic_by_season`), loaded by file pat
 | `n_words_body` | length control, error analysis |
 | `error` | non-empty → document dropped and counted |
 
-Fallback while part 5 has not cleaned a year: `results/2_results/release_texts.csv`
+Fallback while part 5 has not cleaned a year: `2_EDGAR text/results/release_texts.csv`
 (`accession`, `text`), marked `text_source = fallback_release_texts`. For development only.
 
 ## 3. Model scores: `5_data cleaning/cache/model_outputs.sqlite` (part 6 writes, via part 5's `ModelCache`)
