@@ -5,8 +5,8 @@
 Dep. Variable:          car_0_1_ff4_w   R-squared:                       0.119
 Model:                            OLS   Adj. R-squared:                  0.118
 Method:                 Least Squares   F-statistic:                    -36.05
-Date:                Fri, 06 Nov 2026   Prob (F-statistic):               1.00
-Time:                        15:53:05   Log-Likelihood:                 46064.
+Date:                Sun, 08 Nov 2026   Prob (F-statistic):               1.00
+Time:                        20:10:09   Log-Likelihood:                 46064.
 No. Observations:               35508   AIC:                        -9.200e+04
 Df Residuals:                   35446   BIC:                        -9.148e+04
 Df Model:                          61                                         

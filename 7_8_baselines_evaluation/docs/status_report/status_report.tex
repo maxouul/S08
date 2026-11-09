@@ -15,6 +15,7 @@
 \usepackage{amsmath}
 \usepackage[hidelinks]{hyperref}
 \usepackage{titlesec}
+\usepackage{graphicx}
 \usepackage{fancyhdr}
 
 \definecolor{done}{HTML}{1B7F3B}
@@ -35,7 +36,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\small Parts 7--8: baselines and financial evaluation}
-\rhead{\small Status, 6 November 2026}
+\rhead{\small Status, 8 November 2026}
 \cfoot{\small\thepage}
 
 \begin{document}
@@ -44,12 +45,12 @@
   {\LARGE\bfseries Priced In or Memorized?}\\[4pt]
   {\Large Parts 7--8: Baselines, Model Comparisons and Financial Evaluation}\\[8pt]
   {\large Status report: what is built, what is missing, how to continue}\\[10pt]
-  Max Lacroix \quad\textbullet\quad 15.S08, Fall 2026 \quad\textbullet\quad 6 November 2026
+  Max Lacroix \quad\textbullet\quad 15.S08, Fall 2026 \quad\textbullet\quad 8 November 2026
 \end{center}
 
 \vspace{6pt}
 \noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
-\textbf{In one paragraph.} The code for tasks 7 and 8 is written, documented and tested (28 tests
+\textbf{In one paragraph.} The code for tasks 7 and 8 is written, documented and tested (29 tests
 pass). It reads the outputs of parts 3--4, 5 and 6 directly, so new upstream data flows in by
 rerunning one command, with no code changes. With today's inputs we have: (i) the full surprise
 benchmark on 46{,}883 events (validation rank IC $0.31$, $t=22$; beat$-$miss reaction gap $4.5$\%),
@@ -58,7 +59,9 @@ stable across sectors, sizes, years and sessions; (ii) the benchmark regression 
 (iii) a diagnostic of the day $-1$ placebo, which the surprise fails mildly in every subset, a
 pattern that looks like pre-announcement drift rather than a clock error; (iv) an exploratory
 Loughran--McDonald pilot on the 115 texts that exist, pointing the right way but far too small to
-test. \textbf{The bottleneck is upstream}: release texts beyond 2006 (part 5), model scores (part 6),
+test; (v) the error profile of the surprise (41\% of beats fall) with a worked example; (vi) power
+with the actual sample sizes: \emph{the pre-registered 0.02 incremental-IC bar is at or below the
+minimum detectable effect even in the holdout}. \textbf{The bottleneck is upstream}: release texts beyond 2006 (part 5), model scores (part 6),
 and the holdout freeze. No text-beyond-surprise result is possible until they arrive.}}
 
 \tableofcontents
@@ -195,7 +198,7 @@ Save outputs automatically & \code{outputs.py}: \code{.csv/.md/.tex}, provenance
 
 \subsection*{Quality checks}
 \begin{itemize}
-  \item \textbf{28 tests} (\texttt{python code/tests/run\_all.py}): hand-computed answers (ranks,
+  \item \textbf{29 tests} (\texttt{python code/tests/run\_all.py}): hand-computed answers (ranks,
   Newey--West equal to part 4's, Clark--West, exact $2\times2$ and beat/miss cell means, LM negation,
   folds without look-ahead, holdout lock, book-to-market timing and units, git provenance) and recovery tests on synthetic data (planted effect found; noise and
   placebo not; Clark--West size under the null over 15 seeds).
@@ -353,6 +356,97 @@ so the pipeline does not evaluate LM. Purely to check direction (\code{cd_lm_pil
 this is a result: one year, $n=115$, no seasons to cluster on. It shows the LM path works end to end
 on real texts.
 
+\subsection{Real data: one figure}
+
+\begin{center}
+\includegraphics[width=\linewidth]{../../results/figures/cd_surprise_response__validation.png}
+\end{center}
+\noindent Left: the reaction rises steeply with the SUE decile while the next 60 days are flat (the
+top decile even gives some back). Right: misses are punished about 2.5 times more than beats are
+rewarded, and a meet is treated as a miss. (\code{results/figures/cd_surprise_response__validation.png}.)
+
+\subsection{Real data: where the surprise gets it wrong}
+
+The surprise ranks reactions well on average, but event by event it often gets the \emph{sign} wrong
+(\code{cd_surprise_errors__validation}):
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Validation 2017--19 & $n$ & Reaction has the wrong sign & Wrong by more than 5\% \\
+\midrule
+All beats & 7{,}997 & 41.3\% & 14.0\% \\
+All misses & 2{,}819 & 32.9\% & 9.7\% \\
+Top SUE quintile & 2{,}163 & 30.8\% & 11.8\% \\
+Bottom SUE quintile & 2{,}164 & 32.5\% & 10.1\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent Even in the most extreme surprise quintiles, nearly one event in three moves the other way.
+That residual is the room text has to work with.
+
+\textbf{Worked example.} Conagra Brands, results released before the open on 20 December 2018:
+EPS 0.67 against a median consensus of 0.56 (10 analysts), a top-quintile surprise (SUE rank 0.40).
+The surprise predicts a gain; the two-day abnormal return was $-23.0\%$, and a further $-29.2\%$
+over the next 60 trading days. Public reporting attributes the drop to a cut in full-year guidance
+after the Pinnacle Foods acquisition. This is the error type the project is about (a guidance
+revision that the EPS number cannot carry), and it continued to drift, so the market did not
+fully price it on day 0--1. \emph{To verify against the 8-K text (accession 0001193125-18-353858)
+once part 5's texts are available.} The list of the 20 largest disagreements among large firms is
+kept in \code{data/error_cases__validation.csv} (private: it names firms).
+
+\subsection{Sample sizes and power}
+
+Counts from part 3--4's event table (\code{cd_sample_counts}; holdout outcomes are not read):
+
+\begin{center}
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Split & Years & All events & Text sample & Primary & Primary, post-cutoff & Quarters \\
+\midrule
+dev & 2006--16 & 120{,}439 & 51{,}529 & 35{,}508 & 0 & 44 \\
+validation & 2017--19 & 30{,}647 & 14{,}523 & 11{,}375 & 0 & 12 \\
+excluded & 2020 & 10{,}469 & 5{,}232 & 4{,}114 & 0 & 4 \\
+holdout & 2021--25 & 56{,}056 & 26{,}503 & 22{,}145 & 8{,}579 & 20 \\
+\midrule
+total & & 217{,}611 & 97{,}787 & 73{,}142 & 8{,}579 & \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent ``Post-cutoff'' is after Llama 3.1's December 2023 training cutoff. These are part 3--4's
+\code{sample_v1} counts (6 November export); the checkpoint funnel (115{,}561 events) uses a
+different filter set, and the two should be reconciled before they are reported side by side.
+
+\textbf{Minimum detectable incremental IC} (\code{cd_mde_incremental_ic}; two-sided 5\%, 80\% power,
+quarters as the independent units, $t_{S-1}$ critical values). The quarterly IC standard deviation is
+estimated two ways: a random signal on the real validation returns (best case, 0.032), and the
+observed variation of the SUE IC across quarters (realistic for a signal whose strength varies, 0.059).
+
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+& Events & Quarters & MDE, best case & MDE, realistic \\
+\midrule
+Validation & 11{,}375 & 12 & 0.028 & 0.052 \\
+Holdout & 22{,}145 & 20 & 0.021 & 0.039 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent \textbf{Implication.} The pre-registered bar (incremental IC $\ge 0.02$) is at the edge of what
+the holdout can detect in the best case, and below it in the realistic case. Two caveats cut the other
+way: an incremental IC is a \emph{paired} difference (SUE+text minus SUE on the same events), whose
+quarterly variance is lower than a single IC's, so these numbers are conservative; and the regression
+tests pool events rather than quarters. Still, a true incremental IC of 0.02 could be missed, and the
+report should say so. Options to discuss: pre-register the paired test explicitly, pool validation and
+holdout for the main test (with model selection frozen on dev), or treat 0.02 as the economic
+threshold and report confidence intervals rather than a pass/fail.
+
+\textbf{Contamination comparison} (\code{cd_mde_contamination}), with the checkpoint's formula
+$SE \simeq \sqrt{2(1-r)(1/n_a+1/n_b)}$ and the actual holdout arms (13{,}566 pre-cutoff vs 8{,}579
+post-cutoff primary events): MDE $= 0.039$, $0.030$ and $0.017$ at $r = 0.5$, $0.7$ and $0.9$. The
+checkpoint's example (0.061 at 2{,}500 per arm, $r=0.7$) is reproduced exactly; the real sample is
+about twice as sensitive.
+
 \subsection{Synthetic data: the pipeline works}
 
 Synthetic events carry a planted text effect (a ``good'' LLM) and a pure-noise LLM. Combined model
@@ -386,7 +480,7 @@ Item & Who & Effect on 7--8 & Action here \\
 \midrule
 Release texts 2007--2025 & Part 5 & LM and TF-IDF cover 115 events; TF-IDF needs $\ge 500$ training texts per fold; no real regression or $2\times2$ with text & Rerun \texttt{-{}-step all} \\
 LLM scores & Part 6 & No LLM rows in any table & Rerun \texttt{-{}-step evaluate} \\
-Corrected release clock & Part 1, then 3--4 & Returns and surprise may shift; may also explain part of the day $-1$ placebo & Rerun \texttt{-{}-step all} \\
+Corrected release clock & Part 1, then 3--4 & A WRDS rerun with combined acceptance times is on \texttt{main} (8 Nov); our numbers use the 6 Nov event table. Returns and surprise may shift; may also explain part of the day $-1$ placebo & Refresh \code{events_final}, rerun \texttt{-{}-step all} \\
 Holdout freeze & Part 5 (\texttt{splits.py -{}-freeze}) & Test run and rate shock locked & Final run (\S\ref{sec:next}) \\
 \bottomrule
 \end{tabularx}
@@ -485,7 +579,7 @@ File & Role \\
 \code{code/robustness.py} & Robustness grid \\
 \code{code/rate_shock.py} & 2022 rate-shock regimes \\
 \code{code/book_to_market.py} & Compustat book equity as of the release, divided by market cap \\
-\code{code/current_data.py} & Benchmark regression, beat/miss, stability, placebo diagnostic, LM pilot \\
+\code{code/current_data.py} & Benchmark regression, beat/miss, stability, placebo diagnostic, LM pilot, error cases, sample counts, power, figure \\
 \code{code/outputs.py} & Saving and provenance logging \\
 \code{code/synthetic.py} & Synthetic data with planted effect \\
 \code{code/pipeline.py} & Command-line entry point \\

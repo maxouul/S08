@@ -1,0 +1,5 @@
+split,events,quarters,quarterly_ic_sd,sd,mde_mean_ic,clears_0.02_bar
+validation,11375,12,noise floor (random signal),0.032014721266433316,0.028432703645275427,False
+validation,11375,12,SUE-like time variation,0.0590154709579762,0.05241243183940532,False
+holdout,22145,20,noise floor (random signal),0.032014721266433316,0.021146645484053313,False
+holdout,22145,20,SUE-like time variation,0.0590154709579762,0.038981418330549196,False

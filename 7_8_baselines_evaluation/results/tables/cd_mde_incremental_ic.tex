@@ -1,0 +1,14 @@
+\begin{table}
+\caption{Minimum detectable mean IC (two-sided 5%, 80% power), quarter-clustered}
+\label{tab:cd_mde_incremental_ic}
+\begin{tabular}{lrrlrrr}
+\toprule
+split & events & quarters & quarterly\_ic\_sd & sd & mde\_mean\_ic & clears\_0.02\_bar \\
+\midrule
+validation & 11375 & 12 & noise floor (random signal) & 0.032000 & 0.028400 & False \\
+validation & 11375 & 12 & SUE-like time variation & 0.059000 & 0.052400 & False \\
+holdout & 22145 & 20 & noise floor (random signal) & 0.032000 & 0.021100 & False \\
+holdout & 22145 & 20 & SUE-like time variation & 0.059000 & 0.039000 & False \\
+\bottomrule
+\end{tabular}
+\end{table}

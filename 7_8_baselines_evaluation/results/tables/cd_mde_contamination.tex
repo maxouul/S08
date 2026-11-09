@@ -1,0 +1,19 @@
+\begin{table}
+\caption{Paired-arm MDE, SE = sqrt(2(1-r)(1/n_a+1/n_b)), MDE = 2.80 SE (checkpoint formula)}
+\label{tab:cd_mde_contamination}
+\begin{tabular}{lrrrrr}
+\toprule
+comparison & n\_a & n\_b & r & se & mde\_80 \\
+\midrule
+pre- vs post-cutoff holdout (actual) & 13566 & 8579 & 0.500000 & 0.013800 & 0.038600 \\
+pre- vs post-cutoff holdout (actual) & 13566 & 8579 & 0.700000 & 0.010700 & 0.029900 \\
+pre- vs post-cutoff holdout (actual) & 13566 & 8579 & 0.900000 & 0.006200 & 0.017300 \\
+checkpoint example & 2500 & 2500 & 0.500000 & 0.028300 & 0.079200 \\
+checkpoint example & 2500 & 2500 & 0.700000 & 0.021900 & 0.061300 \\
+checkpoint example & 2500 & 2500 & 0.900000 & 0.012600 & 0.035400 \\
+checkpoint example, large & 20000 & 20000 & 0.500000 & 0.010000 & 0.028000 \\
+checkpoint example, large & 20000 & 20000 & 0.700000 & 0.007700 & 0.021700 \\
+checkpoint example, large & 20000 & 20000 & 0.900000 & 0.004500 & 0.012500 \\
+\bottomrule
+\end{tabular}
+\end{table}

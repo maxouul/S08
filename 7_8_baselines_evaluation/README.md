@@ -40,8 +40,9 @@ model has to beat (task 7) and runs the statistical tests (task 8).
     synthetic.py            fake data with a planted effect (tests and demo)
     pipeline.py             the whole thing, from the command line
     current_data.py         what today's inputs support: benchmark regression, beat/miss,
-                            stability, day -1 placebo diagnostic, LM pilot (tables cd_*)
-    tests/                  28 tests: hand-computed answers + recovery of a planted effect
+                            stability, day -1 placebo, LM pilot, error cases, sample counts,
+                            power (MDE), presentation figure (tables and figures cd_*)
+    tests/                  29 tests: hand-computed answers + recovery of a planted effect
   resources/lm/             the Loughran-McDonald master dictionary (downloaded, git-ignored, not redistributed)
   data/                     panel, signals, cached LM counts        WRDS-derived: never committed
   results/tables/           every table, as .csv, .md and .tex      summary statistics only
@@ -65,7 +66,7 @@ Or from a terminal, at the folder root:
 
 ```bash
 python code/pipeline.py --step all                 # real data, validation split
-python code/current_data.py                        # then: benchmark, placebo, LM pilot tables
+python code/current_data.py                        # then: benchmark, placebo, errors, power, figure
 ```
 
 ```bash
@@ -94,7 +95,7 @@ Every saved table records the upstream versions (`surprise_version`, `returns_ve
 `sample_version`, `clean_version`) in `logs/runs.jsonl`, so you can always tell which inputs a number
 came from.
 
-## Status (6 Nov 2026)
+## Status (8 Nov 2026)
 
 **In short:** everything in tasks 7–8 is built and tested. The surprise benchmark and its controls
 are final on real data. Every *text* result (LM, TF-IDF, LLMs, the real 2×2 table, the text
@@ -113,6 +114,13 @@ without code changes. Full write-up: [`docs/status_report/status_report.pdf`](do
 | Post-release drift | none: 60-day IC −0.011 (t = −0.7) | `t7_surprise_benchmark__validation` |
 | Day −1 placebo | SUE IC 0.036 (t = 4.7); dev 0.052 (t = 9.1); diffuse across sessions, sizes and periods, which looks like pre-announcement drift, not a clock error. Flagged to parts 1 and 3–4 | `cd_placebo_diagnostic` |
 | LM tone pilot (115 texts, **exploratory**) | Spearman with reaction 0.16 (p = 0.09); +0.73% per SD beyond SUE (t = 1.6) | `cd_lm_pilot_*` |
+| Where SUE gets the sign wrong | 41% of beats fall, 33% of misses rise; ~1 in 3 even in the extreme quintiles. Worked example: Conagra, 20 Dec 2018 (beat, −23% in two days, −29% over 60) | `cd_surprise_errors__validation` |
+| Sample sizes | primary sample: 35,508 dev / 11,375 validation / 22,145 holdout, of which 8,579 after the Llama 3.1 cutoff | `cd_sample_counts` |
+| Power | minimum detectable mean IC: validation 0.028–0.052, holdout 0.021–0.039 (best case–realistic). **The 0.02 incremental-IC bar is at or below what we can detect**; contamination test MDE 0.030 at r = 0.7 | `cd_mde_*` |
+| Figure for the slides | reaction and 60-day drift by SUE decile; beat / meet / miss by window | `results/figures/cd_surprise_response__validation.png` |
+
+All numbers above use the 6 November export of part 3–4's event table. A WRDS rerun with combined
+acceptance times is on `main` (8 Nov); refresh `events_final.parquet` and rerun to update them.
 
 ### Component status
 

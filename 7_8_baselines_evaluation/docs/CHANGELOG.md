@@ -2,6 +2,22 @@
 
 Add one line per change that can move a number: what, why, who. Newest first.
 
+## 2026-11-08: v1.3, error cases, power, sample counts, figure (Max)
+
+* `current_data.py` adds four outputs. They need no text.
+  * How often the surprise sign disagrees with the reaction (`cd_surprise_errors__validation`): 41% of
+    beats fall. The worked example is Conagra, 20 Dec 2018. The list naming firms stays in `data/`.
+  * Events per split and after the Llama cutoff, read from the event table without outcomes
+    (`cd_sample_counts`).
+  * Minimum detectable effects (`cd_mde_*`). The incremental IC is clustered by quarter, and the
+    contamination arms use the checkpoint's paired formula (it reproduces the checkpoint's 0.061).
+  * The slide figure `cd_surprise_response__validation.png`.
+* Finding to discuss: the pre-registered 0.02 incremental-IC bar is at or below the holdout's
+  minimum detectable effect (0.021 at best, 0.039 realistic).
+* Merged `main` into the parts 7–8 branch. Paths now come from `scripts/project_paths.py`, so run
+  with `STEP78_DIR` set to this folder when `TEAM_DIR` points at the Drive copy.
+* 29 tests (new: sample counts and MDE, checked against the checkpoint's example).
+
 ## 2026-11-06: v1.2, results on today's inputs, status report (Max)
 
 * New `code/current_data.py`: the results that need no text coverage. It produces the benchmark

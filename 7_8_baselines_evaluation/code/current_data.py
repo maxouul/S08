@@ -236,6 +236,203 @@ def lm_pilot(p: pd.DataFrame, sig: pd.DataFrame, outcome: str = S.PRIMARY_OUTCOM
     return corr, regs, tb.get("cells")
 
 
+# ---------------------------------------------------------------------------
+# 6. Where the surprise gets the sign wrong (error cases)
+# ---------------------------------------------------------------------------
+def surprise_errors(p: pd.DataFrame, split: str = "validation", outcome: str = S.PRIMARY_OUTCOME,
+                    n_cases: int = 10) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    How often the sign of the surprise and the sign of the reaction disagree,
+    by size of the surprise, plus the largest disagreements among large firms.
+
+    The summary goes to results/; the list of cases names firms and dates
+    (row-level, WRDS-derived), so it is written to data/ only.
+    """
+    d = p[p["split"] == split].dropna(subset=[outcome, "surprise", "sue_rank"]).copy()
+    d = d[d["surprise"] != 0]
+    d["beat"] = d["surprise"] > 0
+    d["wrong_sign"] = np.where(d["beat"], d[outcome] < 0, d[outcome] > 0)
+    d["big_wrong"] = np.where(d["beat"], d[outcome] < -0.05, d[outcome] > 0.05)
+    d["sue_quintile"] = pd.qcut(d["sue_rank"], 5, labels=["Q1 (worst)", "Q2", "Q3", "Q4", "Q5 (best)"])
+    rows = []
+    for (label, g) in [("all beats", d[d["beat"]]), ("all misses", d[~d["beat"]])] + \
+                      [(f"SUE {q}", g) for q, g in d.groupby("sue_quintile", observed=True)]:
+        rows.append({"group": label, "n": len(g), "share_wrong_sign": g["wrong_sign"].mean(),
+                     "share_wrong_by_5pct": g["big_wrong"].mean(), "mean_car": g[outcome].mean()})
+    summary = pd.DataFrame(rows)
+    summary.insert(0, "split", split)
+    OUT.save_table(summary, f"cd_surprise_errors__{split}",
+                   f"How often the surprise sign and the {outcome} sign disagree, {split}")
+
+    # strongest-signal disagreements: top-quintile beats that fell, bottom-quintile misses that rose
+    big = d[d["size_tercile"] == 3]
+    cases = pd.concat([
+        big[(big["sue_rank"] > 0.3) & (big[outcome] < 0)].nsmallest(n_cases, outcome),
+        big[(big["sue_rank"] < -0.3) & (big[outcome] > 0)].nlargest(n_cases, outcome)])
+    keep = ["cname", "ticker", "accession", "reaction_date", "session_type", "actual",
+            "consensus_median", "n_analysts", "sue_rank", outcome, "post_car_60_ff4", "mktcap_t2", "ff12"]
+    cases = cases[[c for c in keep if c in cases.columns]]
+    S.DATA.mkdir(parents=True, exist_ok=True)
+    cases.to_csv(S.DATA / f"error_cases__{split}.csv", index=False)     # private: names firms
+    return summary, cases
+
+
+# ---------------------------------------------------------------------------
+# 7. Sample sizes and minimum detectable effects
+# ---------------------------------------------------------------------------
+def sample_counts(events: pd.DataFrame) -> pd.DataFrame:
+    """Events per split and sample, and after Llama 3.1's cutoff. Counts only: no outcome is read."""
+    e = events.copy()
+    e["year"] = pd.to_datetime(e["reaction_date"]).dt.year
+    rows = []
+    for split, g in e.groupby("split"):
+        rows.append({"split": split, "years": f"{g['year'].min()}-{g['year'].max()}",
+                     "events_all": len(g), "in_text_sample": int(g["in_text_sample"].sum()),
+                     "in_primary": int(g["in_primary"].sum()),
+                     "primary_after_llama_cutoff": int((g["in_primary"] & g["after_llama_cutoff"]).sum()),
+                     "quarters": g["year"].astype(str).str.cat(
+                         pd.to_datetime(g["reaction_date"]).dt.quarter.astype(str)).nunique()})
+    t = pd.DataFrame(rows)
+    order = {"dev": 0, "validation": 1, "excluded_2020": 2, "holdout": 3}
+    t = t.sort_values("split", key=lambda s: s.map(order)).reset_index(drop=True)
+    tot = {"split": "total", "years": f"{e['year'].min()}-{e['year'].max()}", "events_all": len(e),
+           "in_text_sample": int(e["in_text_sample"].sum()), "in_primary": int(e["in_primary"].sum()),
+           "primary_after_llama_cutoff": int((e["in_primary"] & e["after_llama_cutoff"]).sum())}
+    t = pd.concat([t, pd.DataFrame([tot])], ignore_index=True)
+    t["quarters"] = t["quarters"].astype("Int64")
+    OUT.save_table(t, "cd_sample_counts", "Events by split and sample (counts only; holdout outcomes not read)")
+    return t
+
+
+def mde_tables(p: pd.DataFrame, counts: pd.DataFrame, outcome: str = S.PRIMARY_OUTCOME,
+               n_sim: int = 200, seed: int = 7) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Two power calculations, both two-sided 5% with 80% power.
+
+    (a) Incremental IC on the evaluation split. The test statistic is the mean of
+        quarterly ICs, so its noise depends on the number of quarters and the
+        events per quarter. Two estimates of the quarterly IC standard deviation:
+        - "noise floor": a random signal on the real validation outcomes
+          (simulated n_sim times), which is the best case;
+        - "SUE-like": the observed quarter-to-quarter SD of the SUE IC, which is
+          what a real signal with time-varying strength looks like.
+        MDE = (t_{0.975,S-1} + t_{0.80,S-1}) * sd / sqrt(S). For the holdout
+        (outcomes locked) the validation SDs are scaled to its quarter count.
+    (b) The checkpoint's paired-arm formula for the contamination comparison,
+        SE = sqrt(2 (1 - r) (1/n_a + 1/n_b)), MDE = 2.80 SE, with the actual
+        pre- and post-cutoff holdout counts and r in {0.5, 0.7, 0.9}.
+    """
+    from scipy import stats
+    rng = np.random.default_rng(seed)
+    v = p[p["split"] == "validation"].dropna(subset=[outcome, "sue_rank"])
+    ic_sue = v.groupby("season").apply(lambda g: g["sue_rank"].corr(g[outcome], method="spearman"))
+    sims = []
+    for _ in range(n_sim):
+        r = pd.Series(rng.standard_normal(len(v)), index=v.index)
+        sims.append(v.assign(_r=r).groupby("season").apply(
+            lambda g: g["_r"].corr(g[outcome], method="spearman")).std(ddof=1))
+    sd_noise, sd_sue = float(np.mean(sims)), float(ic_sue.std(ddof=1))
+
+    def mde(sd, S):
+        k = stats.t.ppf(0.975, S - 1) + stats.t.ppf(0.80, S - 1)
+        return k * sd / np.sqrt(S)
+
+    c = counts.set_index("split")
+    rows = []
+    for split, S in (("validation", int(c.loc["validation", "quarters"])),
+                     ("holdout", int(c.loc["holdout", "quarters"]))):
+        n = int(c.loc[split, "in_primary"])
+        for label, sd in (("noise floor (random signal)", sd_noise), ("SUE-like time variation", sd_sue)):
+            rows.append({"split": split, "events": n, "quarters": S, "quarterly_ic_sd": label,
+                         "sd": sd, "mde_mean_ic": mde(sd, S), "clears_0.02_bar": mde(sd, S) <= 0.02})
+    mde_ic = pd.DataFrame(rows)
+    OUT.save_table(mde_ic, "cd_mde_incremental_ic",
+                   "Minimum detectable mean IC (two-sided 5%, 80% power), quarter-clustered")
+
+    h = int(c.loc["holdout", "in_primary"])
+    n_post = int(c.loc["holdout", "primary_after_llama_cutoff"])
+    n_pre = h - n_post
+    rows = []
+    for arm, (na, nb) in {"pre- vs post-cutoff holdout (actual)": (n_pre, n_post),
+                          "checkpoint example": (2500, 2500), "checkpoint example, large": (20000, 20000)}.items():
+        for r in (0.5, 0.7, 0.9):
+            se = np.sqrt(2 * (1 - r) * (1 / na + 1 / nb))
+            rows.append({"comparison": arm, "n_a": na, "n_b": nb, "r": r, "se": se, "mde_80": 2.80 * se})
+    mde_pair = pd.DataFrame(rows)
+    OUT.save_table(mde_pair, "cd_mde_contamination",
+                   "Paired-arm MDE, SE = sqrt(2(1-r)(1/n_a+1/n_b)), MDE = 2.80 SE (checkpoint formula)")
+    return mde_ic, mde_pair
+
+
+# ---------------------------------------------------------------------------
+# 8. Figure for the presentations
+# ---------------------------------------------------------------------------
+# Default validated categorical palette (dataviz skill), slots 1-3, light mode.
+_SERIES = ["#2a78d6", "#eb6834", "#1baf7a"]
+_INK, _INK2, _GRID, _SURF = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
+
+
+def figure_surprise_response(p: pd.DataFrame, split: str = "validation"):
+    """(a) mean reaction and 60-day drift by SUE decile; (b) beat / meet / miss by window."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    d = p[p["split"] == split]
+    dec = d.groupby("sue_decile").agg(react=("car_0_1_ff4", "mean"), drift=("post_car_60_ff4", "mean"))
+    grp = np.select([d["surprise"] > 0, d["surprise"] < 0], ["Beat", "Miss"], "Meet")
+    win = {"Day −1": "ar_m1", "Days 0 to +1": "car_0_1_ff4", "Next 60 days": "post_car_60_ff4"}
+    bars = d.assign(g=grp).groupby("g")[list(win.values())].mean().loc[["Beat", "Meet", "Miss"]] * 100
+
+    fig, (a, b) = plt.subplots(1, 2, figsize=(11, 4.2), facecolor=_SURF)
+    for ax in (a, b):
+        ax.set_facecolor(_SURF)
+        for s in ("top", "right"):
+            ax.spines[s].set_visible(False)
+        for s in ("left", "bottom"):
+            ax.spines[s].set_color(_GRID)
+        ax.tick_params(colors=_INK2, labelsize=9)
+        ax.yaxis.grid(True, color=_GRID, linewidth=0.8)
+        ax.set_axisbelow(True)
+        ax.axhline(0, color=_INK2, linewidth=0.8)
+
+    x = dec.index.astype(int) + (1 if dec.index.min() == 0 else 0)
+    for col, name, colr in (("react", "Days 0 to +1", _SERIES[0]), ("drift", "Next 60 days", _SERIES[1])):
+        a.plot(x, dec[col] * 100, color=colr, linewidth=2, marker="o", markersize=5,
+               markeredgecolor=_SURF, markeredgewidth=1.5, label=name)
+        a.annotate(name, (x[-1], dec[col].iloc[-1] * 100), xytext=(6, 0), textcoords="offset points",
+                   va="center", fontsize=9, color=_INK2)
+    a.set_xticks(list(x))
+    a.set_xlabel("SUE decile (1 = most negative surprise)", color=_INK2, fontsize=9)
+    a.set_ylabel("Mean abnormal return (%)", color=_INK2, fontsize=9)
+    a.set_title("The surprise is priced at once, with no drift", loc="left", fontsize=11, color=_INK)
+    a.legend(frameon=False, fontsize=9, labelcolor=_INK2, loc="upper left")
+    a.set_xlim(x.min() - 0.5, x.max() + 2.2)
+
+    w = 0.26
+    xs = np.arange(len(bars.index))
+    # colour follows the window in both panels: reaction blue, drift orange, day -1 aqua
+    colour = {"ar_m1": _SERIES[2], "car_0_1_ff4": _SERIES[0], "post_car_60_ff4": _SERIES[1]}
+    for i, (lab, col) in enumerate(win.items()):
+        b.bar(xs + (i - 1) * w, bars[col], width=w - 0.03, color=colour[col], label=lab)
+    lo, hi = bars.min().min(), bars.max().max()
+    b.set_ylim(lo - 0.15 * (hi - lo), hi + 0.12 * (hi - lo))
+    b.set_xticks(xs, bars.index)
+    b.set_ylabel("Mean abnormal return (%)", color=_INK2, fontsize=9)
+    b.set_title("Beat, meet, miss", loc="left", fontsize=11, color=_INK)
+    b.legend(frameon=False, fontsize=9, labelcolor=_INK2, loc="lower left")
+    for i, g in enumerate(bars.index):
+        v = bars.loc[g, "car_0_1_ff4"]
+        b.annotate(f"{v:+.1f}%", (i, v), xytext=(0, 3 if v > 0 else -11), textcoords="offset points",
+                   ha="center", fontsize=8, color=_INK)
+    fig.text(0.01, 0.01, f"{split.capitalize()} split, {len(d):,} events in the primary sample; FF4 abnormal returns.",
+             fontsize=8, color=_INK2)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    path = OUT.save_figure(fig, f"cd_surprise_response__{split}")
+    plt.close(fig)
+    return path
+
+
 def main() -> int:
     p, sig = _load()
     for split in SPLITS:
@@ -244,7 +441,13 @@ def main() -> int:
         surprise_robustness(p, split)
     placebo_diagnostic(p)
     lm_pilot(p, sig)
-    print(f"done: results/tables/cd_*")
+    surprise_errors(p, "validation")
+    ev = pd.read_parquet(S.EVENTS, columns=["split", "reaction_date", "in_primary", "in_text_sample",
+                                            "after_llama_cutoff"])
+    counts = sample_counts(ev)
+    mde_tables(p, counts)
+    figure_surprise_response(p, "validation")
+    print(f"done: results/tables/cd_*, results/figures/cd_*")
     return 0
 
 

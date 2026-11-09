@@ -180,6 +180,34 @@ def test_surprise_sign_means_and_difference():
     assert np.isclose(t.loc["beat - miss", "mean_car"], 0.05)
 
 
+def test_sample_counts_and_mde_reproduce_checkpoint_example():
+    from current_data import mde_tables, sample_counts
+
+    rng = np.random.default_rng(0)
+    rows = []
+    for split, years, n_per_q in (("validation", [2017, 2018, 2019], 60), ("holdout", [2021, 2024], 40)):
+        for y in years:
+            for q in (1, 2, 3, 4):
+                for k in range(n_per_q):
+                    rows.append({"split": split, "reaction_date": f"{y}-{3 * q:02d}-15",
+                                 "in_primary": True, "in_text_sample": True,
+                                 "after_llama_cutoff": y >= 2024})
+    ev = pd.DataFrame(rows)
+    c = sample_counts(ev).set_index("split")
+    assert c.loc["validation", "in_primary"] == 720 and c.loc["validation", "quarters"] == 12
+    assert c.loc["holdout", "primary_after_llama_cutoff"] == 160 and c.loc["holdout", "quarters"] == 8
+
+    p = ev[ev["split"] == "validation"].copy()
+    p["season"] = pd.to_datetime(p["reaction_date"]).dt.to_period("Q").astype(str)
+    p["sue_rank"] = rng.uniform(-0.5, 0.5, len(p))
+    p["car_0_1_ff4"] = 0.05 * p["sue_rank"] + rng.normal(0, 0.05, len(p))
+    mde_ic, pair = mde_tables(p, sample_counts(ev), n_sim=5)
+    ex = pair[(pair["comparison"] == "checkpoint example") & (pair["r"] == 0.7)].iloc[0]
+    assert np.isclose(ex["mde_80"], 0.061, atol=0.001)          # the checkpoint's own number
+    noise = mde_ic[mde_ic["quarterly_ic_sd"].str.startswith("noise")].set_index("split")
+    assert np.isclose(noise.loc["validation", "sd"], 1 / np.sqrt(60), rtol=0.5)
+
+
 def test_two_by_two_excludes_meets():
     from two_by_two import two_by_two
 
