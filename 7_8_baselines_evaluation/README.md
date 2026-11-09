@@ -76,9 +76,8 @@ python code/pipeline.py --step all --synthetic     # demo on synthetic data -> r
 python code/tests/run_all.py                       # the tests (synthetic data only)
 ```
 
-On Colab, mount Drive and `%cd "/content/drive/MyDrive/S08 NLP/7_8_baselines_evaluation"` first.
-The paths resolve from the folder itself, so the same code runs on a laptop with the Drive folder
-synced. Override with `TEAM_DIR` / `STEP78_DIR` if your layout differs.
+The notebooks find the checkout themselves (paths come from `scripts/project_paths.py`), so Jupyter or VS Code can be started from any folder of S08. Google Colab is no longer required.
+Override with `TEAM_DIR` / `STEP78_DIR` if your layout differs.
 
 ## When another part updates its output
 

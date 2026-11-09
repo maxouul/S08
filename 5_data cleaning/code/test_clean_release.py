@@ -3,7 +3,10 @@ Unit tests for clean_release.clean(), on four small documents built to look like
 four kinds met in the sample: a recent HTML release, an old release laid out inside a
 table, an old .txt filing in SGML, and an iXBRL 8-K body; and on two more carrying the
 repeated content a release can hold (page headers, "-more-", a paragraph or a table
-printed twice). They need no network and no data.
+printed twice); and on an earnings release against a monthly traffic report, for the
+earnings_like flag. Since v3, also on a document opening with a stray </head>, on a
+release filed as a PDF, and on a transcript whose safe harbor no heading closes.
+They need no network and no data.
 
 Usage: python code/test_clean_release.py
 """
@@ -32,6 +35,15 @@ RECENT_HTML = f"""<html><head><meta charset="utf-8"><title>Acme Q3</title>
 <p>About Acme Corp.</p><p>Acme makes widgets.</p>
 <p>Investor Contact:</p><p>Jane Doe</p><p>(212) 555-1234</p><p>ir@acme.com</p>
 </body></html>""".encode("utf-8")
+
+# Part 2's earnings-release check: a quarterly release, and a monthly traffic report
+# filed under Item 2.02.
+EARNINGS_HTML = b"""<html><body><p>Acme Reports Third Quarter Financial Results</p>
+<p>Net income was $5.1 million, or $0.10 per diluted share, compared with $4.2 million.
+Operating income rose 8%. Acme raised its full year guidance.</p></body></html>"""
+TRAFFIC_HTML = b"""<html><body><p>Acme Airlines Reports May Traffic</p>
+<p>Revenue passenger miles rose 4.1% on available seat miles up 2.0%, and the load
+factor reached 84.2%, up 1.7 points.</p></body></html>"""
 
 LAYOUT_TABLE_HTML = f"""<HTML><HEAD><META http-equiv="Content-Type"
 content="text/html; charset=iso-8859-1"></HEAD><BODY>
@@ -115,6 +127,62 @@ OLD_HTML = (f"<html><body><p>{PROSE}</p><p>The company&#146;s cost of goods sold
 TABLE = "<table><tr><td>Revenue</td><td>1,234</td><td>1,100</td></tr></table>"
 TWICE_TABLE_HTML = f"<html><body><p>{PROSE}</p>{TABLE}<p>Notes follow.</p>{TABLE}</body></html>"
 
+# Seen on 39 releases (Word exports): the document opens with a closing </head> and no
+# <head>, which lxml reads as an empty document.
+STRAY_HEAD = (f"<DOCUMENT>\n<TYPE>EX-99.1\n<FILENAME>ex991.htm\n<TEXT>\n\n</head>\n\n"
+              f"<body lang=EN-US><p>FOR IMMEDIATE RELEASE</p><p>{PROSE}</p></body>\n"
+              f"</TEXT>\n</DOCUMENT>").encode("ascii")
+
+# A call transcript: the safe harbor read at the top, then the call, with no heading.
+TALK = ("Thanks, operator. Sales grew in every region this quarter and our new plant in "
+        "Ohio reached full output in June, ahead of plan, while freight costs eased and "
+        "pricing held. We paid down debt and bought back shares, and we see demand for "
+        "the new product line staying firm into next year as distributors restock. ")
+TRANSCRIPT_HTML = (
+    "<html><body><p>Acme Q3 2023 Earnings Call</p>"
+    "<p>Before we begin, this call contains forward-looking statements that are subject "
+    "to risks and uncertainties, and actual results may differ materially. We undertake "
+    "no obligation to update them.</p>"
+    + "".join(f"<p>Speaker {i}: {TALK}</p>" for i in range(6))
+    + "</body></html>").encode("ascii")
+# A release whose safe harbor lists its factors one per paragraph: the list stays in
+# the safe harbor, the body keeps the economics.
+FACTORS_HTML = (
+    f"<html><body><p>{PROSE * 4}</p><p>Forward-Looking Statements</p>"
+    "<p>This release contains forward-looking statements that involve risks and "
+    "uncertainties, including:</p>"
+    "<p>changes in economic conditions in our markets;</p>"
+    "<p>Our ability to keep key customers and to win new ones at acceptable prices.</p>"
+    "<p>the loss of key suppliers; and</p><p>other factors.</p>"
+    "</body></html>").encode("ascii")
+
+
+def tiny_pdf(lines: list[str]) -> bytes:
+    """A one-page PDF with these lines of text in Helvetica, built by hand."""
+    stream = "BT /F1 11 Tf 14 TL 72 720 Td " + " ".join(f"({t}) Tj T*" for t in lines) + " ET"
+    objs = ["<< /Type /Catalog /Pages 2 0 R >>",
+            "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+            "/Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+            "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+            f"<< /Length {len(stream)} >>\nstream\n{stream}\nendstream"]
+    out, offsets = "%PDF-1.4\n", []
+    for i, o in enumerate(objs, 1):
+        offsets.append(len(out))
+        out += f"{i} 0 obj\n{o}\nendobj\n"
+    xref = len(out)
+    out += f"xref\n0 {len(objs) + 1}\n0000000000 65535 f \n"
+    out += "".join(f"{off:010d} 00000 n \n" for off in offsets)
+    out += f"trailer\n<< /Size {len(objs) + 1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n"
+    return out.encode("latin-1")
+
+
+PDF_RELEASE = tiny_pdf(["ACME REPORTS THIRD QUARTER RESULTS",
+                        "Revenue rose 12% to $1.2 million in the third quarter, driven by",
+                        "demand in the U.S. market and new customers in Asia.",
+                        "Revenue 1,234 1,100 12%",
+                        "Net income 234 210 11%"])
+
 
 def run() -> int:
     fails = []
@@ -193,6 +261,37 @@ def run() -> int:
 
     r = clean(b"caf\xe9 \x81 ok", "x.txt")
     expect("undecodable byte counted, not hidden", r["n_replacement_chars"] == 1)
+
+    r = clean(EARNINGS_HTML, "ex99.htm")
+    expect("earnings release flagged earnings_like",
+           r["earnings_like"] and r["n_earnings_terms"] >= 3)
+    r = clean(TRAFFIC_HTML, "ex99.htm")
+    expect("monthly traffic report not earnings_like, text kept",
+           not r["earnings_like"] and r["n_other_report_terms"] >= 2
+           and "load factor" in r["text_body"])
+
+    r = clean(STRAY_HEAD, "ex991.htm")
+    expect("stray </head> at the top: text read in full",
+           "FOR IMMEDIATE RELEASE" in r["text_full"] and "Revenue rose" in r["text_body"])
+
+    r = clean(PDF_RELEASE, "ex991.pdf")
+    expect("pdf: read with pypdf, no replacement characters",
+           r["encoding"] == "pdf" and r["n_replacement_chars"] == 0
+           and "%PDF" not in r["text_full"])
+    expect("pdf: wrapped lines joined into one paragraph",
+           "driven by demand in the U.S. market" in r["text_body"])
+    expect("pdf: lines of figures set aside as a table",
+           len(r["fin_tables"]) == 1 and "1,234" in r["fin_tables"][0]
+           and "1,234" not in r["text_full"])
+
+    r = clean(TRANSCRIPT_HTML, "ex991.htm")
+    expect("transcript: safe harbor at the top labelled, the call kept in the body",
+           "forward-looking" not in r["text_body"] and r["text_body"].count("Speaker") == 6)
+
+    r = clean(FACTORS_HTML, "ex991.htm")
+    expect("factors listed one per paragraph stay in the safe harbor",
+           "Revenue rose" in r["text_body"] and "key customers" not in r["text_body"]
+           and "suppliers" not in r["text_body"])
 
     print(f"\n{len(fails)} failed" if fails else "\nall passed")
     return 1 if fails else 0

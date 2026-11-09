@@ -7,6 +7,7 @@ sample splits, the holdout lock and the trading calendar are defined once.
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -14,9 +15,9 @@ import pandas as pd
 ET = "America/New_York"
 
 # Folder holding the inputs and outputs. Override with the PROJECT_DIR
-# environment variable (on WRDS, Colab or a laptop) instead of editing paths.
-TEAM_DIR = Path(os.environ.get("TEAM_DIR", Path(__file__).resolve().parents[2])).expanduser().resolve()
-PROJECT_DIR = Path(os.environ.get("PROJECT_DIR", TEAM_DIR / "3_4_surprise_returns")).expanduser().resolve()
+# environment variable (in Jupyter, WRDS or a terminal) instead of editing paths.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+from project_paths import TEAM_DIR, PROJECT_DIR, data_path
 
 # ---------------------------------------------------------------------------
 # Splits, as registered in the proposal. 2020 is set aside.

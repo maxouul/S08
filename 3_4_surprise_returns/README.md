@@ -36,7 +36,7 @@ This folder builds the event-level financial data the rest of the project is mea
 
 | Step | Reads | Writes | Time |
 |---|---|---|---|
-| `00_setup_access` | WRDS; Mahaut's `1_2nov/nov2_data` | `logs/access_report_*.json`, `data/trading_calendar.csv`, `data/clock_provisional.csv` | 5 min |
+| `00_setup_access` | WRDS; Mahaut's `files csv` | `logs/access_report_*.json`, `data/trading_calendar.csv`, `data/clock_provisional.csv` | 5 min |
 | `01_download` | WRDS | `cache/` (about 840 MB), `cache/manifest.csv` | 20 min first time; reruns skip finished pulls |
 | `02_surprise` | `cache/`, calendar, clock | `data/surprise.parquet`, `data/estimates_used.parquet`, `data/handcheck_sample_50.csv`, `results/funnel_part3.csv`, `results/consensus_counts.csv` | 4 min |
 | `03_returns` | `data/surprise.parquet`, `cache/` | `data/returns.parquet`, `results/returns_info.csv`, `results/sue_deciles_dev.csv` | 3 min |

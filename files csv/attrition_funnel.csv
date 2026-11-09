@@ -1,8 +1,9 @@
 step,remaining,removed,pct_removed
-Raw Item 2.02 filings,383155,0.0,0.0
-Matched to PERMNO,329202,53953.0,14.08
-CRSP trading day,323430,5772.0,1.75
-CRSP price at t-2,283561,39869.0,12.33
-Price above $5,228605,54956.0,19.38
-Above NYSE 20th percentile,148920,79685.0,34.86
-At least 3 analysts,117836,31084.0,20.87
+raw: 8-K Item 2.02 filings 2006-2025,383153,0,0.0
+"matched to a PERMNO, link window respected",328317,54836,14.31
+release session rolled onto the trading calendar,328317,0,0.0
+inside the t-2 window of the trading calendar,328317,0,0.0
+has a CRSP price at t-2,288037,40280,12.27
+price at t-2 above $5,232070,55967,19.43
+market cap above the NYSE 20th percentile,150841,81229,35.0
+at least 3 analysts in the prior 90 days,115552,35289,23.39

@@ -23,9 +23,21 @@ Compared with to_text() in fetch_releases.py:
   content repeated inside a document: a paragraph pasted twice, the page header or
   footer an old filing repeats on every page, a table printed twice. The counts are
   kept, so nothing disappears unseen;
-- the text is split into sentences, never across paragraphs.
+- a document that opens with a closing tag ("</head>" with no <head> before it) is read
+  in full: lxml would return it empty;
+- a PDF document is read with pypdf instead of being decoded as text;
+- a safe harbor that is not followed by a heading (transcripts, slide decks, page
+  images with a text layer) no longer takes the rest of the text with it;
+- the text is split into sentences, never across paragraphs;
+- part 2's check that the document is an earnings release (2_EDGAR.ipynb: earnings
+  vocabulary against that of the monthly sales and traffic reports some filers also
+  file under Item 2.02) is applied to every text, as a flag (earnings_like), never as
+  a deletion. Part 2's hand check found about 5% of its sample was not an earnings
+  release.
 
-Output: data/clean/clean_{year}.parquet, one row per accession.
+Output: data/clean/clean_{year}.parquet, one row per accession, columns OUTPUT_COLUMNS
+(year of the filing date). Parts 6 to 8 read accession, text_body, sha256_text,
+clean_version, n_words_body and error from it.
 
 Usage: python code/clean_release.py --workers 4
 """
@@ -34,26 +46,48 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import os
 import re
 import sys
+import warnings
 import zipfile
 from multiprocessing import Pool
 
+# Recent filings are XHTML; reading them with the HTML parser is intended (the same
+# parser for every document), so bs4's advice to use an XML parser is not shown.
+warnings.filterwarnings("ignore", message="It looks like you're parsing an XML document")
+
 # v1: first version. v2: page furniture and repeated content removed (drop_repeats),
 # SGML-wrapped documents read to their end, statement-shaped tables set aside,
-# cp1252 numeric references decoded.
-CLEAN_VERSION = "v2"
+# cp1252 numeric references decoded. v3: leading closing tags dropped before parsing
+# (39 documents came out empty), PDF documents read with pypdf (6), a safe harbor taking
+# more than half the text read again with a stricter rule, and short listed factors no
+# longer closing the safe harbor (label_paragraphs).
+CLEAN_VERSION = "v3"
 
 FIN_TABLE_DIGITS = 0.30          # same rule as to_text()
 SEP = " "                   # paragraph mark used while the HTML is flattened
 
-BLOCK_TAGS = ["p", "div", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6",
-              "table", "ul", "ol", "center", "blockquote", "title"]
+BLOCK_TAGS = {"p", "div", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6",
+              "table", "ul", "ol", "center", "blockquote", "title"}
+CELL_TAGS = {"td", "th"}
+PRE_TAGS = {"pre", "xmp", "plaintext"}
+# Removed with everything inside them, as are the elements styled display:none. Inline
+# XBRL hides its facts in ix:header.
+REMOVED_TAGS = {"script", "style", "head", "noscript", "ix:header", "ix:hidden"}
 SPACE_RE = re.compile(r"[ \t\r\n\f\v\xa0 -​  　]+")
 META_CHARSET_RE = re.compile(rb"""<meta[^>]+charset\s*=\s*["']?\s*([A-Za-z0-9_.:-]+)""", re.I)
 HIDDEN_RE = re.compile(r"display\s*:\s*none", re.I)
 SGML_TEXT_END_RE = re.compile(r"</TEXT>", re.I)
+# What may come before the first opening tag: blanks, comments, a doctype, and the stray
+# closing tags some word processors export ("</head>" with no <head>).
+LEADING_RE = re.compile(r"^(?:\s|<!--.*?-->|<![^>]*>|<\?[^>]*>|</[A-Za-z][^>]*>)+", re.S)
+COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
+END_TAG_RE = re.compile(r"</[A-Za-z]")
+# PDF text from pypdf: one line per printed line, bullets often in the Symbol font
+PDF_BULLET_RE = re.compile(r"^[•▪●◦○■□➢✓]\s*")
+PDF_SHORT_LINE = 60       # characters: a shorter line ends its paragraph (heading, name, last line)
 SGML_TABLE_RE = re.compile(r"<TABLE>(.*?)</TABLE>", re.S | re.I)
 SGML_TAG_RE = re.compile(r"</?(?:PAGE|S|C|FN|F\d+|CAPTION|PRE|DOCUMENT|TYPE|SEQUENCE|"
                          r"FILENAME|DESCRIPTION|TEXT)\b[^>]*>", re.I)
@@ -71,6 +105,28 @@ C1_TO_CP1252 = {c: bytes([c]).decode("cp1252") for c in range(0x80, 0xA0)
                 if c not in (0x81, 0x8D, 0x8F, 0x90, 0x9D)}
 REPEAT_MIN_WORDS = 8      # a repeated paragraph this long is a copy, whatever its count
 REPEAT_MIN_COUNT = 3      # a shorter one goes only if it recurs, like a page header
+
+# Part 2's earnings-release check (2_EDGAR.ipynb, automatic validation), same terms and
+# rule, read on the first 8,000 characters. It only sets a flag: the text is unchanged.
+EARNINGS_TERMS = ["earnings per share", "net income", "diluted", "fourth quarter",
+                  "first quarter", "second quarter", "third quarter", "full year",
+                  "results of operations", "financial results", "net revenue",
+                  "operating income", "gaap", "guidance"]
+OTHER_REPORT_TERMS = ["traffic", "revenue passenger", "load factor", "available seat miles",
+                      "same-store sales for", "monthly sales", "sales for the month",
+                      "unit sales for"]
+EARNINGS_MIN_TERMS = 3    # earnings_like: at least this many earnings terms ...
+OTHER_MAX_TERMS = 1       # ... and at most this many terms of a monthly report
+
+# Every column of data/clean/clean_{year}.parquet, in order. A year file lacking one of
+# them is rebuilt even when its clean_version is current.
+OUTPUT_COLUMNS = [
+    "accession", "filename", "clean_version", "error", "encoding",
+    "text_full", "text_body", "sections", "sentences", "sentence_section", "fin_tables",
+    "n_words", "n_words_body", "n_words_tables", "n_sentences", "n_replacement_chars",
+    "n_furniture_removed", "n_repeats_removed", "n_table_copies_removed",
+    "n_earnings_terms", "n_other_report_terms", "earnings_like", "sha256_text",
+]
 
 # WHATWG treats these labels as windows-1252, and so do the filers who wrote them.
 CP1252_ALIASES = {"iso-8859-1", "iso8859-1", "latin-1", "latin1", "us-ascii", "ascii",
@@ -126,12 +182,20 @@ def is_financial_table(txt: str) -> bool:
     return numeric >= 3 and numeric >= 0.5 * len(rows)
 
 
+def tags_named(root, names: set[str]) -> list:
+    """The tags under root whose name is in names, in document order: what
+    root.find_all(list(names)) returns, without the slow matching bs4 applies to a list
+    of names (a third of the cleaning time)."""
+    from bs4 import Tag
+    return [t for t in root.descendants if isinstance(t, Tag) and t.name in names]
+
+
 def html_table_text(table) -> str:
     """One line per row, cells separated by tabs."""
     rows = []
     for tr in table.find_all("tr"):
         cells = [SPACE_RE.sub(" ", td.get_text(" ")).strip()
-                 for td in tr.find_all(["td", "th"])]
+                 for td in tags_named(tr, CELL_TAGS)]
         cells = [c for c in cells if c]
         if cells:
             rows.append("\t".join(cells))
@@ -168,22 +232,98 @@ def plain_paragraphs(text: str, fin_tables: list[str]) -> list[str]:
     return out
 
 
+# --- PDF ----------------------------------------------------------------------------
+
+def is_pdf(raw: bytes) -> bool:
+    return raw[:1024].lstrip().startswith(b"%PDF-")
+
+
+def pdf_text(raw: bytes) -> str:
+    """The text of every page, pages separated by a blank line."""
+    from pypdf import PdfReader
+    return "\n\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(raw)).pages)
+
+
+def pdf_paragraphs(text: str, fin_tables: list[str]) -> list[str]:
+    """pypdf gives one line per printed line and no blank line between paragraphs. A
+    paragraph ends at a line closed by . ! ? : ; or at a short line (a heading, a name,
+    the last line of a paragraph); a bulleted line opens one; consecutive lines that are
+    mostly digits make a financial table."""
+    paras: list[str] = []
+    cur: list[str] = []
+    table: list[str] = []
+
+    def end_para():
+        if cur:
+            paras.append(" ".join(cur))
+            cur.clear()
+
+    def end_table():
+        if table:
+            fin_tables.append("\n".join(table))
+            table.clear()
+
+    for line in text.split("\n"):
+        s = SPACE_RE.sub(" ", line).strip()
+        if not s:
+            end_para()
+            end_table()
+            continue
+        if len(s.split()) >= 2 and is_financial(s):
+            end_para()
+            table.append(s)
+            continue
+        end_table()
+        if PDF_BULLET_RE.match(s):
+            end_para()
+            s = PDF_BULLET_RE.sub("• ", s)
+        cur.append(s)
+        if s[-1] in ".!?:;" or len(s) < PDF_SHORT_LINE:
+            end_para()
+    end_para()
+    end_table()
+    return paras
+
+
 # --- HTML -------------------------------------------------------------------------
+
+def drop_hidden(soup) -> None:
+    """Remove the REMOVED_TAGS and every element styled display:none, with their content,
+    in one walk of the tree; the subtree of a removed element is not visited."""
+    from bs4 import Tag
+    gone, stack = [], list(soup.contents)
+    while stack:
+        node = stack.pop()
+        if not isinstance(node, Tag):
+            continue
+        style = node.get("style")
+        if node.name in REMOVED_TAGS or (style is not None and HIDDEN_RE.search(style)):
+            gone.append(node)
+        else:
+            stack.extend(node.contents)
+    for t in gone:
+        t.decompose()
+
+
+def drop_leading_end_tags(doc: str) -> str:
+    """A document that opens with closing tags ("</head>" with no <head>) is read by lxml
+    as empty: what precedes the first opening tag is dropped when it holds a closing
+    tag. Any other document is returned unchanged."""
+    m = LEADING_RE.match(doc)
+    if m and END_TAG_RE.search(COMMENT_RE.sub("", m.group(0))):
+        return doc[m.end():]
+    return doc
+
 
 def html_paragraphs(doc: str, fin_tables: list[str]) -> list[str]:
     from bs4 import BeautifulSoup
+    doc = drop_leading_end_tags(doc)
     try:
         soup = BeautifulSoup(doc, "lxml")
     except Exception:
         soup = BeautifulSoup(doc, "html.parser")
 
-    for t in soup.find_all(["script", "style", "head", "noscript"]):
-        t.decompose()
-    # Inline XBRL hides its facts in ix:header; some filers hide whole blocks.
-    for t in soup.find_all(lambda tag: tag.name in ("ix:header", "ix:hidden")):
-        t.decompose()
-    for t in soup.find_all(style=HIDDEN_RE):
-        t.decompose()
+    drop_hidden(soup)
 
     # Innermost tables first: reversed document order visits children before parents.
     for table in reversed(soup.find_all("table")):
@@ -195,15 +335,15 @@ def html_paragraphs(doc: str, fin_tables: list[str]) -> list[str]:
             table.replace_with(SEP)
         # a layout table stays; its rows become paragraphs below
 
-    for pre in soup.find_all(["pre", "xmp", "plaintext"]):
+    for pre in tags_named(soup, PRE_TAGS):
         pre.replace_with(SEP + SEP.join(plain_paragraphs(pre.get_text(), fin_tables)) + SEP)
 
     for br in soup.find_all("br"):
         br.replace_with(SEP)
-    for tag in soup.find_all(BLOCK_TAGS):
+    for tag in tags_named(soup, BLOCK_TAGS):
         tag.insert_before(SEP)
         tag.insert_after(SEP)
-    for td in soup.find_all(["td", "th"]):
+    for td in tags_named(soup, CELL_TAGS):
         td.insert_after(" ")
 
     text = SPACE_RE.sub(" ", soup.get_text().translate(C1_TO_CP1252))
@@ -234,6 +374,22 @@ CALL_PARA = re.compile(r"\b(conference call|webcast|earnings call)\b", re.I)
 CALL_DETAIL = re.compile(r"\b(dial|replay|listen|passcode|pass code|toll[- ]free|"
                          r"conference id|www\.|https?://)", re.I)
 CONTACT_LINE = re.compile(r"@|\(\d{3}\)|\d{3}[-.\s]\d{3}[-.\s]\d{4}", re.I)
+# The stricter reading of a safe harbor that takes more than SAFE_MAX_SHARE of the text:
+# it goes on through short paragraphs, list items, and paragraphs in its own vocabulary.
+SAFE_MAX_SHARE = 0.5
+SAFE_SHORT_PARA = 40      # words: shorter paragraphs never end it (factors listed one per line)
+SAFE_LONG_PARA = 300      # words: a longer one goes on only if it would open a safe harbor
+SAFE_WORDS = re.compile(
+    r"forward[- ]looking|\brisks?\b|uncertaint|actual (results|events|performance|outcomes)"
+    r"|differ materially|could cause|undue reliance|speaks? only as of|no (obligation|duty)"
+    r"|undertakes? no|cautionary|safe harbor|litigation reform|factors that", re.I)
+LIST_BULLET = r"^\s*(?:[•·▪●◦○■□➢✓§*–—-]|\(?(?:\d{1,2}|[a-z]|[ivx]{1,4})[.)])\s"
+LIST_ITEM = re.compile(LIST_BULLET + r"|[;,:]\s*(?:and|or)?\s*$", re.I)
+# A factor listed in a safe harbor can be short enough to pass for a heading ("• the
+# loss of key suppliers; and"): it stays in the safe harbor instead of closing it, as
+# does a heading in the safe harbor's vocabulary ("These risks include:"). Other
+# headings ending in a colon, such as a speaker's name in a transcript, still close it.
+HEADING_ITEM = re.compile(LIST_BULLET + r"|\b(?:and|or)\s*$", re.I)
 
 
 def is_heading(p: str) -> bool:
@@ -244,12 +400,35 @@ def is_heading(p: str) -> bool:
     return 0 < len(words) <= 8 and any(rx.search(p) for _, rx in HEAD_PATTERNS)
 
 
+def safe_harbor_goes_on(p: str) -> bool:
+    n = len(p.split())
+    return (n < SAFE_SHORT_PARA or bool(LIST_ITEM.search(p))
+            or (n < SAFE_LONG_PARA and bool(SAFE_WORDS.search(p)))
+            or bool(SAFE_HARBOR_PARA.search(p) and RISK_WORDS.search(p)))
+
+
 def label_paragraphs(paras: list[str]) -> list[str]:
     """Heading-driven labelling. A heading that matches a pattern opens that section;
     any other heading closes it, except inside contacts, where names and phone numbers
-    look like headings and only a long paragraph closes the block. Without a heading,
+    look like headings and only a long paragraph closes the block, and inside the safe
+    harbor, where a short listed factor looks like a heading too (HEADING_ITEM). Without a heading,
     a forward-looking paragraph that cites risks opens the safe harbor, and a
-    paragraph giving dial-in details is labelled conference_call on its own."""
+    paragraph giving dial-in details is labelled conference_call on its own.
+
+    A safe harbor at the top of a transcript or a slide deck is followed by no heading,
+    and would take the whole text. So when the safe harbor holds more than
+    SAFE_MAX_SHARE of the words, the text is labelled again with a stricter rule: the
+    safe harbor then ends at the first paragraph that is not short, not a list item,
+    and not in its vocabulary. Every other text keeps the first labelling."""
+    labels = _labels(paras, strict=False)
+    words = [len(p.split()) for p in paras]
+    safe = sum(w for w, lab in zip(words, labels) if lab == "safe_harbor")
+    if safe > SAFE_MAX_SHARE * max(sum(words), 1):
+        labels = _labels(paras, strict=True)
+    return labels
+
+
+def _labels(paras: list[str], strict: bool) -> list[str]:
     labels, current = [], "body"
     for p in paras:
         lab = None
@@ -262,11 +441,15 @@ def label_paragraphs(paras: list[str]) -> list[str]:
                 current = lab
             elif current == "contacts" and (CONTACT_LINE.search(p) or len(p.split()) <= 6):
                 pass
+            elif current == "safe_harbor" and (HEADING_ITEM.search(p) or SAFE_WORDS.search(p)):
+                pass
             else:
                 current = "body"
             labels.append(current)
             continue
         if current == "contacts" and len(p.split()) > 25:
+            current = "body"
+        if strict and current == "safe_harbor" and not safe_harbor_goes_on(p):
             current = "body"
         if SAFE_HARBOR_PARA.search(p) and RISK_WORDS.search(p):
             current = "safe_harbor"
@@ -344,21 +527,24 @@ def drop_repeats(paras: list[str]) -> tuple[list[str], int, int]:
 # --- the pure function ------------------------------------------------------------
 
 def clean(raw_bytes: bytes, filename: str) -> dict:
-    text, encoding = decode(raw_bytes)
     fin_tables: list[str] = []
-
-    # EDGAR's SGML wrapper: the document is what lies between <TEXT> and </TEXT>. The
-    # opening tag sits in the header, but the closing one can be anywhere in the file.
-    start = text[:20000].upper().find("<TEXT>")
-    if start >= 0:
-        end = SGML_TEXT_END_RE.search(text, start)
-        inner = text[start + len("<TEXT>"):end.start() if end else len(text)]
+    if is_pdf(raw_bytes):                    # a release filed as a PDF document
+        text, encoding = pdf_text(raw_bytes), "pdf"
+        paras = pdf_paragraphs(text, fin_tables)
     else:
-        inner = text
-    if is_html(inner[:5000], filename):
-        paras = html_paragraphs(inner, fin_tables)
-    else:
-        paras = plain_paragraphs(inner, fin_tables)
+        text, encoding = decode(raw_bytes)
+        # EDGAR's SGML wrapper: the document is what lies between <TEXT> and </TEXT>.
+        # The opening tag sits in the header, but the closing one can be anywhere.
+        start = text[:20000].upper().find("<TEXT>")
+        if start >= 0:
+            end = SGML_TEXT_END_RE.search(text, start)
+            inner = text[start + len("<TEXT>"):end.start() if end else len(text)]
+        else:
+            inner = text
+        if is_html(inner[:5000], filename):
+            paras = html_paragraphs(inner, fin_tables)
+        else:
+            paras = plain_paragraphs(inner, fin_tables)
 
     paras, n_furniture, n_copies = drop_repeats(paras)
     n_tables_found = len(fin_tables)
@@ -384,6 +570,10 @@ def clean(raw_bytes: bytes, filename: str) -> dict:
             sentences.append(s)
             sentence_section.append(lab)
 
+    head = text_full[:8000].lower()
+    n_earnings = sum(t in head for t in EARNINGS_TERMS)
+    n_other = sum(t in head for t in OTHER_REPORT_TERMS)
+
     return {
         "clean_version": CLEAN_VERSION,
         "encoding": encoding,
@@ -401,16 +591,26 @@ def clean(raw_bytes: bytes, filename: str) -> dict:
         "n_furniture_removed": n_furniture,
         "n_repeats_removed": n_copies,
         "n_table_copies_removed": n_tables_found - len(fin_tables),
+        "n_earnings_terms": n_earnings,
+        "n_other_report_terms": n_other,
+        "earnings_like": n_earnings >= EARNINGS_MIN_TERMS and n_other <= OTHER_MAX_TERMS,
         "sha256_text": hashlib.sha256(text_full.encode("utf-8")).hexdigest(),
     }
 
 
 # --- driver -----------------------------------------------------------------------
 
+_ZIPS: dict[str, zipfile.ZipFile] = {}     # one open archive per worker process
+
+
 def _work(args: tuple[str, str]) -> dict:
     zip_path, member = args
-    with zipfile.ZipFile(zip_path) as z:
-        raw = z.read(member)
+    if zip_path not in _ZIPS:              # reading the directory of 5,000 members costs
+        for z in _ZIPS.values():           # 0.1 s: once per worker, not per document
+            z.close()
+        _ZIPS.clear()
+        _ZIPS[zip_path] = zipfile.ZipFile(zip_path)
+    raw = _ZIPS[zip_path].read(member)
     acc, filename = member.split("__", 1)
     try:
         rec = clean(raw, filename)
@@ -453,20 +653,23 @@ def main() -> int:
     for name in zips:
         year = name[4:8]
         out = os.path.join(args.out_dir, f"clean_{year}.parquet")
-        if os.path.exists(out) and not args.force:
-            v = pq.read_table(out, columns=["clean_version"]).column(0).unique().to_pylist()
-            if v == [CLEAN_VERSION]:
-                print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
-                continue
         zp = os.path.join(args.raw_dir, name)
         with zipfile.ZipFile(zp) as z:
             members = [m for m in z.namelist() if "__" in m and not m.endswith("__index.htm")]
+        if os.path.exists(out) and not args.force:
+            # skipped only if built with this version and covering every document of the
+            # archive: a year cleaned during a test, before the full download, is redone
+            t = pq.read_table(out, columns=["accession", "clean_version"])
+            v = t.column("clean_version").unique().to_pylist()
+            done = set(t.column("accession").to_pylist())
+            if (v == [CLEAN_VERSION] and set(OUTPUT_COLUMNS) <= set(pq.read_schema(out).names)
+                    and done == {m.split("__", 1)[0] for m in members}):
+                print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
+                continue
         with Pool(args.workers) as pool:
             recs = pool.map(_work, [(zp, m) for m in members], chunksize=32)
-        df = pd.DataFrame(recs)
+        df = pd.DataFrame(recs).reindex(columns=OUTPUT_COLUMNS)
         bad = int((df["error"] != "").sum())
-        df = df[["accession", "clean_version"] + [c for c in df.columns
-                                                  if c not in ("accession", "clean_version")]]
         tmp = out + ".tmp"
         df.to_parquet(tmp, index=False)
         os.replace(tmp, out)               # a crash never leaves a half-written year
