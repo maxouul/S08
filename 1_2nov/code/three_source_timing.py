@@ -21,6 +21,7 @@ from __future__ import annotations
 from paths import BASE, src, dst
 
 import argparse
+import os
 
 import pandas as pd
 
@@ -82,6 +83,28 @@ def session(dates: pd.Series, secs: pd.Series) -> pd.Series:
 def secs_of(ts: pd.Series) -> pd.Series:
     t = to_et(ts)
     return t.dt.hour * 3600 + t.dt.minute * 60 + t.dt.second
+
+
+def roll_to_calendar(sess: pd.Series, path: str) -> pd.Series:
+    """The first trading session on or after each session date.
+
+    An after-close release is moved to the next calendar day, so a Friday
+    evening release lands on a Saturday, while the EDGAR session it is
+    compared with has been rolled to Monday by wrds_match_and_funnel.py.
+    Rolled forward on the same CRSP calendar (forward, never backward), the
+    sources are comparable and a weekend no longer reads as a disagreement.
+    """
+    if not os.path.exists(path):
+        print("no trading_calendar.csv yet (wrds_match_and_funnel.py writes "
+              "it): sessions are left on calendar days")
+        return sess
+    cal = pd.DatetimeIndex(pd.to_datetime(pd.read_csv(path).date)).sort_values()
+    d = pd.to_datetime(sess, errors="coerce")
+    i = cal.searchsorted(d, side="left")
+    ok = d.notna().to_numpy() & (i < len(cal))
+    out = pd.Series(pd.NA, index=sess.index, dtype="string")
+    out[ok] = cal[i[ok]].strftime("%Y-%m-%d")
+    return out
 
 
 def main() -> int:
@@ -152,8 +175,10 @@ def main() -> int:
                       right_on="wire_dt", by="permno", direction="nearest",
                       tolerance=pd.Timedelta("3D"))
 
-    m["wire_session"] = session(m.wire_dt, secs_of(m.wire_dt))
-    m["ibes_session_c"] = m.ibes_session
+    cal_path = src("trading_calendar.csv")
+    m["wire_session"] = roll_to_calendar(session(m.wire_dt, secs_of(m.wire_dt)),
+                                         cal_path)
+    m["ibes_session_c"] = roll_to_calendar(m.ibes_session, cal_path)
     m["edgar_session"] = m.session_date
 
     has_w = m.wire_session.notna()

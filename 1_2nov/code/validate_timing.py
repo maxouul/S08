@@ -27,6 +27,8 @@ from __future__ import annotations
 
 from paths import BASE, src, dst
 
+import os
+
 import pandas as pd
 import wrds
 
@@ -58,6 +60,28 @@ def sessions(dates: pd.Series, times: pd.Series) -> pd.DataFrame:
     flag = flag.mask(after, "after_close").mask(pre, "pre_open")                .mask(missing, "no_time").mask(d.isna(), "no_date")
     return pd.DataFrame({"ibes_session": sess.where(d.notna()),
                          "ibes_flag": flag})
+
+
+def roll_to_calendar(sess: pd.Series, path: str) -> pd.Series:
+    """The first trading session on or after each session date.
+
+    An after-close release is moved to the next calendar day, so a Friday
+    evening release lands on a Saturday, while the EDGAR session it is
+    compared with has been rolled to Monday by wrds_match_and_funnel.py.
+    Rolled forward on the same CRSP calendar (forward, never backward), the
+    sources are comparable and a weekend no longer reads as a disagreement.
+    """
+    if not os.path.exists(path):
+        print("no trading_calendar.csv yet (wrds_match_and_funnel.py writes "
+              "it): sessions are left on calendar days")
+        return sess
+    cal = pd.DatetimeIndex(pd.to_datetime(pd.read_csv(path).date)).sort_values()
+    d = pd.to_datetime(sess, errors="coerce")
+    i = cal.searchsorted(d, side="left")
+    ok = d.notna().to_numpy() & (i < len(cal))
+    out = pd.Series(pd.NA, index=sess.index, dtype="string")
+    out[ok] = cal[i[ok]].strftime("%Y-%m-%d")
+    return out
 
 
 def main() -> int:
@@ -104,6 +128,8 @@ def main() -> int:
     a = pd.concat([a.reset_index(drop=True),
                    sessions(a.anndats, a.anntims).reset_index(drop=True)],
                   axis=1)
+    a["ibes_session"] = roll_to_calendar(a["ibes_session"],
+                                         src("trading_calendar.csv"))
 
     ev["_d"] = pd.to_datetime(ev.session_date, errors="coerce")
     # An I/B/E/S announcement is matched to the EDGAR event nearest in time,

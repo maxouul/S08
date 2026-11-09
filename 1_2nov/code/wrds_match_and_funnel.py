@@ -236,6 +236,10 @@ def main() -> int:
     years = [y for y in years if 2006 <= y <= 2025]
 
     cal = trading_calendar(db, years)
+    # saved so validate_timing.py and three_source_timing.py roll the
+    # I/B/E/S and wire sessions onto the same calendar as the EDGAR one.
+    pd.DataFrame({"date": cal.strftime("%Y-%m-%d")}).to_csv(
+        dst("trading_calendar.csv"), index=False)
     rolled = roll_to_session(ev["session_date"], cal)
     moved = int((rolled.notna() & (rolled != ev["session_date"])).sum())
     off_calendar = int(rolled.isna().sum())

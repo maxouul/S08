@@ -17,6 +17,8 @@ the row is marked and left.
 from __future__ import annotations
 
 import argparse
+import bisect
+import os
 import re
 import threading
 import time
@@ -88,6 +90,22 @@ def main() -> int:
     args = ap.parse_args()
 
     d = pd.read_csv(args.sheet, dtype={"accession": str})
+    # a sheet settled by an earlier run carries the columns this run adds;
+    # they are dropped so the merge below does not duplicate cik.
+    d = d.drop(columns=[c for c in ("cik", "header_acceptance_et",
+                                    "sources_matching_header", "judged_by")
+                        if c in d.columns])
+    # the header session is rolled onto the trading calendar, like every
+    # source it is compared with: a Friday evening filing belongs to Monday.
+    cal_path = src("trading_calendar.csv")
+    days = (sorted(pd.read_csv(cal_path, dtype=str).date)
+            if os.path.exists(cal_path) else [])
+
+    def roll(day):
+        if not day or not days:
+            return day
+        i = bisect.bisect_left(days, day)
+        return days[i] if i < len(days) else day
     ev = pd.read_csv(src("event_table.csv"), dtype={"accession": str},
                      usecols=["accession", "cik"]).drop_duplicates("accession")
     d = d.merge(ev, on="accession", how="left")
@@ -100,7 +118,7 @@ def main() -> int:
         m = HEADER_RE.search(head or "")
         hdr = (datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=ET)
                if m else None)
-        truth = session_of(hdr)
+        truth = roll(session_of(hdr))
 
         matches = []
         for label, col in (("edgar", "edgar_session"),
@@ -111,10 +129,14 @@ def main() -> int:
                 matches.append(label)
 
         # a wire story that predates the filing is not a source being wrong
-        wire_dt = pd.to_datetime(r.get("wire_dt"), errors="coerce", utc=True)
+        # wire_dt is New York time already when it carries no offset (as
+        # three_source_timing.py writes it); reading it as UTC would move
+        # the story four or five hours early and make the wire look first.
+        wire_dt = pd.to_datetime(r.get("wire_dt"), errors="coerce")
+        if pd.notna(wire_dt) and wire_dt.tzinfo is not None:
+            wire_dt = wire_dt.tz_convert(ET).tz_localize(None)
         early = bool(hdr is not None and pd.notna(wire_dt)
-                     and wire_dt.tz_convert(ET).tz_localize(None)
-                     < hdr.replace(tzinfo=None))
+                     and wire_dt < hdr.replace(tzinfo=None))
 
         if truth is None:
             verdict, note = "", "no header could be read"

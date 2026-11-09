@@ -1,39 +1,40 @@
-﻿figure,revise du 8 novembre,rendu du 2 novembre
-events after the last stage,115561,117926
-matched sample rows,115561,117926
-"largest single removal, the size cut",81231,79505
-"median market capitalisation, $bn",3.5,3.4
-median number of analysts,7,9
-"events in 2025, lost with the legacy CRSP file",5664,5791
-events with a release recovered,114578,116983
-EX-99.1 and its variants,101688,103852
-other EX-99 exhibits,10970,11269
-the 8-K body itself,1920,1862
-no prose document found,981,941
-"median release, words",3161,3157
-"tenth percentile, words",1425,1437
-"ninetieth percentile, words",5978,5960
-events with an I/B/E/S announcement,101706,106418
-EDGAR and I/B/E/S on the same session,96827,88448
-"kept if two sources must agree, in percent",85.6,75.0
-dropped by that rule,16253,29478
-"  of those, no I/B/E/S match",11374,11508
-"  of those, matched to a different session",4879,17970
-"same date, I/B/E/S after the close, EDGAR in session",199,12809
-"same date, I/B/E/S after the close, EDGAR pre-open",187,154
-"same date, both after the close, different session",36,27
-"same date, differing only on the side of the close",422,12990
-EDGAR session one to three days after the I/B/E/S date,4211,4706
-EDGAR session before the I/B/E/S date,246,274
-events given a wire time,86538,90437
-I/B/E/S agrees with the wire,82650,86374
-  out of events where both exist,83829,87647
-EDGAR agrees with the wire,82363,75775
-EDGAR agrees with I/B/E/S,96827,88448
-retained when two of three sources agree,102726,104259
-dropped by that rule,10354,13667
-"  of those, with no second source",8665,8718
-"  of those, with a second source that disagrees",1689,4949
-events the wire moves to another session,4175,14662
-  EDGAR one to three sessions too early,574,10526
-  EDGAR one to three sessions too late,3601,4136
+﻿figure,"revise final (heures completees, calendrier)",revise du 8 novembre,rendu du 2 novembre
+events after the last stage,115552,115561,117926
+matched sample rows,115552,115561,117926
+"largest single removal, the size cut",81229,81231,79505
+"median market capitalisation, $bn",3.5,3.5,3.4
+median number of analysts,7,7,9
+"events in 2025, lost with the legacy CRSP file",5664,5664,5791
+events with a release recovered,114569,114578,116983
+EX-99.1 and its variants,101679,101688,103852
+other EX-99 exhibits,10970,10970,11269
+the 8-K body itself,1920,1920,1862
+no prose document found,981,981,941
+"share lost by taking EX-99.1 alone, in percent",11.3,11.2,11.2
+"median release, words",3161,3161,3157
+"tenth percentile, words",1425,1425,1437
+"ninetieth percentile, words",5978,5978,5960
+events with an I/B/E/S announcement,101688,101706,106418
+EDGAR and I/B/E/S on the same session,97039,96827,88448
+"kept if two sources must agree, in percent",85.8,85.6,75.0
+dropped by that rule,16024,16253,29478
+"  of those, no I/B/E/S match",11375,11374,11508
+"  of those, matched to a different session",4649,4879,17970
+"same date, I/B/E/S after the close, EDGAR in session",72,199,12809
+"same date, I/B/E/S after the close, EDGAR pre-open",187,187,154
+"same date, both after the close, different session",36,36,27
+"same date, differing only on the side of the close",295,422,12990
+EDGAR session one to three days after the I/B/E/S date,4108,4211,4706
+EDGAR session before the I/B/E/S date,246,246,274
+events given a wire time,86522,86538,90437
+I/B/E/S agrees with the wire,82653,82650,86374
+  out of events where both exist,83813,83829,87647
+EDGAR agrees with the wire,82541,82363,75775
+EDGAR agrees with I/B/E/S,97039,96827,88448
+retained when two of three sources agree,102805,102726,104259
+dropped by that rule,10258,10354,13667
+"  of those, with no second source",8666,8665,8718
+"  of those, with a second source that disagrees",1592,1689,4949
+events the wire moves to another session,3981,4175,14662
+  EDGAR one to three sessions too early,490,574,10526
+  EDGAR one to three sessions too late,3491,3601,4136
