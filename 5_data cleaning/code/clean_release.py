@@ -39,6 +39,10 @@ Output: data/clean/clean_{year}.parquet, one row per accession, columns OUTPUT_C
 (year of the filing date). Parts 6 to 8 read accession, text_body, sha256_text,
 clean_version, n_words_body and error from it.
 
+A rerun completes each year instead of redoing it: a row cleaned with this CLEAN_VERSION
+from a document still in the archive is kept, and only the documents the year lacks
+(added by a later download) are cleaned. --force cleans every document again.
+
 Usage: python code/clean_release.py --workers 4
 """
 
@@ -622,6 +626,27 @@ def _work(args: tuple[str, str]) -> dict:
     return rec
 
 
+def _reusable(out: str, members: list[str]) -> tuple[list[int], set[str], int]:
+    """The rows of an existing year file that a rerun keeps: cleaned with this
+    CLEAN_VERSION from a document still in the archive under the same filename, one per
+    accession. Returns (their row indices, their accessions, rows in the file); nothing
+    is kept from a file that lacks one of OUTPUT_COLUMNS."""
+    import pyarrow.parquet as pq
+
+    if not os.path.exists(out) or not set(OUTPUT_COLUMNS) <= set(pq.read_schema(out).names):
+        return [], set(), 0
+    t = pq.read_table(out, columns=["accession", "filename", "clean_version"])
+    in_archive = {tuple(m.split("__", 1)) for m in members}
+    rows, accs = [], set()
+    for i, (a, f, v) in enumerate(zip(t.column("accession").to_pylist(),
+                                      t.column("filename").to_pylist(),
+                                      t.column("clean_version").to_pylist())):
+        if v == CLEAN_VERSION and (a, f) in in_archive and a not in accs:
+            rows.append(i)
+            accs.add(a)
+    return rows, accs, t.num_rows
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--raw-dir", default=None, help="default: cache/raw")
@@ -629,10 +654,12 @@ def main() -> int:
     ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     ap.add_argument("--years", default="", help="e.g. 2006-2010; default all")
     ap.add_argument("--force", action="store_true",
-                    help="rebuild years already cleaned with this CLEAN_VERSION")
+                    help="clean every document again, even those already cleaned with "
+                         "this CLEAN_VERSION")
     args = ap.parse_args()
 
     import pandas as pd
+    import pyarrow as pa
     import pyarrow.parquet as pq
 
     import settings as S
@@ -649,35 +676,52 @@ def main() -> int:
         return 1
 
     sentence_splitter()                    # download punkt once, before forking
-    total = errors = 0
+    total = kept_total = errors = 0
     for name in zips:
         year = name[4:8]
         out = os.path.join(args.out_dir, f"clean_{year}.parquet")
         zp = os.path.join(args.raw_dir, name)
         with zipfile.ZipFile(zp) as z:
             members = [m for m in z.namelist() if "__" in m and not m.endswith("__index.htm")]
-        if os.path.exists(out) and not args.force:
-            # skipped only if built with this version and covering every document of the
-            # archive: a year cleaned during a test, before the full download, is redone
-            t = pq.read_table(out, columns=["accession", "clean_version"])
-            v = t.column("clean_version").unique().to_pylist()
-            done = set(t.column("accession").to_pylist())
-            if (v == [CLEAN_VERSION] and set(OUTPUT_COLUMNS) <= set(pq.read_schema(out).names)
-                    and done == {m.split("__", 1)[0] for m in members}):
-                print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
-                continue
-        with Pool(args.workers) as pool:
-            recs = pool.map(_work, [(zp, m) for m in members], chunksize=32)
+        # Rows already cleaned with this version are kept; only the documents the year
+        # lacks are cleaned (a later download added filings, or a test run cleaned the
+        # year before the full download). Rows of another version or of a document no
+        # longer in the archive are dropped, so the file always matches the archive.
+        keep_rows, kept, n_file = ([], set(), 0) if args.force else _reusable(out, members)
+        todo = [m for m in members if m.split("__", 1)[0] not in kept]
+        if not todo and len(keep_rows) == n_file:
+            print(f"  {year}: already cleaned with {CLEAN_VERSION}, skipped")
+            continue
+        recs = []
+        if todo:
+            with Pool(min(args.workers, len(todo))) as pool:
+                recs = pool.map(_work, [(zp, m) for m in todo], chunksize=32)
         df = pd.DataFrame(recs).reindex(columns=OUTPUT_COLUMNS)
         bad = int((df["error"] != "").sum())
         tmp = out + ".tmp"
-        df.to_parquet(tmp, index=False)
+        if keep_rows:
+            # Appended in Arrow with the file's own schema, so the kept rows are copied
+            # unchanged and the new ones take exactly the same column types.
+            table = pq.read_table(out, columns=OUTPUT_COLUMNS).take(pa.array(keep_rows, pa.int64()))
+            if len(df):
+                table = pa.concat_tables([table, pa.Table.from_pandas(df, schema=table.schema,
+                                                                      preserve_index=False)])
+            pos = {m.split("__", 1)[0]: i for i, m in enumerate(members)}
+            accs = table.column("accession").to_pylist()
+            table = table.take(pa.array(sorted(range(len(accs)), key=lambda i: pos[accs[i]]),
+                                        pa.int64()))       # archive order, as a full run
+            pq.write_table(table, tmp)
+        else:
+            df.to_parquet(tmp, index=False)
         os.replace(tmp, out)               # a crash never leaves a half-written year
         total += len(df)
+        kept_total += len(keep_rows)
         errors += bad
-        print(f"  {year}: {len(df):,} cleaned, {bad:,} errors", flush=True)
+        print(f"  {year}: {len(df):,} cleaned, {len(keep_rows):,} kept, {bad:,} errors",
+              flush=True)
 
     print(f"\ndocuments cleaned : {total:,}")
+    print(f"documents kept    : {kept_total:,} (already cleaned with {CLEAN_VERSION})")
     print(f"errors            : {errors:,}")
     print(f"clean version     : {CLEAN_VERSION}")
     print(f"written           : {args.out_dir}/clean_YYYY.parquet")

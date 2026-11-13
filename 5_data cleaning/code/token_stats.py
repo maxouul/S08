@@ -24,9 +24,11 @@ also carries what the pieces depend on: sha256_text, clean_version, tokenizer_id
 max_tokens and overlap. A text with no body sentence gets one row with chunk_idx -1.
 Token ids themselves are not stored: they are rebuilt exactly, and fast, from the
 boundaries (see pieces()), while storing them would take gigabytes.
-A year whose cache already matches the cleaned texts and the settings is skipped. The
-match is on sha256_text and clean_version together: the hash covers text_full, while
-the body sentences also depend on the labelling, which the version carries.
+Only the texts a year's cache lacks are cut: the pieces of a text are kept when their
+sha256_text, clean_version and settings match it, and the pieces of a text that is gone
+or has changed are dropped. A year whose cache already matches is skipped. The match is
+on sha256_text and clean_version together: the hash covers text_full, while the body
+sentences also depend on the labelling, which the version carries.
 
 Output: the cache above; data/token_stats.parquet, one row per accession (tokens,
 pieces and truncated sentences per model), rebuilt from the cache; and
@@ -154,15 +156,19 @@ def cut_year(df: pd.DataFrame, name: str, count, overlap: int) -> pd.DataFrame:
     return pd.DataFrame(out)
 
 
-def up_to_date(path: str, df: pd.DataFrame, name: str, overlap: int) -> bool:
+def reusable(path: str, df: pd.DataFrame, name: str, overlap: int) -> tuple[pd.DataFrame, int]:
+    """The cached pieces of a year that still fit its texts (same accession, sha256_text,
+    clean_version, tokenizer, window and overlap), and the number of cached rows that do
+    not and will be dropped."""
     if not os.path.exists(path):
-        return False
-    old = pd.read_parquet(path, columns=["accession"] + PARAMS).drop_duplicates("accession")
+        return pd.DataFrame(), 0
+    old = pd.read_parquet(path)
     tok_id, max_tokens = MODELS[name]
-    same_settings = (old.tokenizer_id.eq(tok_id).all() and old.max_tokens.eq(max_tokens).all()
-                     and old.overlap.eq(overlap).all())
-    texts = set(zip(df.accession, df.sha256_text, df.clean_version))
-    return same_settings and set(zip(old.accession, old.sha256_text, old.clean_version)) == texts
+    texts = pd.MultiIndex.from_frame(df[["accession", "sha256_text", "clean_version"]])
+    ok = (pd.MultiIndex.from_frame(old[["accession", "sha256_text", "clean_version"]]).isin(texts)
+          & old.tokenizer_id.eq(tok_id).to_numpy() & old.max_tokens.eq(max_tokens).to_numpy()
+          & old.overlap.eq(overlap).to_numpy())
+    return old[ok], int((~ok).sum())
 
 
 def main() -> int:
@@ -193,17 +199,27 @@ def main() -> int:
                                           "text_body", "sentences", "sentence_section"])
             df = df[df.sha256_text.notna()]
             path = os.path.join(mdir, f"chunks_{year}.parquet")
-            if up_to_date(path, df, name, args.overlap):
+            kept, stale = reusable(path, df, name, args.overlap)
+            todo = df[~df.accession.isin(kept.accession)] if len(kept) else df
+            if not len(todo) and not stale:
                 print(f"  {name} {year}: cache up to date, skipped", flush=True)
                 continue
-            if count is None:
-                count = load_tokenizer(name)
+            new = pd.DataFrame()
+            if len(todo):
                 if count is None:
-                    break
-            cuts = cut_year(df, name, count, args.overlap)
+                    count = load_tokenizer(name)
+                    if count is None:
+                        break
+                new = cut_year(todo, name, count, args.overlap)
+            cuts = pd.concat([x for x in (kept, new) if len(x)], ignore_index=True)
+            pos = pd.Series(range(len(df)), index=df.accession.to_numpy())
+            cuts = (cuts.assign(_pos=cuts.accession.map(pos).to_numpy())
+                    .sort_values(["_pos", "chunk_idx"], kind="stable")
+                    .drop(columns="_pos").reset_index(drop=True))    # text order, as a full run
             cuts.to_parquet(path + ".tmp", index=False)
             os.replace(path + ".tmp", path)          # never a half-written year
-            print(f"  {name} {year}: {len(df):,} texts, "
+            print(f"  {name} {year}: {len(todo):,} texts cut, "
+                  f"{kept.accession.nunique() if len(kept) else 0:,} kept, "
                   f"{int((cuts.chunk_idx >= 0).sum()):,} pieces", flush=True)
         else:
             done_models.append(name)

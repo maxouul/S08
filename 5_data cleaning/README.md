@@ -33,15 +33,15 @@ This folder turns the 8-K documents chosen in parts 1–2 into the inputs every 
 | Step | Reads | Writes | Time |
 |---|---|---|---|
 | `00_setup_check` | the inputs below | `logs/env_*.json` | 1 min |
-| `01_raw_cache` (200-event test, then `RUN_FULL = True` once) | `files csv/extraction_report.csv`, EDGAR | `cache/raw/raw_YYYY.zip`, `cache/raw_manifest.parquet` | 3 h 44 for the 116,983 documents (6–7 November); reruns fetch only what is missing |
+| `01_raw_cache` (200-event test, then `RUN_FULL = True` once) | `files csv/extraction_report_full.csv`, EDGAR | `cache/raw/raw_YYYY.zip`, `cache/raw_manifest.parquet` | 3 h 44 for the 116,983 documents (6–7 November); reruns fetch only what is missing |
 | `02_clean_prepare` | `cache/raw/`, parts 3–4 | everything in `data/`, `cache/model_outputs.sqlite`, `results/token_quantiles.csv`, `manifest.json` | 12 h 30 for a full run on a 4-core laptop (3 workers, 7–8 November): cleaning 10 h 45 (recent documents are about three times heavier than 2006's), entities 3 min, tokens 1 h 25 to 1 h 50, duplicates 15 min, the rest under a minute; reruns skip what is up to date |
 | `python code/splits.py --freeze` | `data/splits_draft.parquet`, part 4's `events_final.parquet` | `data/holdout_ids.txt`, `.sha256`, `holdout_freeze.json` | once, at the end |
 
-Every step can be stopped and rerun. `cache_raw.py` commits its archives every 500 documents and retries failed downloads on the next run. `clean_release.py` skips a year already cleaned with the current `CLEAN_VERSION` and covering every document of its archive. `token_stats.py` skips a year whose pieces match the texts (their hash and cleaning version) and the window settings. `ModelCache` never pays for the same call twice.
+Every step can be stopped and rerun. `cache_raw.py` commits its archives every 500 documents and retries failed downloads on the next run. `clean_release.py` keeps every document already cleaned with the current `CLEAN_VERSION` and cleans only those its year lacks, so documents added by a later download take minutes, not the full pass. `token_stats.py` keeps the pieces of a text while they match it (its hash and cleaning version) and the window settings, and cuts only new or changed texts. `ModelCache` never pays for the same call twice.
 
 Inputs (read, never changed):
 
-- `files csv/` (or `1_2nov/nov2_data` when present): `extraction_report.csv` (accession, cik, filename of the document `fetch_releases.py` chose) and `event_table.csv` (company names).
+- `files csv/` (or `1_2nov/nov2_data` when present): `extraction_report_full.csv` (accession, cik, filename of the document `fetch_releases.py` chose; the shared `extraction_report.csv` no longer carries them) and `event_table.csv` (company names).
 - `1_2nov/code/fetch_releases.py`: download and choice rules, reused.
 - `3_4_surprise_returns/`: `data/events_final.parquet` (event keys, reaction dates, splits, sample flags), `data/clock_provisional.csv` (permno and dates of every filing), `data/trading_calendar.csv`, `cache/crsp_names.parquet`, `cache/link_ibes_crsp.parquet`, and `SPLITS` in `code/common.py`.
 
