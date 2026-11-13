@@ -1,1 +1,2 @@
 files[[:space:]]csv/event_table.csv filter=lfs diff=lfs merge=lfs -text
+5_data[[:space:]]cleaning/data/**/*.parquet filter=lfs diff=lfs merge=lfs -text

@@ -15,10 +15,17 @@ venv/
 
 # Local datasets and model caches (including licensed WRDS data)
 cache/
-data/
+**/data/*
 **/three_source_timing.csv
 **/timing_handcheck_50.csv
 
 # Shared CSV inputs explicitly included in the repository
 !/files csv/three_source_timing.csv
 !/files csv/timing_handcheck_50.csv
+
+# Part 5 data built only from public EDGAR filings (stored with Git LFS).
+# entities, splits_draft and dedup_flags carry WRDS fields (permno, CRSP/IBES)
+# and stay local, like everything in 3_4_surprise_returns/data.
+!/5_data cleaning/data/clean/
+!/5_data cleaning/data/chunks/
+!/5_data cleaning/data/token_stats.parquet
